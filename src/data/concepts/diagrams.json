@@ -1,0 +1,152 @@
+[
+  {
+    "id": "diag-01",
+    "subject": "DBMS",
+    "title": "Database Normalization Progression (1NF to BCNF)",
+    "analogy": "Think of organizing a messy warehouse ledger: 1NF stops stuffing multiple product SKUs into one cell, 2NF moves supplier addresses into a Supplier table so you don't repeat them on every order line, 3NF moves zip-code-to-city lookups out of customer records, and BCNF ensures every determinant rule is strictly a candidate key.",
+    "summary": "Normalization eliminates insertion, update, and deletion anomalies by decomposing relations along functional dependencies without losing join fidelity.",
+    "keyTakeaways": [
+      "1NF: Atomic column values, no repeating groups or nested arrays.",
+      "2NF: Already in 1NF + no partial dependency of non-prime attributes on a proper subset of a composite candidate key.",
+      "3NF: Already in 2NF + no transitive dependency (non-prime attribute determining another non-prime attribute).",
+      "BCNF: For every non-trivial functional dependency X -> Y, X MUST be a superkey."
+    ],
+    "mermaidCode": "flowchart LR\n  U[Unnormalized Table<br/>Repeating Groups] -->|Make Cells Atomic| N1[1NF<br/>Atomic Columns + PK]\n  N1 -->|Remove Partial<br/>Key Dependencies| N2[2NF<br/>Full Key Dependency]\n  N2 -->|Remove Transitive<br/>Non-Key Dependencies| N3[3NF<br/>No Non-Prime -> Non-Prime]\n  N3 -->|Every Determinant<br/>Must Be Superkey| B[BCNF<br/>Boyce-Codd Normal Form]",
+    "examTrap": "A relation with only single-attribute candidate keys in 1NF is automatically in 2NF, because partial dependency requires a composite key. Also, 3NF allows X -> A if A is a prime attribute, whereas BCNF forbids it unless X is a superkey."
+  },
+  {
+    "id": "diag-02",
+    "subject": "DBMS",
+    "title": "ACID Transactions & Write-Ahead Logging (WAL)",
+    "analogy": "Imagine wiring money with an indelible ledger stamp: before changing vault drawer balances, the clerk writes 'Debiting A $100, Crediting B $100' into a fireproof journal (WAL). If power fails halfway, the recovery clerk checks the journal to either replay committed transfers or undo partial edits.",
+    "summary": "ACID ensures reliable concurrent transactions using locking/MVCC for Isolation and Write-Ahead Logging for Atomicity and Durability.",
+    "keyTakeaways": [
+      "Atomicity (Undo log): All operations commit together or roll back cleanly on failure.",
+      "Consistency: Database moves from one valid constraint/trigger state to another.",
+      "Isolation (Locks / MVCC): Concurrent transactions do not corrupt intermediate reads (Dirty, Non-Repeatable, Phantom).",
+      "Durability (Redo log + fsync): Committed changes survive power loss by flushing WAL before acknowledging COMMIT."
+    ],
+    "mermaidCode": "sequenceDiagram\n  participant App as Java Service\n  participant TX as Transaction Manager\n  participant WAL as Write-Ahead Log\n  participant Disk as Heap / Index Pages\n  App->>TX: BEGIN + UPDATE accounts\n  TX->>WAL: Append UNDO + REDO log records\n  App->>TX: COMMIT\n  TX->>WAL: Flush Commit Record (fsync)\n  WAL-->>TX: Durable OK\n  TX-->>App: 200 OK Committed\n  Note over WAL,Disk: Dirty data pages flushed lazily in background",
+    "examTrap": "Isolation levels differ sharply: READ COMMITTED prevents Dirty Reads only; REPEATABLE READ prevents Non-Repeatable Reads (PostgreSQL also avoids Phantoms via MVCC snapshots); SERIALIZABLE prevents Phantoms completely."
+  },
+  {
+    "id": "diag-03",
+    "subject": "Java",
+    "title": "JDBC Execution Pipeline & PreparedStatement Flow",
+    "analogy": "Opening a raw Statement every query is like translating a fresh recipe into kitchen instructions on every order—and leaving it open to trick instructions (SQL injection). PreparedStatement pre-compiles the recipe card once and safely slots user parameters into sealed ingredient bowls.",
+    "summary": "Standard 7-step JDBC lifecycle connecting a Java application to a relational database via DriverManager/DataSource, PreparedStatement, and ResultSet.",
+    "keyTakeaways": [
+      "Modern JDBC 4.0+ auto-loads drivers via ServiceLoader (Class.forName is legacy/optional).",
+      "Always bind parameters via PreparedStatement (? placeholders) to block SQL injection and reuse query plans.",
+      "Use try-with-resources for Connection, PreparedStatement, and ResultSet to prevent connection pool leaks.",
+      "In Spring Boot, HikariCP manages pooled Connections rather than opening/closing TCP sockets per request."
+    ],
+    "mermaidCode": "flowchart LR\n  A[1. Load Driver /<br/>DataSource] --> B[2. Open Connection<br/>DriverManager / HikariCP]\n  B --> C[3. Create PreparedStatement<br/>Precompile SQL with ?]\n  C --> D[4. Bind Parameters<br/>setInt / setString]\n  D --> E[5. Execute Query/Update<br/>executeQuery / executeUpdate]\n  E --> F[6. Process ResultSet<br/>while rs.next]\n  F --> G[7. Auto-Close Resources<br/>try-with-resources]",
+    "examTrap": "Remember executeQuery() returns ResultSet (SELECT), executeUpdate() returns int row count (INSERT/UPDATE/DELETE/DDL), and ResultSet cursor starts BEFORE the first row—you must call rs.next() before reading getters."
+  },
+  {
+    "id": "diag-04",
+    "subject": "Java",
+    "title": "Java HashMap Internals & Java 8+ Treeification",
+    "analogy": "Think of a post office with 16 numbered sorting bins. Each letter's key goes through hash() to pick a bin. Usually 1-2 letters sit in a linked chain, but if too many collide in one bin (8+ items and 64+ total bins), the bin converts into a fast balanced search tree so lookup drops from scanning linearly to binary branching.",
+    "summary": "HashMap combines an array of buckets, bit-spread hashing, linked lists, red-black trees (Java 8+), and load-factor resizing (0.75).",
+    "keyTakeaways": [
+      "Bucket index computed via `(n - 1) & hash` where `hash = (h = key.hashCode()) ^ (h >>> 16)`.",
+      "Equals/hashCode contract: Equal objects MUST return equal hashCodes; mutating key fields used in hashCode breaks lookups.",
+      "Treeify threshold = 8 per bucket (only if table capacity >= 64, else resizes first); untreeify threshold = 6.",
+      "ConcurrentHashMap avoids full-map locks by using CAS on empty buckets and synchronized on head bucket node (no null keys/values)."
+    ],
+    "mermaidCode": "flowchart TD\n  K[Key.hashCode] --> S[Spread Bits: h ^ h >>> 16]\n  S --> I[Bucket Index: n - 1 & hash]\n  I --> B{Bucket State}\n  B -->|Empty| N[Insert Node directly]\n  B -->|Collision < 8| L[Append Linked List Node<br/>O k lookup]\n  B -->|Collision >= 8 & cap >= 64| T[Convert to Red-Black Tree<br/>O log k lookup]",
+    "examTrap": "HashMap permits one null key (always mapped to bucket 0) and multiple null values, whereas ConcurrentHashMap and Hashtable throw NullPointerException on null keys or null values."
+  },
+  {
+    "id": "diag-05",
+    "subject": "Java",
+    "title": "JVM Runtime Memory & Garbage Collection Areas",
+    "analogy": "Thread Stacks are private desk scratchpads that disappear as soon as a method returns, while the Heap is the shared warehouse where objects live. New short-lived items start in Eden (a fast intake tray), survivors get promoted across Survivor spaces into Tenured (long-term shelf), while Class metadata sits in Metaspace.",
+    "summary": "Understanding Stack vs Heap vs Metaspace clarifies OutOfMemoryError vs StackOverflowError and why immutable Strings live safely in the String Pool.",
+    "keyTakeaways": [
+      "Stack (per thread): Stores local primitives, object references, and call frames; deep recursion throws StackOverflowError.",
+      "Heap (shared): Stores all object instances & arrays (including String Pool since Java 7); GC collects unreachable objects.",
+      "Metaspace (native OS memory since Java 8): Stores class definitions, method bytecode, and static metadata.",
+      "Young Gen (Eden + S0 + S1) handles Minor GC quickly; Old Gen runs Major/Mixed GC (G1/ZGC)."
+    ],
+    "mermaidCode": "flowchart LR\n  subgraph PerThread[Per-Thread Memory]\n    ST[JVM Stack<br/>Frames & Local Refs]\n    PC[PC Register]\n  end\n  subgraph Shared[Shared Process Memory]\n    YG[Heap: Young Gen<br/>Eden + S0 + S1] -->|Survives Age| OG[Heap: Old / Tenured Gen]\n    SP[String Pool inside Heap]\n    MS[Metaspace Native Mem<br/>Class Metadata]\n  end\n  ST -->|Object Reference| YG",
+    "examTrap": "Remember: Java is ALWAYS pass-by-value. When passing an object to a method, the reference value (pointer copy) is copied onto the callee's stack frame—reassigning the parameter inside the method never changes the caller's reference."
+  },
+  {
+    "id": "diag-06",
+    "subject": "OS",
+    "title": "Process States & CPU Context Switching Lifecycle",
+    "analogy": "Imagine chefs at one stove (CPU core). Only one chef cooks at a time (Running). If waiting for milk delivery (Disk I/O), they step into the Waiting lounge so another Ready chef takes the stove. When a timer alarm rings (Preemption), the current chef pauses and returns to the Ready line.",
+    "summary": "OS process scheduler transitions PCBs across New, Ready, Running, Waiting (Blocked), and Terminated states during I/O, interrupts, and time-slice expiry.",
+    "keyTakeaways": [
+      "Ready -> Running: Scheduler dispatch assigns CPU core.",
+      "Running -> Waiting: Process triggers blocking I/O or waits on mutex/semaphore.",
+      "Running -> Ready: Quantum expires (Round Robin) or higher-priority process preempts.",
+      "Threads within one process share Heap/Code/Open Files but keep separate Stacks, Registers, and PC."
+    ],
+    "mermaidCode": "stateDiagram-v2\n  [*] --> New\n  New --> Ready: Admitted to Ready Queue\n  Ready --> Running: CPU Scheduler Dispatch\n  Running --> Ready: Time Quantum Expired / Preempted\n  Running --> Waiting: I/O Request or Lock Wait\n  Waiting --> Ready: I/O Completed / Lock Signaled\n  Running --> Terminated: exit()\n  Terminated --> [*]",
+    "examTrap": "A process cannot jump directly from Waiting to Running! Once I/O completes, it MUST move to Ready first and wait in the ready queue for scheduler dispatch."
+  },
+  {
+    "id": "diag-07",
+    "subject": "OS",
+    "title": "Deadlock Coffman Conditions & Prevention Strategies",
+    "analogy": "Two trains enter single-track bridges from opposite ends and refuse to back up until the other clears the track ahead. Break any one rule—allow backing up (Preemption), force trains to book both bridges in numbered order upfront (No Circular Wait)—and gridlock becomes mathematically impossible.",
+    "summary": "Deadlock occurs ONLY if all four Coffman conditions hold simultaneously: Mutual Exclusion, Hold and Wait, No Preemption, and Circular Wait.",
+    "keyTakeaways": [
+      "Mutual Exclusion: Resource is non-shareable (e.g., write lock, printer).",
+      "Hold and Wait: Process holds >=1 resource while requesting another.",
+      "No Preemption: Resources cannot be forcibly reclaimed mid-use.",
+      "Circular Wait: Cycle P1 -> R1 -> P2 -> R2 -> P1 exists; prevented cleanly by strict lock ordering (Lock ID 1 before Lock ID 2)."
+    ],
+    "mermaidCode": "flowchart LR\n  P1((Thread P1)) -->|Requests| R2[Resource R2]\n  R2 -->|Held by| P2((Thread P2))\n  P2 -->|Requests| R1[Resource R1]\n  R1 -->|Held by| P1\n  style P1 stroke:#dc2626\n  style P2 stroke:#dc2626",
+    "examTrap": "Banker's Algorithm is Deadlock AVOIDANCE (checks safe sequence dynamically at request time), whereas breaking one of the 4 Coffman conditions structurally (like global lock ordering) is Deadlock PREVENTION."
+  },
+  {
+    "id": "diag-08",
+    "subject": "CN",
+    "title": "TCP 3-Way Handshake & Connection Teardown",
+    "analogy": "Before shipping fragile cargo, the sender asks 'Can you hear me? Starting at box #100' (SYN). The receiver replies 'I hear you (#101), and here is my #500' (SYN-ACK). Sender confirms 'Got #501, shipping now!' (ACK).",
+    "summary": "TCP establishes bidirectional sequence-number synchronization via SYN -> SYN-ACK -> ACK and closes cleanly via a 4-way FIN/ACK exchange.",
+    "keyTakeaways": [
+      "SYN increments sequence counter virtually by 1 (ACK = ISN + 1).",
+      "SYN flood DDoS attacks exhaust half-open connection backlog queues (mitigated by SYN cookies).",
+      "4-way teardown (FIN/ACK both ways) supports half-closed TCP connections.",
+      "TIME_WAIT (2 * MSL) ensures delayed duplicate packets don't corrupt a new connection reusing the same port."
+    ],
+    "mermaidCode": "sequenceDiagram\n  participant C as Client\n  participant S as Server\n  C->>S: SYN (seq = x)\n  Note over S: State: SYN_RCVD\n  S->>C: SYN-ACK (seq = y, ack = x + 1)\n  Note over C: State: ESTABLISHED\n  C->>S: ACK (seq = x + 1, ack = y + 1)\n  Note over S: State: ESTABLISHED\n  C->>S: HTTP / Application Data",
+    "examTrap": "In a TLS (HTTPS) connection, TCP's 3-way handshake completes FIRST before the TLS ClientHello/ServerHello certificate exchange begins."
+  },
+  {
+    "id": "diag-09",
+    "subject": "CN",
+    "title": "Browser URL to Response: DNS, TCP, TLS & HTTP Flow",
+    "analogy": "Like dialing a secure office line: first check your contact book and directory assistance for the IP address (DNS), establish the phone call (TCP), verify ID badges and agree on a secret cipher (TLS), and finally ask for the document (HTTP GET).",
+    "summary": "End-to-end network traversal across OSI/TCP-IP layers whenever a client requests an HTTPS endpoint.",
+    "keyTakeaways": [
+      "DNS lookup resolves hostname to IP (Browser Cache -> OS Cache -> Recursive Resolver -> Root -> TLD -> Authoritative, usually UDP/53).",
+      "TCP 3-way handshake establishes reliable transport channel (Port 443).",
+      "TLS 1.3 handshake validates X.509 certificate chain and negotiates ephemeral symmetric keys in 1 RTT.",
+      "HTTP request travels through Load Balancer / Reverse Proxy to Application Server and SQL Database."
+    ],
+    "mermaidCode": "flowchart LR\n  U[Browser URL] --> D[DNS Resolution<br/>UDP 53 -> IP]\n  D --> T[TCP 3-Way Handshake<br/>Port 443]\n  T --> L[TLS 1.3 Handshake<br/>Cert + Session Key]\n  L --> H[Encrypted HTTP Request<br/>GET /api/orders]\n  H --> B[Spring Boot + SQL DB]",
+    "examTrap": "DNS typically uses UDP port 53 for fast single-packet queries, switching to TCP port 53 for zone transfers or responses exceeding standard UDP payload limits."
+  },
+  {
+    "id": "diag-10",
+    "subject": "Spring Boot & REST",
+    "title": "Spring Boot HTTP Request Lifecycle & Layered Architecture",
+    "analogy": "Think of a corporate mailroom: the front desk (DispatcherServlet) checks address labels and security passes (Filters/Interceptors), routes the envelope to the right department clerk (Controller) who checks form fields (@Valid), hands the work to the policy specialist (Service + @Transactional), and saves records via the archivist (Repository/JPA).",
+    "summary": "Clean separation of concerns in enterprise Spring Boot applications using Dependency Injection, Bean Validation, AOP transactions, and JPA repositories.",
+    "keyTakeaways": [
+      "DispatcherServlet (Front Controller) delegates routing via HandlerMapping to @RestController methods.",
+      "Filters run at Servlet container level; HandlerInterceptors run inside Spring MVC context.",
+      "@Transactional wraps Service methods via AOP proxies—self-invocation within the same class bypasses the proxy!",
+      "Always return DTOs from Controllers rather than exposing JPA @Entity classes directly (prevents lazy-loading & over-posting bugs)."
+    ],
+    "mermaidCode": "flowchart LR\n  Req[HTTP Request] --> F[Security Filter Chain]\n  F --> DS[DispatcherServlet]\n  DS --> C[RestController<br/>@Valid DTO]\n  C --> S[Service Layer<br/>@Transactional]\n  S --> R[JPA Repository<br/>Prepared SQL]\n  R --> DB[(PostgreSQL / MySQL)]",
+    "examTrap": "Default Spring bean scope is Singleton (one instance per IoC container)—never store mutable user/request state in @Service or @Controller instance fields or concurrent requests will corrupt data!"
+  }
+]

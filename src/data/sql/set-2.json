@@ -1,0 +1,99 @@
+{
+  "setId": "sql-set-2",
+  "title": "SQL Set 02: E-Commerce Orders, Anti-Joins & Filtering",
+  "description": "Multi-table joins, HAVING thresholds, anti-joins with NULL safety, and revenue ranking across an e-commerce order schema.",
+  "durationMinutes": 45,
+  "queries": [
+    {
+      "id": "sql-2-q01",
+      "topic": "SQL",
+      "subtopic": "Multi-Table JOIN & HAVING",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "title": "High-Value Repeat Customers",
+      "prompt": "Find `cust_name` and `total_spent` for customers who placed at least 2 `COMPLETED` orders totaling strictly more than 5000. Order by `total_spent` descending.",
+      "schemaSql": "CREATE TABLE customers (cust_id INT PRIMARY KEY, cust_name TEXT); CREATE TABLE orders (order_id INT PRIMARY KEY, cust_id INT, amount INT, status TEXT);",
+      "seedSql": "INSERT INTO customers VALUES (1,'Siddharth'),(2,'Lavanya'),(3,'Pranav'),(4,'Zoya'); INSERT INTO orders VALUES (10,1,3200,'COMPLETED'),(11,1,2400,'COMPLETED'),(12,2,6000,'COMPLETED'),(13,3,2900,'COMPLETED'),(14,3,2500,'CANCELLED'),(15,4,3000,'COMPLETED'),(16,4,2100,'COMPLETED');",
+      "expectedColumns": ["cust_name", "total_spent"],
+      "expectedRows": [
+        ["Siddharth", 5600],
+        ["Zoya", 5100]
+      ],
+      "solutionSql": "SELECT c.cust_name, SUM(o.amount) AS total_spent FROM customers c JOIN orders o ON c.cust_id = o.cust_id WHERE o.status = 'COMPLETED' GROUP BY c.cust_id, c.cust_name HAVING COUNT(*) >= 2 AND SUM(o.amount) > 5000 ORDER BY total_spent DESC;",
+      "explanation": "Filter `status = 'COMPLETED'` in `WHERE` before grouping so cancelled orders never count toward the 2-order minimum."
+    },
+    {
+      "id": "sql-2-q02",
+      "topic": "SQL",
+      "subtopic": "Anti-Join (NOT EXISTS)",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "title": "Unsold Products in Catalog",
+      "prompt": "List `prod_id` and `prod_name` of all catalog products that have never appeared in `order_items`, sorted by `prod_id` ascending.",
+      "schemaSql": "CREATE TABLE products (prod_id INT PRIMARY KEY, prod_name TEXT); CREATE TABLE order_items (item_id INT PRIMARY KEY, prod_id INT, qty INT);",
+      "seedSql": "INSERT INTO products VALUES (1,'Keyboard'),(2,'Monitor'),(3,'Dock'),(4,'Webcam'); INSERT INTO order_items VALUES (100,1,2),(101,3,1),(102,NULL,4);",
+      "expectedColumns": ["prod_id", "prod_name"],
+      "expectedRows": [
+        [2, "Monitor"],
+        [4, "Webcam"]
+      ],
+      "solutionSql": "SELECT p.prod_id, p.prod_name FROM products p WHERE NOT EXISTS (SELECT 1 FROM order_items oi WHERE oi.prod_id = p.prod_id) ORDER BY p.prod_id;",
+      "explanation": "Notice row `(102, NULL, 4)` in `order_items`: `NOT IN (SELECT prod_id FROM order_items)` would return zero rows due to SQL 3-valued NULL logic, whereas `NOT EXISTS` handles NULLs safely."
+    },
+    {
+      "id": "sql-2-q03",
+      "topic": "SQL",
+      "subtopic": "Window DENSE_RANK",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "title": "Top Product Category by Revenue per Region",
+      "prompt": "Compute total revenue per `(region, category)` and return the top-earning category (including ties) for each `region`, ordered by `region` ascending and `category` ascending.",
+      "schemaSql": "CREATE TABLE sales (sale_id INT PRIMARY KEY, region TEXT, category TEXT, revenue INT);",
+      "seedSql": "INSERT INTO sales VALUES (1,'North','Laptops',400),(2,'North','Laptops',300),(3,'North','Audio',500),(4,'South','Audio',600),(5,'South','Tablets',600),(6,'South','Laptops',200);",
+      "expectedColumns": ["region", "category", "total_rev"],
+      "expectedRows": [
+        ["North", "Laptops", 700],
+        ["South", "Audio", 600],
+        ["South", "Tablets", 600]
+      ],
+      "solutionSql": "WITH agg AS (SELECT region, category, SUM(revenue) AS total_rev FROM sales GROUP BY region, category), ranked AS (SELECT region, category, total_rev, DENSE_RANK() OVER (PARTITION BY region ORDER BY total_rev DESC) AS rnk FROM agg) SELECT region, category, total_rev FROM ranked WHERE rnk = 1 ORDER BY region, category;",
+      "explanation": "`DENSE_RANK()` partitioned by `region` preserves ties (Audio and Tablets both tie at 600 in South)."
+    },
+    {
+      "id": "sql-2-q04",
+      "topic": "SQL",
+      "subtopic": "Conditional Aggregation",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "title": "Order Fulfillment & Cancellation Rate by Seller",
+      "prompt": "For every seller in `shipments`, return `seller_id`, `delivered_cnt`, and `cancelled_cnt`, ordered by `seller_id` ascending.",
+      "schemaSql": "CREATE TABLE shipments (ship_id INT PRIMARY KEY, seller_id INT, state TEXT);",
+      "seedSql": "INSERT INTO shipments VALUES (1,501,'DELIVERED'),(2,501,'CANCELLED'),(3,501,'DELIVERED'),(4,502,'DELIVERED'),(5,503,'CANCELLED');",
+      "expectedColumns": ["seller_id", "delivered_cnt", "cancelled_cnt"],
+      "expectedRows": [
+        [501, 2, 1],
+        [502, 1, 0],
+        [503, 0, 1]
+      ],
+      "solutionSql": "SELECT seller_id, SUM(CASE WHEN state = 'DELIVERED' THEN 1 ELSE 0 END) AS delivered_cnt, SUM(CASE WHEN state = 'CANCELLED' THEN 1 ELSE 0 END) AS cancelled_cnt FROM shipments GROUP BY seller_id ORDER BY seller_id;",
+      "explanation": "Conditional `SUM(CASE WHEN ... THEN 1 ELSE 0 END)` pivots row statuses into columns in a single scan."
+    },
+    {
+      "id": "sql-2-q05",
+      "topic": "SQL",
+      "subtopic": "Average Basket Size",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "title": "Above-Average Order Invoices",
+      "prompt": "Return `invoice_id` and `grand_total` for invoices whose `grand_total` exceeds the overall average invoice total across the entire `invoices` table, ordered by `grand_total` descending.",
+      "schemaSql": "CREATE TABLE invoices (invoice_id INT PRIMARY KEY, grand_total INT);",
+      "seedSql": "INSERT INTO invoices VALUES (1,100),(2,200),(3,300),(4,600);",
+      "expectedColumns": ["invoice_id", "grand_total"],
+      "expectedRows": [
+        [4, 600]
+      ],
+      "solutionSql": "SELECT invoice_id, grand_total FROM invoices WHERE grand_total > (SELECT AVG(grand_total) FROM invoices) ORDER BY grand_total DESC;",
+      "explanation": "Overall average is `(100+200+300+600)/4 = 300`; only invoice 4 (600) is strictly greater than 300."
+    }
+  ]
+}

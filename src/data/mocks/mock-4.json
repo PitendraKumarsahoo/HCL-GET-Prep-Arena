@@ -1,0 +1,1249 @@
+{
+  "mockId": "mock-4",
+  "title": "Full Mock 04: HCLTech Ascend Simulation — Algorithms, Concurrency & Storage",
+  "description": "Complete 75-item timed simulation (37 Cognitive + 36 Technical MCQ + 2 Coding) crafted exclusively from unseen questions.",
+  "durationMinutes": 90,
+  "aptitudeQuestions": [
+    {
+      "id": "mock4-apt-01",
+      "section": "quant",
+      "topic": "Algebra",
+      "subtopic": "Polynomial Remainder Theorem",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "When the polynomial `P(x) = x^3 - 4x^2 + kx + 6` is divided by `(x - 3)`, it leaves a remainder of 18. What is the value of `k`?",
+      "options": ["5", "7", "9", "11"],
+      "correctIndex": 1,
+      "explanation": "By the Polynomial Remainder Theorem, remainder upon dividing by `(x - 3)` equals `P(3)`. Thus `3^3 - 4(3^2) + 3k + 6 = 18 => 27 - 36 + 3k + 6 = 18 => -3 + 3k = 18 => 3k = 21 => k = 7`.",
+      "shortcut": "Plug x = 3 directly: 27 - 36 + 3k + 6 = 18 => 3k = 21 => k = 7."
+    },
+    {
+      "id": "mock4-apt-02",
+      "section": "quant",
+      "topic": "Pipes & Cisterns",
+      "subtopic": "Alternate-Hour Filling",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "Inlet A alone can fill a reservoir in 8 hours and Inlet B alone can fill it in 12 hours. If they are opened on alternate hours starting with A for the 1st hour, B for the 2nd hour, and so on, in how much total time will the reservoir be full?",
+      "options": ["9 hours 00 min", "9 hours 20 min", "9 hours 30 min", "9 hours 45 min"],
+      "correctIndex": 2,
+      "explanation": "Take tank capacity = LCM(8, 12) = 24 units. Rates: A = 3 units/hr, B = 2 units/hr. Every 2-hour cycle (A then B) fills `3 + 2 = 5` units. In 4 cycles (8 hours), `4 * 5 = 20` units are filled. Remaining = 4 units. In hour 9, A fills 3 units (total 23). Remaining 1 unit is filled by B at 2 units/hr in `1/2 hour = 30 min`. Total = 9 hours 30 min.",
+      "shortcut": "4 full 2-hr cycles = 8h (20/24); hour 9 by A (+3 -> 23/24); final 1/24 by B takes 1/2 hr = 30 min."
+    },
+    {
+      "id": "mock4-apt-03",
+      "section": "quant",
+      "topic": "Time, Speed & Distance",
+      "subtopic": "Three-Leg Harmonic Mean Speed",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "A delivery van covers three equal consecutive stretches of a highway at speeds of 30 km/h, 45 km/h, and 90 km/h respectively. What is its average speed across the entire trip?",
+      "options": ["42 km/h", "45 km/h", "50 km/h", "55 km/h"],
+      "correctIndex": 1,
+      "explanation": "Let each stretch be 90 km (LCM of 30, 45, 90). Times: `90/30 = 3h`, `90/45 = 2h`, `90/90 = 1h`. Total distance = 270 km; total time = 6h. Average speed = `270 / 6 = 45 km/h`.",
+      "shortcut": "Assume D = 90 km per leg -> (3 * 90) / (3 + 2 + 1) = 270 / 6 = 45."
+    },
+    {
+      "id": "mock4-apt-04",
+      "section": "quant",
+      "topic": "Profit & Loss",
+      "subtopic": "Equal Selling Price Profit-Loss",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "A hardware vendor sold two enterprise switches for Rs. 2,970 each. On the first switch he earned a 10% profit, while on the second he suffered a 10% loss. What was his net profit or loss in rupees?",
+      "options": ["No profit, no loss", "Rs. 60 profit", "Rs. 60 loss", "Rs. 120 loss"],
+      "correctIndex": 2,
+      "explanation": "CP1 = `2970 / 1.10 = Rs. 2,700`. CP2 = `2970 / 0.90 = Rs. 3,300`. Total CP = `2700 + 3300 = Rs. 6,000`. Total SP = `2 * 2970 = Rs. 5,940`. Net outcome = Rs. 60 loss.",
+      "shortcut": "Equal SP with +x% and -x% always loses (x^2/100)% = 1% of Total CP: 5940 / 0.99 = 6000 CP -> Rs. 60 loss."
+    },
+    {
+      "id": "mock4-apt-05",
+      "section": "quant",
+      "topic": "Compound Interest",
+      "subtopic": "Consecutive Year Growth Ratio",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Under annual compounding, a principal grows to Rs. 13,310 at the end of 3 years and Rs. 14,641 at the end of 4 years. What was the original principal?",
+      "options": ["Rs. 9,500", "Rs. 10,000", "Rs. 10,500", "Rs. 11,000"],
+      "correctIndex": 1,
+      "explanation": "Annual growth factor = `14641 / 13310 = 1.1` (rate = 10%). Since `P * (1.1)^3 = 13310 => P * 1.331 = 13310 => P = Rs. 10,000`.",
+      "shortcut": "14641 / 13310 = 11/10 => 10% rate; 13310 / 1.331 = 10,000."
+    },
+    {
+      "id": "mock4-apt-06",
+      "section": "quant",
+      "topic": "Probability",
+      "subtopic": "Matching Random Letters",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Two letters are selected at random without replacement from the 11 letters of the word `PROGRAMMING`. What is the probability that both selected letters are identical?",
+      "options": ["2/55", "3/55", "4/55", "1/11"],
+      "correctIndex": 1,
+      "explanation": "`PROGRAMMING` (11 letters) has frequencies: P(1), R(2), O(1), G(2), A(1), M(2), I(1), N(1). Total pairs = `C(11, 2) = 55`. Identical pairs = `C(2,2) for R + C(2,2) for G + C(2,2) for M = 1 + 1 + 1 = 3`. Probability = `3 / 55`.",
+      "shortcut": "Count repeated letters: R(2), G(2), M(2) -> 3 matching pairs out of C(11,2)=55."
+    },
+    {
+      "id": "mock4-apt-07",
+      "section": "quant",
+      "topic": "Permutations & Combinations",
+      "subtopic": "Constrained Odd Numbers",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "How many distinct 4-digit ODD numbers strictly greater than 5000 can be formed using digits from `{1, 2, 4, 5, 7, 8}` with NO digit repeated?",
+      "options": ["72", "84", "96", "108"],
+      "correctIndex": 1,
+      "explanation": "Odd units digit must come from `{1, 5, 7}` and leading thousands digit must come from `{5, 7, 8}` (to exceed 5000). Case A: thousands digit is `8` (1 way) -> units has 3 choices `{1,5,7}`, middle 2 positions take `4*3 = 12` => `1 * 3 * 12 = 36`. Case B: thousands digit is `5` or `7` (2 ways) -> units loses 1 odd choice, leaving 2 choices, middle 2 positions take `4*3 = 12` => `2 * 2 * 12 = 48`. Total = `36 + 48 = 84`.",
+      "shortcut": "Split first digit = 8 (3*12=36) vs first digit in {5,7} (2*2*12=48) -> 84."
+    },
+    {
+      "id": "mock4-apt-08",
+      "section": "quant",
+      "topic": "Partnership",
+      "subtopic": "Inverse Time Ratio for Equal Profit",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Three founders A, B, and C invested capital for 4 months, 6 months, and 9 months respectively. If they shared the final annual profit EQUALLY, what was the ratio of their capital investments A : B : C?",
+      "options": ["4 : 6 : 9", "9 : 6 : 4", "6 : 4 : 3", "12 : 8 : 5"],
+      "correctIndex": 1,
+      "explanation": "Equal profit implies `C_A * 4 = C_B * 6 = C_C * 9 = K`. Hence `C_A : C_B : C_C = 1/4 : 1/6 : 1/9`. Multiplying by LCM(4, 6, 9) = 36 yields `9 : 6 : 4`.",
+      "shortcut": "Inverse ratio of 4:6:9 -> multiply by LCM 36 -> 9:6:4."
+    },
+    {
+      "id": "mock4-apt-09",
+      "section": "quant",
+      "topic": "Data Interpretation",
+      "subtopic": "Warehouse Fulfillment Table",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "passage": "Fulfillment Centers (Q9–Q11): Monthly parcel metrics. Delhi: 12,000 shipped, 720 returned, avg pack 4.5 min, freight Rs. 14.4L. Mumbai: 15,000 shipped, 600 returned, avg pack 5.0 min, freight Rs. 16.5L. Bengaluru: 18,000 shipped, 540 returned, avg pack 3.5 min, freight Rs. 19.8L. Hyderabad: 10,000 shipped, 450 returned, avg pack 4.0 min, freight Rs. 10.5L.",
+      "question": "Which fulfillment center achieved the LOWEST parcel return percentage (Returned / Shipped)?",
+      "options": ["Delhi", "Mumbai", "Bengaluru", "Hyderabad"],
+      "correctIndex": 2,
+      "explanation": "Return rates: Delhi = 720/12000 = 6.0%; Mumbai = 600/15000 = 4.0%; Bengaluru = 540/18000 = 3.0%; Hyderabad = 450/10000 = 4.5%. Bengaluru is lowest at 3.0%.",
+      "shortcut": "540 / 18000 = 3 / 100 = 3%."
+    },
+    {
+      "id": "mock4-apt-10",
+      "section": "quant",
+      "topic": "Data Interpretation",
+      "subtopic": "Net Successful Freight Cost",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "passage": "Fulfillment Centers (Q9–Q11): Monthly parcel metrics. Delhi: 12,000 shipped, 720 returned, avg pack 4.5 min, freight Rs. 14.4L. Mumbai: 15,000 shipped, 600 returned, avg pack 5.0 min, freight Rs. 16.5L. Bengaluru: 18,000 shipped, 540 returned, avg pack 3.5 min, freight Rs. 19.8L. Hyderabad: 10,000 shipped, 450 returned, avg pack 4.0 min, freight Rs. 10.5L.",
+      "question": "What is the freight cost per shipped parcel in Delhi versus Hyderabad (in Rs. per parcel)?",
+      "options": [
+        "Delhi Rs. 115, Hyderabad Rs. 100",
+        "Delhi Rs. 120, Hyderabad Rs. 105",
+        "Delhi Rs. 125, Hyderabad Rs. 105",
+        "Delhi Rs. 120, Hyderabad Rs. 110"
+      ],
+      "correctIndex": 1,
+      "explanation": "Delhi = `14,40,000 / 12,000 = Rs. 120`. Hyderabad = `10,50,000 / 10,000 = Rs. 105`.",
+      "shortcut": "144/1.2 = 120; 105/1 = 105."
+    },
+    {
+      "id": "mock4-apt-11",
+      "section": "quant",
+      "topic": "Data Interpretation",
+      "subtopic": "Overall Return Rate",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "passage": "Fulfillment Centers (Q9–Q11): Monthly parcel metrics. Delhi: 12,000 shipped, 720 returned, avg pack 4.5 min, freight Rs. 14.4L. Mumbai: 15,000 shipped, 600 returned, avg pack 5.0 min, freight Rs. 16.5L. Bengaluru: 18,000 shipped, 540 returned, avg pack 3.5 min, freight Rs. 19.8L. Hyderabad: 10,000 shipped, 450 returned, avg pack 4.0 min, freight Rs. 10.5L.",
+      "question": "What is the combined overall return percentage across all four fulfillment centers together?",
+      "options": ["3.90%", "4.20%", "4.50%", "4.85%"],
+      "correctIndex": 1,
+      "explanation": "Total returned = `720 + 600 + 540 + 450 = 2,310`. Total shipped = `12000 + 15000 + 18000 + 10000 = 55,000`. Overall return% = `(2310 / 55000) * 100 = 231 / 55 = 21 / 5 = 4.20%`.",
+      "shortcut": "Divide 231 and 55 by 11 -> 21/5 = 4.2%."
+    },
+    {
+      "id": "mock4-apt-12",
+      "section": "quant",
+      "topic": "Algebra",
+      "subtopic": "AM and GM Quadratic Identity",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Two positive numbers have an Arithmetic Mean (AM) of 25 and a Geometric Mean (GM) of 15. What is the positive difference between the two numbers?",
+      "options": ["30", "35", "40", "45"],
+      "correctIndex": 2,
+      "explanation": "`(a + b)/2 = 25 => a + b = 50`. `sqrt(ab) = 15 => ab = 225`. Using `(a - b)^2 = (a + b)^2 - 4ab = 2500 - 900 = 1600 => |a - b| = 40` (numbers are 45 and 5).",
+      "shortcut": "(a - b) = sqrt((2*AM)^2 - 4*GM^2) = 2 * sqrt(25^2 - 15^2) = 2 * 20 = 40."
+    },
+    {
+      "id": "mock4-apt-13",
+      "section": "quant",
+      "topic": "Circular Motion",
+      "subtopic": "Distinct Meeting Points & Time",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "Two runners start together from the same point on a 1200-meter circular track running in the SAME direction at speeds of 15 m/s and 9 m/s. How long after the start do they meet for the FIRST time anywhere on the track, and how many DISTINCT meeting points exist on the track overall?",
+      "options": [
+        "150 s; 3 distinct points",
+        "200 s; 2 distinct points",
+        "200 s; 3 distinct points",
+        "240 s; 2 distinct points"
+      ],
+      "correctIndex": 1,
+      "explanation": "First meeting in same direction = `TrackLength / (v1 - v2) = 1200 / (15 - 9) = 200 seconds`. Speed ratio `15 : 9 = 5 : 3` in simplest form => same-direction distinct meeting points = `5 - 3 = 2` points (at 0m and 600m).",
+      "shortcut": "Time = 1200 / (15-9) = 200s; reduced ratio 5:3 same direction -> |5 - 3| = 2 points."
+    },
+    {
+      "id": "mock4-apt-14",
+      "section": "reasoning",
+      "topic": "Stack Puzzle",
+      "subtopic": "Seven Vertical Boxes",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "Seven courier crates P, Q, R, S, T, U, V are stacked vertically in slots 1 (bottom) through 7 (top). Crate R sits at slot 4. Exactly two crates sit between R and P. T sits immediately above P. S sits on an odd-numbered slot above R, with exactly one crate between S and Q. Q sits below R. U sits immediately above V. Which crate sits at slot 6?",
+      "options": ["Q", "S", "U", "V"],
+      "correctIndex": 3,
+      "explanation": "R = 4. Two slots from R(4) places P at 1 or 7; T immediately above P rules out 7, forcing P = 1 and T = 2. Odd slot above R(4) for S is 5 or 7. If S = 7, one crate between S and Q gives Q = 5, violating 'Q sits below R(4)'. Thus S = 5 and Q = 3 (below R). Remaining slots {6, 7} hold V = 6 and U = 7 (U immediately above V). Therefore slot 6 holds V.",
+      "shortcut": "P=1, T=2 -> S in {5,7}; Q<4 & |S-Q|=2 forces S=5, Q=3 -> V=6, U=7."
+    },
+    {
+      "id": "mock4-apt-15",
+      "section": "reasoning",
+      "topic": "Blood Relations",
+      "subtopic": "Couple & Generation Count",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "In a three-generation family of seven members (A, B, C, D, E, F, G) containing two married couples: A is the grandfather of E. C is the sister-in-law of D (who is unmarried). B is the father of E and the only son of A. F is the grandmother of G, where E and G are siblings. How is C related to G?",
+      "options": ["Aunt", "Sister", "Mother", "Grandmother"],
+      "correctIndex": 2,
+      "explanation": "A (grandfather) and F (grandmother) form Couple 1. B is A's only son and father of siblings E and G. Couple 2 must be B and E/G's mother! Since D is unmarried and C is D's sister-in-law, D is B's sibling (A's daughter) and C is B's wife = mother of E and G.",
+      "shortcut": "D unmarried sibling of B -> C is D's sister-in-law -> C is B's wife -> Mother of G."
+    },
+    {
+      "id": "mock4-apt-16",
+      "section": "reasoning",
+      "topic": "Direction Sense",
+      "subtopic": "Angular Turns",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "A robot starts facing North-East, turns 90 degrees clockwise, then turns 135 degrees counter-clockwise, and finally turns 270 degrees clockwise. Which direction is the robot facing now?",
+      "options": ["South-East", "South", "South-West", "West"],
+      "correctIndex": 3,
+      "explanation": "Take North = 0 deg, NE = 45 deg, E = 90 deg, SE = 135 deg, S = 180 deg, SW = 225 deg, W = 270 deg. Net rotation = `+90 (CW) - 135 (CCW) + 270 (CW) = +225 degrees clockwise`. Starting at 45 deg: `45 + 225 = 270 degrees = West`.",
+      "shortcut": "Net angle = 90 - 135 + 270 = +225 deg CW from NE (45 deg) = 270 deg = West."
+    },
+    {
+      "id": "mock4-apt-17",
+      "section": "reasoning",
+      "topic": "Syllogisms",
+      "subtopic": "Only-a-Few & Possibility",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "Statements: (1) Only a few schedulers are preemptive. (2) No preemptive module is deterministic. (3) All deterministic modules are verifiable.\nConclusions:\nI. Some schedulers are not deterministic.\nII. All schedulers being verifiable is a possibility.",
+      "options": [
+        "Only I follows",
+        "Only II follows",
+        "Both I and II follow",
+        "Neither I nor II follows"
+      ],
+      "correctIndex": 2,
+      "explanation": "From (1), some schedulers are preemptive; by (2), those preemptive schedulers cannot be deterministic -> Conclusion I definitely follows. Meanwhile, (3) places deterministic modules inside verifiable without forbidding non-deterministic modules (including preemptive schedulers) from also lying inside verifiable -> Conclusion II is a valid possibility.",
+      "shortcut": "Schedulers ∩ Preemptive ≠ ∅ and Preemptive ⊥ Deterministic => I true; no restriction bars Preemptive from Verifiable => II possible."
+    },
+    {
+      "id": "mock4-apt-18",
+      "section": "reasoning",
+      "topic": "Data Sufficiency",
+      "subtopic": "Train Speed via Pole & Bridge",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "What is the speed of Train T (in m/s)?\nStatement I: Train T crosses a stationary signal pole in 12 seconds.\nStatement II: Train T crosses a 300-meter-long railway bridge in 27 seconds.",
+      "options": [
+        "Statement I alone is sufficient",
+        "Statement II alone is sufficient",
+        "Both I and II together are required",
+        "Even together they are not sufficient"
+      ],
+      "correctIndex": 2,
+      "explanation": "From I alone: `L = 12v` (2 unknowns). From II alone: `L + 300 = 27v` (2 unknowns). Together: substituting `L = 12v` gives `12v + 300 = 27v => 15v = 300 => v = 20 m/s` (sufficient together!).",
+      "shortcut": "Length + Speed = 2 unknowns -> need both equations."
+    },
+    {
+      "id": "mock4-apt-19",
+      "section": "reasoning",
+      "topic": "Alpha-Numeric Series",
+      "subtopic": "Dual Letter + Number Progression",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Find the next term in the alpha-numeric series: `B2E, D5H, G12L, K27Q, ?`",
+      "options": ["P58W", "P56V", "O58W", "P58V"],
+      "correctIndex": 0,
+      "explanation": "First letters: B(+2)->D(+3)->G(+4)->K(+5)->P. Middle numbers: `2*2+1=5`, `5*2+2=12`, `12*2+3=27`, `27*2+4=58`. Last letters: E(+3)->H(+4)->L(+5)->Q(+6)->W. Combined term = `P58W`.",
+      "shortcut": "Track 3 independent streams: First +2/+3/+4/+5 -> P; Num *2+1/+2/+3/+4 -> 58; Last +3/+4/+5/+6 -> W."
+    },
+    {
+      "id": "mock4-apt-20",
+      "section": "reasoning",
+      "topic": "Number Analogy",
+      "subtopic": "Quadratic Number Relation",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Select the number related to 18 in the same manner as 210 is related to 14:\n`14 : 210 :: 18 : ?`",
+      "options": ["306", "324", "342", "360"],
+      "correctIndex": 2,
+      "explanation": "Relation: `n : n * (n + 1)` (equivalently `n^2 + n`). Since `14 * 15 = 210`, for `18` we compute `18 * 19 = 342`.",
+      "shortcut": "18^2 + 18 = 324 + 18 = 342."
+    },
+    {
+      "id": "mock4-apt-21",
+      "section": "reasoning",
+      "topic": "Calendars",
+      "subtopic": "First Weekday of Month",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Given that 1 January 2026 was a Thursday, on what date did the FIRST Sunday of May 2026 fall?",
+      "options": ["2 May 2026", "3 May 2026", "4 May 2026", "5 May 2026"],
+      "correctIndex": 1,
+      "explanation": "Odd days from 1 Jan to 1 May 2026 (non-leap year): Jan rem 30 (2) + Feb 28 (0) + Mar 31 (3) + Apr 30 (2) + May 1 = `30 + 28 + 31 + 30 + 1 = 120` days -> `120 mod 7 = 1` odd day. Thursday + 1 = Friday (so 1 May 2026 is Friday). Thus 2 May is Saturday and 3 May 2026 is Sunday.",
+      "shortcut": "Odd days Jan..Apr (non-leap) = 3+0+3+2 = 8 ≡ 1 => 1 May = Thu + 1 = Fri => 3 May = Sunday."
+    },
+    {
+      "id": "mock4-apt-22",
+      "section": "reasoning",
+      "topic": "Dice",
+      "subtopic": "Two-View Opposite Faces",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Two positions of a standard six-faced die (faces labeled 1 to 6) are shown:\nPosition 1: Top = 3, Front = 5, Right = 1.\nPosition 2: Top = 3, Front = 2, Right = 4.\nWhich number lies on the face OPPOSITE to 5?",
+      "options": ["1", "2", "4", "6"],
+      "correctIndex": 1,
+      "explanation": "Both positions share the same common face `3` on the SAME position (Top). When one face is common at the identical position, the remaining corresponding faces are opposite each other: Front(5) is opposite Front(2), and Right(1) is opposite Right(4) (leaving 3 opposite 6).",
+      "shortcut": "Same face on same side -> matching Front faces (5 and 2) are opposite."
+    },
+    {
+      "id": "mock4-apt-23",
+      "section": "reasoning",
+      "topic": "Mathematical Operations",
+      "subtopic": "Symbol Substitution BODMAS",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "If `+` denotes division (`/`), `-` denotes multiplication (`*`), `*` denotes subtraction (`-`), and `/` denotes addition (`+`), evaluate:\n`48 + 6 - 5 / 14 * 9`",
+      "options": ["35", "40", "45", "49"],
+      "correctIndex": 2,
+      "explanation": "Substitute operators carefully: `48 / 6 * 5 + 14 - 9`. Apply BODMAS left-to-right for `/` and `*`: `(48 / 6) * 5 + 14 - 9 = 8 * 5 + 14 - 9 = 40 + 14 - 9 = 45`.",
+      "shortcut": "(48 / 6) * 5 + 14 - 9 = 40 + 5 = 45."
+    },
+    {
+      "id": "mock4-apt-24",
+      "section": "reasoning",
+      "topic": "Critical Reasoning",
+      "subtopic": "Identify Unwarranted Assumption",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "An engineering manager states: 'Our Java service experienced OutOfMemory crashes during peak checkout, so doubling each container's RAM from 4 GB to 8 GB will completely prevent future checkout outages.' This reasoning relies on which questionable assumption?",
+      "options": [
+        "Docker containers run on Linux host kernels.",
+        "The memory exhaustion is caused by higher legitimate peak working-set demand rather than an unbounded memory leak or non-memory bottlenecks (like DB connection exhaustion).",
+        "8 GB RAM costs more per month than 4 GB RAM.",
+        "Checkout traffic drops late at night."
+      ],
+      "correctIndex": 1,
+      "explanation": "If a memory leak exists, doubling RAM merely delays the crash; similarly, non-memory outages (thread starvation, DB deadlocks) aren't fixed by adding RAM.",
+      "shortcut": "Check hidden causal flaw: unbounded leak or unrelated bottleneck defeats 'completely prevent'."
+    },
+    {
+      "id": "mock4-apt-25",
+      "section": "reasoning",
+      "topic": "Decision Making",
+      "subtopic": "API Rate-Limiting Strategy",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Statement: Automated scraper bots from three external IP subnets are sending 50,000 `/search` requests per second, degrading latency for paying web customers.\nCourses of Action:\nI. Enforce per-IP/token sliding-window rate limiting with HTTP `429 Too Many Requests` at the API gateway while keeping legitimate customer limits comfortable.\nII. Permanently take the `/search` feature offline for all users until next quarter.\nWhich action(s) are sound?",
+      "options": ["Only I", "Only II", "Both I and II", "Neither I nor II"],
+      "correctIndex": 0,
+      "explanation": "Gateway rate-limiting (`429`) isolates abusive scrapers without harming genuine customers (Action I). Shutting down search globally punishes paying customers unnecessarily (Action II).",
+      "shortcut": "Targeted gateway throttling protects availability without breaking product utility."
+    },
+    {
+      "id": "mock4-apt-26",
+      "section": "verbal",
+      "topic": "Reading Comprehension",
+      "subtopic": "Structural Contrast",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "passage": "For decades, general-purpose relational engines relied on B+ trees to organize table rows and secondary indexes on block storage. B+ trees shine on point lookups and ordered range scans because keys sit sorted in fixed-size pages, yet every random insert or update forces in-place page rewrites—inducing random disk I/O and write amplification when working sets exceed RAM. Log-Structured Merge-trees (LSM-trees), powering storage engines like RocksDB and Cassandra, invert that trade-off for write-intensive telemetry workloads. Incoming writes append sequentially to a write-ahead log and accumulate in an in-memory sorted MemTable, periodically flushing immutable Sorted String Tables (SSTables) to disk. Although background compaction must eventually merge overlapping SSTables and point reads may probe multiple levels (mitigated via Bloom filters), sequential append throughput scales orders of magnitude higher on modern SSDs.",
+      "question": "What fundamental limitation of B+ trees makes them less suited for massive write-heavy telemetry ingestion than LSM-trees?",
+      "options": [
+        "B+ trees cannot execute ordered range scans on timestamps.",
+        "Random inserts/updates require in-place page modifications, causing random disk I/O and write amplification once data exceeds RAM.",
+        "B+ trees lack crash-recovery write-ahead logging.",
+        "B+ trees store every key unsorted on disk."
+      ],
+      "correctIndex": 1,
+      "explanation": "The passage explains that every random insert/update in a B+ tree forces in-place page rewrites, triggering random I/O and write amplification beyond RAM.",
+      "shortcut": "Match 'random insert or update forces in-place page rewrites'."
+    },
+    {
+      "id": "mock4-apt-27",
+      "section": "verbal",
+      "topic": "Reading Comprehension",
+      "subtopic": "Supporting Mechanism",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "passage": "For decades, general-purpose relational engines relied on B+ trees to organize table rows and secondary indexes on block storage. B+ trees shine on point lookups and ordered range scans because keys sit sorted in fixed-size pages, yet every random insert or update forces in-place page rewrites—inducing random disk I/O and write amplification when working sets exceed RAM. Log-Structured Merge-trees (LSM-trees), powering storage engines like RocksDB and Cassandra, invert that trade-off for write-intensive telemetry workloads. Incoming writes append sequentially to a write-ahead log and accumulate in an in-memory sorted MemTable, periodically flushing immutable Sorted String Tables (SSTables) to disk. Although background compaction must eventually merge overlapping SSTables and point reads may probe multiple levels (mitigated via Bloom filters), sequential append throughput scales orders of magnitude higher on modern SSDs.",
+      "question": "How do LSM-tree engines accelerate point reads that would otherwise have to check multiple on-disk SSTable files?",
+      "options": [
+        "By forbidding background compaction completely",
+        "By consulting Bloom filters to skip SSTables guaranteed not to contain the target key",
+        "By converting all SSTables back into B+ tree pages on every query",
+        "By keeping the entire multi-terabyte dataset permanently inside CPU registers"
+      ],
+      "correctIndex": 1,
+      "explanation": "The final sentence notes that point reads probing multiple levels are 'mitigated via Bloom filters'.",
+      "shortcut": "Direct read: '(mitigated via Bloom filters)'."
+    },
+    {
+      "id": "mock4-apt-28",
+      "section": "verbal",
+      "topic": "Reading Comprehension",
+      "subtopic": "Inference",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "passage": "For decades, general-purpose relational engines relied on B+ trees to organize table rows and secondary indexes on block storage. B+ trees shine on point lookups and ordered range scans because keys sit sorted in fixed-size pages, yet every random insert or update forces in-place page rewrites—inducing random disk I/O and write amplification when working sets exceed RAM. Log-Structured Merge-trees (LSM-trees), powering storage engines like RocksDB and Cassandra, invert that trade-off for write-intensive telemetry workloads. Incoming writes append sequentially to a write-ahead log and accumulate in an in-memory sorted MemTable, periodically flushing immutable Sorted String Tables (SSTables) to disk. Although background compaction must eventually merge overlapping SSTables and point reads may probe multiple levels (mitigated via Bloom filters), sequential append throughput scales orders of magnitude higher on modern SSDs.",
+      "question": "Why are flushed SSTables described as 'immutable' in an LSM-tree?",
+      "options": [
+        "They are encrypted with read-only public keys.",
+        "New writes never overwrite existing SSTable files in place; instead updates go to the MemTable and are reconciled later during compaction.",
+        "They reside exclusively in volatile RAM.",
+        "They automatically delete themselves after 24 hours."
+      ],
+      "correctIndex": 1,
+      "explanation": "Instead of in-place overwrites (which B+ trees do), LSM writes go sequentially to the WAL + MemTable and flush as read-only SSTables merged later via compaction.",
+      "shortcut": "No in-place updates -> sequential new SSTable flushes + compaction."
+    },
+    {
+      "id": "mock4-apt-29",
+      "section": "verbal",
+      "topic": "Reading Comprehension",
+      "subtopic": "Word Meaning",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "passage": "For decades, general-purpose relational engines relied on B+ trees to organize table rows and secondary indexes on block storage. B+ trees shine on point lookups and ordered range scans because keys sit sorted in fixed-size pages, yet every random insert or update forces in-place page rewrites—inducing random disk I/O and write amplification when working sets exceed RAM. Log-Structured Merge-trees (LSM-trees), powering storage engines like RocksDB and Cassandra, invert that trade-off for write-intensive telemetry workloads. Incoming writes append sequentially to a write-ahead log and accumulate in an in-memory sorted MemTable, periodically flushing immutable Sorted String Tables (SSTables) to disk. Although background compaction must eventually merge overlapping SSTables and point reads may probe multiple levels (mitigated via Bloom filters), sequential append throughput scales orders of magnitude higher on modern SSDs.",
+      "question": "In the context of the passage, 'inducing' most closely means:",
+      "options": [
+        "Preventing",
+        "Causing / triggering",
+        "Compressing",
+        "Bypassing"
+      ],
+      "correctIndex": 1,
+      "explanation": "'inducing random disk I/O and write amplification' means bringing about or causing random disk I/O.",
+      "shortcut": "Induce = bring about / trigger."
+    },
+    {
+      "id": "mock4-apt-30",
+      "section": "verbal",
+      "topic": "Error Spotting",
+      "subtopic": "One-of-the Relative Clause Verb",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Identify the segment containing a grammatical error:\n'Kubernetes is one of the few orchestration platforms (A) / that gracefully reschedules failing pods (B) / while maintaining zero downtime across (C) / multi-zone enterprise clusters. (D)'",
+      "options": ["Segment A", "Segment B", "Segment C", "Segment D"],
+      "correctIndex": 1,
+      "explanation": "In `one of the [plural noun] that [verb]`, the antecedent of `that` is the plural noun `platforms`, so the verb must be plural `reschedule`, not `reschedules`.",
+      "shortcut": "one of the + plural noun + that/who -> plural verb."
+    },
+    {
+      "id": "mock4-apt-31",
+      "section": "verbal",
+      "topic": "Error Spotting",
+      "subtopic": "Double Negative with Hardly",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Identify the segment containing a grammatical error:\n'Because the legacy billing batch job (A) / emitted hardly no structured trace logs, (B) / debugging the silent rounding discrepancy (C) / consumed three full engineering days. (D)'",
+      "options": ["Segment A", "Segment B", "Segment C", "Segment D"],
+      "correctIndex": 1,
+      "explanation": "`hardly` is already negative; pairing it with `no` creates a double negative. Replace `hardly no` with `hardly any`.",
+      "shortcut": "hardly / scarcely / barely + any (never `no`)."
+    },
+    {
+      "id": "mock4-apt-32",
+      "section": "verbal",
+      "topic": "Error Spotting",
+      "subtopic": "Subjunctive Counterfactual",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Identify the segment containing a grammatical error:\n'If our staging cluster was configured (A) / with identical connection-pool limits as production, (B) / we would have caught the deadlock (C) / before Friday's release cut. (D)'",
+      "options": ["Segment A", "Segment B", "Segment C", "Segment D"],
+      "correctIndex": 0,
+      "explanation": "A past counterfactual conditional paired with `would have caught` requires past perfect `had been configured` (and even present counterfactual uses `were`, never `was`).",
+      "shortcut": "Main clause `would have + V3` requires `If ... had + V3`."
+    },
+    {
+      "id": "mock4-apt-33",
+      "section": "verbal",
+      "topic": "Sentence Correction",
+      "subtopic": "Capable Of Gerund Idiom",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Select the grammatically best replacement for the bracketed portion:\nThe upgraded Kafka cluster is [capable to ingest over two million events] per second without packet loss.",
+      "options": [
+        "capable to ingest over two million events",
+        "capable of ingesting over two million events",
+        "capable for ingesting over two million events",
+        "capably ingesting over two million events"
+      ],
+      "correctIndex": 1,
+      "explanation": "Standard English idiom uses `capable of + V-ing` (whereas `able` uses `able to + V`).",
+      "shortcut": "capable of doing / able to do."
+    },
+    {
+      "id": "mock4-apt-34",
+      "section": "verbal",
+      "topic": "Sentence Correction",
+      "subtopic": "Pronoun Reference Ambiguity",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "Choose the clearest revision that eliminates pronoun ambiguity in:\n'When the primary API server sent a retry payload to the downstream warehouse, it logged a timeout warning.'",
+      "options": [
+        "When the primary API server sent a retry payload to the downstream warehouse, it logged a timeout warning.",
+        "When the primary API server sent a retry payload to the downstream warehouse, the API server logged a timeout warning.",
+        "Sending a retry payload to the downstream warehouse, it logged a timeout warning.",
+        "After a retry payload went to the downstream warehouse, a timeout warning was logged by it."
+      ],
+      "correctIndex": 1,
+      "explanation": "In the original sentence, `it` could ambiguously refer either to `the primary API server` or `the downstream warehouse`. Restating `the API server` resolves the ambiguity cleanly.",
+      "shortcut": "Two singular candidate antecedents -> restate the intended noun."
+    },
+    {
+      "id": "mock4-apt-35",
+      "section": "verbal",
+      "topic": "Vocabulary & Collocation",
+      "subtopic": "Contextual Precision",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Fill in the blank with the most fitting word:\nAdding an unverified third-party dependency without pinning checksums can _______ supply-chain security across every downstream build.",
+      "options": ["bolster", "jeopardize", "corroborate", "reconcile"],
+      "correctIndex": 1,
+      "explanation": "`jeopardize` means to put at risk or endanger—matching unverified dependencies threatening build security.",
+      "shortcut": "Unverified dependency -> puts security at risk -> jeopardize."
+    },
+    {
+      "id": "mock4-apt-36",
+      "section": "verbal",
+      "topic": "Para Jumbles",
+      "subtopic": "5-Sentence Coherence",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "Rearrange P, Q, R, S, T into a coherent paragraph:\nP: Because binary base-2 fractions cannot represent 0.1 or 0.2 finitely, tiny rounding errors silently accumulate across thousands of ledger rows.\nQ: Storing monetary balances inside `double` or `float` columns is a notorious anti-pattern in financial software.\nR: Using scaled integer cents (`long`) or fixed-point `BigDecimal` types guarantees exact decimal representation during every tax and interest calculation.\nS: Most engineers assume floating-point inaccuracy only affects extreme scientific magnitudes rather than everyday currency sums.\nT: That subtle penny drift frequently surfaces only during painful month-end accounting audits.",
+      "options": ["Q S P T R", "Q P S T R", "S Q P T R", "Q S T P R"],
+      "correctIndex": 0,
+      "explanation": "Q introduces the anti-pattern (`double`/`float` for money). S explains why engineers fall into it. P states the technical IEEE-754 base-2 reason. T describes the consequence ('That subtle penny drift'), and R provides the remedy (`long` cents or `BigDecimal`).",
+      "shortcut": "Q (anti-pattern) -> S (misconception) -> P (base-2 reason) -> T ('That subtle penny drift') -> R (remedy)."
+    },
+    {
+      "id": "mock4-apt-37",
+      "section": "verbal",
+      "topic": "Para Jumbles",
+      "subtopic": "5-Sentence Coherence",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Rearrange P, Q, R, S into a coherent paragraph:\nP: Instead, schedulers evaluate node CPU requests, memory headroom, and topology-spread constraints before binding each pod.\nQ: Placing all replicas of a payment service onto a single physical rack risks total outage if one top-of-rack switch fails.\nR: Modern container orchestrators prevent such correlated failures by avoiding naive random placement.\nS: Spreading pods cleanly across independent availability zones preserves service continuity even when an entire rack loses power.",
+      "options": ["Q R P S", "R Q P S", "Q P R S", "P Q R S"],
+      "correctIndex": 0,
+      "explanation": "Q presents the single-rack failure risk. R states orchestrators prevent 'such correlated failures'. P explains how ('Instead, schedulers evaluate...'), and S gives the resilience payoff.",
+      "shortcut": "Q (single rack outage) -> R ('such correlated failures') -> P ('Instead, schedulers...') -> S."
+    }
+  ],
+  "technicalQuestions": [
+    {
+      "id": "mock4-tech-01",
+      "topic": "Output Prediction",
+      "subtopic": "TreeMap Custom Comparator & Equality",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "What does the following Java `TreeMap` snippet print?",
+      "codeSnippet": "TreeMap<String, Integer> tm = new TreeMap<>((a, b) -> Integer.compare(a.length(), b.length()));\ntm.put(\"hi\", 1);\ntm.put(\"go\", 2);\ntm.put(\"java\", 3);\nSystem.out.println(tm.size() + \" \" + tm.get(\"hi\"));",
+      "options": [
+        "3 1",
+        "2 2",
+        "2 1",
+        "3 2"
+      ],
+      "correctIndex": 1,
+      "explanation": "The custom `Comparator` compares keys strictly by length! `\"hi\"` and `\"go\"` both have length 2, so `compare(\"hi\", \"go\") == 0`. `TreeMap.put(\"go\", 2)` treats `\"go\"` as the SAME key as `\"hi\"`, overwriting value `1` with `2` while keeping key `\"hi\"`. Size is 2 (`\"hi\"->2, \"java\"->3`) and `tm.get(\"hi\")` prints `2`.",
+      "shortcut": "Length comparator treats \"hi\" and \"go\" as duplicate keys, overwriting value 1 with 2."
+    },
+    {
+      "id": "mock4-tech-02",
+      "topic": "Output Prediction",
+      "subtopic": "Bitwise XOR Swap & Precedence",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "What happens when the following Java snippet executes?",
+      "codeSnippet": "int[] arr = {10, 20};\nint i = 0, j = 0;\narr[i] ^= arr[j];\narr[j] ^= arr[i];\narr[i] ^= arr[j];\nSystem.out.println(arr[0] + \" \" + arr[1]);",
+      "options": [
+        "20 10",
+        "10 20",
+        "0 20",
+        "0 0"
+      ],
+      "correctIndex": 2,
+      "explanation": "Classic XOR-swap self-aliasing bug! Because `i == j == 0`, `arr[0] ^= arr[0]` zeroes `arr[0]` on the very first step (`10 ^ 10 = 0`), and subsequent XORs keep `arr[0] = 0`. Output: `0 20`.",
+      "shortcut": "XOR swap on identical index/memory reference zeroes out the element."
+    },
+    {
+      "id": "mock4-tech-03",
+      "topic": "Output Prediction",
+      "subtopic": "Stream Lazy Short-Circuiting",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "What does this Java Stream `findFirst()` pipeline print?",
+      "codeSnippet": "Optional<String> res = Stream.of(\"alpha\", \"beta\", \"gamma\")\n    .peek(s -> System.out.print(s.charAt(0)))\n    .filter(s -> s.length() == 4)\n    .findFirst();",
+      "options": [
+        "abg",
+        "ab",
+        "b",
+        "Nothing (terminal result ignored)"
+      ],
+      "correctIndex": 1,
+      "explanation": "`findFirst()` is a short-circuiting terminal operation pulling elements vertically one by one: `'alpha'` prints `a` and fails filter (`len 5 != 4`); `'beta'` prints `b` and passes filter (`len 4 == 4`), immediately satisfying `findFirst()` so `'gamma'` is NEVER processed. Output: `ab`.",
+      "shortcut": "Streams pull elements vertically one at a time; findFirst stops as soon as first match passes."
+    },
+    {
+      "id": "mock4-tech-04",
+      "topic": "Output Prediction",
+      "subtopic": "Varargs vs Exact Overload Resolution",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Which overloaded method is chosen by the Java compiler for `call(10, 20)`?",
+      "codeSnippet": "static void call(long a, long b) { System.out.print(\"WIDEN \"); }\nstatic void call(Integer a, Integer b) { System.out.print(\"BOX \"); }\nstatic void call(int... a) { System.out.print(\"VARARGS \"); }\npublic static void main(String[] args) {\n    call(10, 20);\n}",
+      "options": [
+        "WIDEN",
+        "BOX",
+        "VARARGS",
+        "Compilation error: ambiguous call"
+      ],
+      "correctIndex": 0,
+      "explanation": "Java overload resolution precedence has 3 phases: (1) Exact/primitive widening (`int -> long`) WITHOUT boxing or varargs; (2) Boxing/unboxing; (3) Varargs. Thus `call(long, long)` wins in Phase 1 and prints `WIDEN`.",
+      "shortcut": "Overload order: Exact > Primitive Widening > Autoboxing > Varargs."
+    },
+    {
+      "id": "mock4-tech-05",
+      "topic": "Output Prediction",
+      "subtopic": "ConcurrentHashMap computeIfAbsent Recursion Trap",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "In Java 9+, what happens if inside `map.computeIfAbsent(\"Aa\", ...)` the mapping lambda mutates a DIFFERENT colliding key on the same `ConcurrentHashMap`?",
+      "codeSnippet": "Map<String, Integer> m = new ConcurrentHashMap<>();\nm.computeIfAbsent(\"Aa\", k -> m.put(\"BB\", 1));",
+      "options": [
+        "Inserts both keys cleanly in O(1)",
+        "May throw `IllegalStateException: Recursive update` (in Java 9+) or deadlock on the bin lock if keys collide into the same bucket",
+        "Deletes key `Aa` silently",
+        "Throws `UnsupportedOperationException`"
+      ],
+      "correctIndex": 1,
+      "explanation": "`ConcurrentHashMap.computeIfAbsent` locks the hash bin during the mapping function; mutating the same map inside the callback (especially colliding hashes like `\"Aa\"` and `\"BB\"` which share hashCode `2112`) triggers `IllegalStateException: Recursive update` in Java 9+.",
+      "shortcut": "Never mutate the same ConcurrentHashMap inside its own compute/merge callback."
+    },
+    {
+      "id": "mock4-tech-06",
+      "topic": "Java",
+      "subtopic": "CompletableFuture Exception Handling",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "How do `exceptionally()` and `handle()` differ when attached to a `CompletableFuture<T>`?",
+      "options": [
+        "`exceptionally()` runs on every completion regardless of success; `handle()` runs only on failure",
+        "`exceptionally()` executes ONLY when the previous stage throws an exception and recovers to `T`; `handle((res, ex) -> ...)` ALWAYS executes on both success and failure and can transform the result type",
+        "`handle()` swallows exceptions silently without returning a value",
+        "Neither works with `supplyAsync()`"
+      ],
+      "correctIndex": 1,
+      "explanation": "`exceptionally` is like a `catch` block returning fallback `T`; `handle(BiFunction<T, Throwable, U>)` runs unconditionally whether `res` or `ex` is non-null.",
+      "shortcut": "exceptionally = catch-only; handle = finally + map (runs on both success & error)."
+    },
+    {
+      "id": "mock4-tech-07",
+      "topic": "Java",
+      "subtopic": "JVM Heap Generations & G1GC",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "In Java's G1 Garbage Collector (default since Java 9), how is the heap organized compared to older contiguous generational collectors?",
+      "options": [
+        "A single non-generational region where no compaction ever occurs",
+        "Partitioned into thousands of equal-sized regions dynamically assigned as Eden, Survivor, Old, or Humongous, prioritizing regions with the most garbage first (Garbage-First)",
+        "Divided strictly into fixed PermGen and Stack segments",
+        "Allocated entirely off-heap in C++ `malloc`"
+      ],
+      "correctIndex": 1,
+      "explanation": "G1GC splits the heap into equal regions and collects regions yielding the most reclaimable memory within the target `-XX:MaxGCPauseMillis` budget.",
+      "shortcut": "G1GC = region-based incremental collector targeting predictable pause times."
+    },
+    {
+      "id": "mock4-tech-08",
+      "topic": "Java",
+      "subtopic": "Spring Boot Auto-Configuration Mechanism",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "When you add `spring-boot-starter-data-jpa` and an H2 driver to `pom.xml`, how does Spring Boot automatically wire a `DataSource` and `EntityManagerFactory` without XML configuration?",
+      "options": [
+        "It scans every class on the entire filesystem including OS system folders",
+        "`@EnableAutoConfiguration` loads auto-configuration candidates (`AutoConfiguration.imports`) gated by `@ConditionalOnClass` and `@ConditionalOnMissingBean`, backing off automatically if you define custom beans",
+        "Maven generates hardcoded Java files inside `src/main/java` at runtime",
+        "Spring Boot disables dependency injection for JDBC drivers"
+      ],
+      "correctIndex": 1,
+      "explanation": "Spring Boot reads registered auto-configuration classes and activates them conditionally when required classes exist on the classpath and user overrides (`@ConditionalOnMissingBean`) are absent.",
+      "shortcut": "Auto-config = @EnableAutoConfiguration + @ConditionalOnClass / @ConditionalOnMissingBean."
+    },
+    {
+      "id": "mock4-tech-09",
+      "topic": "Java",
+      "subtopic": "Java 21 Virtual Threads (Project Loom)",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Why can a Java 21 JVM comfortably run 100,000 concurrent blocking HTTP/JDBC tasks using Virtual Threads (`Executors.newVirtualThreadPerTaskExecutor()`) where 100,000 OS platform threads would crash?",
+      "options": [
+        "Virtual threads skip TCP sockets completely",
+        "Virtual threads are cheap user-mode threads managed by the JVM (`~KB` resizable stack chunks) that unmount from OS carrier threads whenever they block on I/O, freeing carrier threads for other work",
+        "Virtual threads run directly on GPU shaders",
+        "Virtual threads share a single mutable call stack across tasks"
+      ],
+      "correctIndex": 1,
+      "explanation": "Mounting/unmounting continuations onto a small ForkJoinPool of OS carrier threads makes blocking I/O virtually free in OS thread resources.",
+      "shortcut": "Virtual threads unmount from OS carrier threads on blocking I/O."
+    },
+    {
+      "id": "mock4-tech-10",
+      "topic": "Java",
+      "subtopic": "Serialization serialVersionUID",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Why is declaring `private static final long serialVersionUID = 1L;` strongly recommended on `Serializable` classes?",
+      "options": [
+        "It compresses serialized byte streams by 50%",
+        "It prevents `InvalidClassException` across deployments if minor compatible class edits occur (such as adding a helper method) that would otherwise change the compiler's auto-generated hash",
+        "It marks all fields as `transient` automatically",
+        "It is required for JSON Jackson serialization"
+      ],
+      "correctIndex": 1,
+      "explanation": "Without an explicit `serialVersionUID`, the JVM computes a fragile hash over fields/methods/signatures—any minor edit alters the hash and breaks deserialization of older bytes with `InvalidClassException`.",
+      "shortcut": "Explicit serialVersionUID stabilizes binary serialization version compatibility."
+    },
+    {
+      "id": "mock4-tech-11",
+      "topic": "OOP",
+      "subtopic": "Interface Segregation Principle",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Splitting a bloated 15-method `SmartDevice` interface (`print()`, `scan()`, `fax()`, `staple()`) into smaller cohesive `Printable`, `Scannable`, and `Faxable` interfaces directly applies which SOLID principle?",
+      "options": [
+        "Liskov Substitution Principle",
+        "Interface Segregation Principle (clients should not be forced to depend on methods they do not use)",
+        "Singleton Pattern",
+        "Open-Closed Principle only"
+      ],
+      "correctIndex": 1,
+      "explanation": "ISP prevents concrete classes like `BasicLaserPrinter` from implementing dummy/throwing stub methods for `fax()` or `scan()`.",
+      "shortcut": "Fat interface -> split into role-specific small interfaces = Interface Segregation Principle."
+    },
+    {
+      "id": "mock4-tech-12",
+      "topic": "OOP",
+      "subtopic": "Association, Aggregation & Composition",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "In UML and OOP modeling, what distinguishes Composition (`Car` ◆── `Engine` or `Order` ◆── `OrderLineItem`) from Aggregation (`Department` ◇── `Professor`)?",
+      "options": [
+        "Aggregation is strictly compile-time inheritance; Composition is runtime",
+        "In Composition, the parent owns the child's lifecycle exclusively—destroying the parent destroys its owned parts; in Aggregation, referenced children can exist independently",
+        "Composition forbids private constructors",
+        "Aggregation cannot represent one-to-many relationships"
+      ],
+      "correctIndex": 1,
+      "explanation": "Composition implies strong ownership and coupled lifecycle (filled diamond), whereas Aggregation implies a looser shared 'has-a' relationship (hollow diamond).",
+      "shortcut": "Composition = strong lifecycle ownership; Aggregation = weak independent lifecycle."
+    },
+    {
+      "id": "mock4-tech-13",
+      "topic": "OOP",
+      "subtopic": "Strategy vs State Design Pattern",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Both Strategy and State patterns delegate work to an encapsulated interface, yet how do they differ in intent?",
+      "options": [
+        "Strategy uses inheritance while State uses static methods",
+        "In Strategy, the client explicitly picks/injects an interchangeable algorithm (`CompressionStrategy`); in State, the context's behavior transitions automatically between internal states (`OrderPending -> OrderShipped`) as events occur",
+        "Strategy allows only one implementation class",
+        "State is a creational pattern"
+      ],
+      "correctIndex": 1,
+      "explanation": "Strategy lets callers swap independent algorithms externally; State encapsulates state-specific behavior and state transitions driven by internal lifecycle rules.",
+      "shortcut": "Strategy = externally chosen algorithm; State = internal lifecycle state machine transitions."
+    },
+    {
+      "id": "mock4-tech-14",
+      "topic": "JDBC",
+      "subtopic": "Transaction Isolation Constants",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Which `java.sql.Connection` isolation constant guarantees prevention of Dirty Reads AND Non-Repeatable Reads while still potentially permitting Phantom Reads under the ANSI SQL-92 standard?",
+      "options": [
+        "`Connection.TRANSACTION_READ_UNCOMMITTED`",
+        "`Connection.TRANSACTION_READ_COMMITTED`",
+        "`Connection.TRANSACTION_REPEATABLE_READ`",
+        "`Connection.TRANSACTION_SERIALIZABLE`"
+      ],
+      "correctIndex": 2,
+      "explanation": "ANSI SQL `REPEATABLE READ` eliminates Dirty Reads and Non-Repeatable Reads, leaving Phantom Reads possible (until `SERIALIZABLE`).",
+      "shortcut": "READ_COMMITTED prevents Dirty; REPEATABLE_READ prevents Non-Repeatable; SERIALIZABLE prevents Phantom."
+    },
+    {
+      "id": "mock4-tech-15",
+      "topic": "JDBC",
+      "subtopic": "SQL Injection Prevention Mechanism",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Why does `PreparedStatement` with `?` placeholders neutralize SQL injection attacks like `' OR '1'='1` whereas string-concatenated `Statement` fails?",
+      "options": [
+        "`PreparedStatement` strips all spaces from user input strings",
+        "The SQL query structure is parsed and compiled separately from bind parameters—bound values are always treated strictly as scalar data literals, never executable SQL syntax",
+        "`PreparedStatement` encrypts the SQL text using AES-256",
+        "`PreparedStatement` blocks all `SELECT` queries containing `OR`"
+      ],
+      "correctIndex": 1,
+      "explanation": "Parameterized binding separates SQL code parsing from data values at the database wire protocol / planner level.",
+      "shortcut": "Code (SQL template) compiled separately from Data (`setString` parameters)."
+    },
+    {
+      "id": "mock4-tech-16",
+      "topic": "SQL",
+      "subtopic": "TRUNCATE vs DELETE vs DROP",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Which statement accurately compares `DELETE`, `TRUNCATE`, and `DROP` in standard relational databases (e.g., PostgreSQL / Oracle / MySQL)?",
+      "options": [
+        "`DELETE` removes the table schema permanently from metadata",
+        "`DELETE` is row-by-row DML supporting `WHERE` and firing `ON DELETE` triggers; `TRUNCATE` is fast bulk deallocation (DDL in Oracle/MySQL, non-transactional in MySQL) removing all rows; `DROP` removes both data and table definition",
+        "`TRUNCATE` supports a `WHERE` filter clause in standard SQL",
+        "`DROP` preserves indexes while deleting rows"
+      ],
+      "correctIndex": 1,
+      "explanation": "`DELETE` (DML) filters rows via `WHERE` and fires row triggers; `TRUNCATE` clears all rows rapidly and resets identity sequences (cannot filter with `WHERE`); `DROP` removes the entire table structure.",
+      "shortcut": "DELETE = selective DML + triggers; TRUNCATE = wipe all rows fast; DROP = destroy table."
+    },
+    {
+      "id": "mock4-tech-17",
+      "topic": "SQL",
+      "subtopic": "RANK vs DENSE_RANK vs ROW_NUMBER",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "For scores `(100, 90, 90, 80)` ordered descending, what rank sequence do `ROW_NUMBER()`, `RANK()`, and `DENSE_RANK()` assign respectively?",
+      "options": [
+        "`(1,2,3,4)`, `(1,2,2,4)`, `(1,2,2,3)`",
+        "`(1,2,2,3)`, `(1,2,3,4)`, `(1,2,2,4)`",
+        "`(1,2,2,4)`, `(1,2,2,3)`, `(1,2,3,4)`",
+        "`(1,2,3,4)`, `(1,2,2,3)`, `(1,2,2,4)`"
+      ],
+      "correctIndex": 0,
+      "explanation": "`ROW_NUMBER` assigns unique sequential numbers `(1,2,3,4)`; `RANK` ties equal values and skips gaps `(1,2,2,4)`; `DENSE_RANK` ties equal values without skipping numbers `(1,2,2,3)`.",
+      "shortcut": "ROW_NUMBER = 1,2,3,4; RANK = 1,2,2,4 (gap); DENSE_RANK = 1,2,2,3 (no gap)."
+    },
+    {
+      "id": "mock4-tech-18",
+      "topic": "SQL",
+      "subtopic": "GROUP BY ROLLUP Subtotals",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "If table `Sales` has 2 regions (`North`, `South`), each having 3 product categories (`A`, `B`, `C`), how many total rows does `SELECT region, category, SUM(rev) FROM Sales GROUP BY ROLLUP(region, category);` output?",
+      "options": ["6", "7", "8", "9"],
+      "correctIndex": 3,
+      "explanation": "`ROLLUP(region, category)` produces `(region, category)` detail rows (2*3 = 6), PLUS `(region, NULL)` regional subtotals (2 rows), PLUS `(NULL, NULL)` grand total (1 row) = `6 + 2 + 1 = 9` rows.",
+      "shortcut": "ROLLUP(a, b) generates 3 grouping levels: (a,b) [6] + (a) [2] + () [1] = 9."
+    },
+    {
+      "id": "mock4-tech-19",
+      "topic": "DBMS",
+      "subtopic": "Clustered vs Non-Clustered Index",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "Why can a database table have AT MOST ONE Clustered Index (e.g., MySQL InnoDB Primary Key) while supporting many Non-Clustered Indexes?",
+      "options": [
+        "SQL syntax forbids creating more than one index per table",
+        "A clustered index dictates the actual physical/logical B+ tree storage order of the full table rows themselves, whereas non-clustered indexes store separate lookup keys pointing back to row locators",
+        "Non-clustered indexes use hash tables only",
+        "Clustered indexes take zero disk space"
+      ],
+      "correctIndex": 1,
+      "explanation": "Data rows can only be physically ordered along one key sequence; secondary (non-clustered) indexes store `(indexed_cols, row_id/PK)` in separate B+ trees.",
+      "shortcut": "1 physical row ordering => max 1 clustered index; N secondary lookup trees."
+    },
+    {
+      "id": "mock4-tech-20",
+      "topic": "DBMS",
+      "subtopic": "MVCC Snapshot Visibility",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "How does Multi-Version Concurrency Control (MVCC) in PostgreSQL/InnoDB enable readers (`SELECT`) and writers (`UPDATE`) to proceed simultaneously without blocking each other?",
+      "options": [
+        "Writers pause until every active `SELECT` disconnects",
+        "Updates append a new versioned row stamped with transaction IDs (`xmin`/`xmax`) rather than overwriting old versions in place, allowing concurrent readers to read a consistent snapshot as of their start timestamp",
+        "MVCC disables all write locks even between conflicting writers",
+        "All `SELECT` queries read dirty uncommitted buffers"
+      ],
+      "correctIndex": 1,
+      "explanation": "Readers never block writers and writers never block readers because each transaction reads row versions committed prior to its snapshot.",
+      "shortcut": "MVCC = versioned tuples + transaction snapshots -> readers & writers don't block each other."
+    },
+    {
+      "id": "mock4-tech-21",
+      "topic": "DBMS",
+      "subtopic": "Candidate Key Count from Closure",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "For relation `R(A, B, C, D)` with functional dependencies `AB -> C`, `C -> D`, and `D -> A`, which attributes form ALL minimal candidate keys of R?",
+      "options": [
+        "Only `AB`",
+        "`AB`, `BC`, and `BD`",
+        "`AB` and `CD`",
+        "`ABCD` only"
+      ],
+      "correctIndex": 1,
+      "explanation": "Attribute `B` never appears on any RHS, so `B` MUST belong to every candidate key. Checking closures: `(AB)+ = ABCD` (key!), `C -> D -> A` gives `(BC)+ = BCDA` (key!), `D -> A` gives `(BD)+ = BDAC` (key!). Thus candidate keys are `AB`, `BC`, `BD`.",
+      "shortcut": "B is missing from all RHS -> every key contains B; test B paired with A, C, D."
+    },
+    {
+      "id": "mock4-tech-22",
+      "topic": "OS",
+      "subtopic": "Wait-Free vs Deadlock Prevention (Coffman)",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "To break the 'Circular Wait' Coffman condition for deadlocks when Transfer threads must lock two bank accounts `acct1` and `acct2`, what lightweight rule guarantees deadlock freedom?",
+      "options": [
+        "Acquiring `acct1` then `acct2` in random order",
+        "Always locking the two accounts in strictly ascending order of `accountId` (`min(id)` before `max(id)`)",
+        "Using `Thread.sleep(10)` between locks",
+        "Marking account balances `volatile`"
+      ],
+      "correctIndex": 1,
+      "explanation": "Enforcing a global total ordering on resource acquisition (`id_low -> id_high`) mathematically makes a lock-wait cycle impossible.",
+      "shortcut": "Total lock ordering breaks Circular Wait."
+    },
+    {
+      "id": "mock4-tech-23",
+      "topic": "OS",
+      "subtopic": "External vs Internal Fragmentation",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Which memory allocation scheme suffers primarily from INTERNAL fragmentation versus EXTERNAL fragmentation?",
+      "options": [
+        "Pure Paging suffers from internal fragmentation (unused bytes in the last allocated page); variable-sized contiguous Segmentation suffers from external fragmentation (unusable small holes between segments)",
+        "Pure Paging suffers from external fragmentation; Segmentation suffers from internal fragmentation",
+        "Both suffer equally from external fragmentation",
+        "Virtual memory eliminates both completely"
+      ],
+      "correctIndex": 0,
+      "explanation": "Fixed-size page frames mean half a page on average is wasted inside the final page (internal), whereas contiguous variable partitions leave scattered free gaps too small to fit new segments (external).",
+      "shortcut": "Fixed blocks (Paging) = Internal fragmentation; Variable contiguous (Segmentation) = External."
+    },
+    {
+      "id": "mock4-tech-24",
+      "topic": "OS",
+      "subtopic": "Zombie vs Orphan Processes",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "In Unix/Linux process management, what creates a 'Zombie' (`Z` state) process and why can thousands of zombies eventually halt new process creation even though they consume negligible RAM?",
+      "options": [
+        "A parent dies before its child; zombies occupy full multi-gigabyte heaps",
+        "A child process terminates (`exit()`), yet its parent never calls `wait()`/`waitpid()` to reap its exit status; zombies keep a slot in the kernel process table (`PID` limit exhaustion)",
+        "A zombie is a daemon running infinitely in the background",
+        "Zombies only occur on Windows threads"
+      ],
+      "correctIndex": 1,
+      "explanation": "Orphans (parent dies first) are reparented cleanly to PID 1 (`init`/`systemd`), whereas Zombies have finished execution but retain their kernel PCB/PID slot until the parent reaps their exit code via `wait()`.",
+      "shortcut": "Orphan = parent exited (reparented to init); Zombie = child exited, parent hasn't called wait() (consumes PID slot)."
+    },
+    {
+      "id": "mock4-tech-25",
+      "topic": "OS",
+      "subtopic": "RAID 5 Parity & Capacity",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "You configure a RAID 5 array using 5 identical 2 TB NVMe drives. What is the usable storage capacity and how many simultaneous drive failures can the array survive without data loss?",
+      "options": [
+        "10 TB usable; survives 1 drive failure",
+        "8 TB usable; survives 1 drive failure",
+        "6 TB usable; survives 2 drive failures",
+        "5 TB usable; survives 2 drive failures"
+      ],
+      "correctIndex": 1,
+      "explanation": "RAID 5 stripes data with distributed XOR parity (`(N - 1) * disk_size`): `(5 - 1) * 2 TB = 8 TB` usable, tolerating 1 simultaneous drive failure (`RAID 6` uses `N - 2` for 2 failures).",
+      "shortcut": "RAID 5 = (N - 1) capacity, 1-disk fault tolerance."
+    },
+    {
+      "id": "mock4-tech-26",
+      "topic": "CN",
+      "subtopic": "TCP Flow Control vs Congestion Control",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "In TCP, how is the effective sending window determined using `rwnd` (receiver advertised window) and `cwnd` (congestion window)?",
+      "options": [
+        "`rwnd + cwnd`",
+        "`min(rwnd, cwnd)`",
+        "`max(rwnd, cwnd)`",
+        "`(rwnd + cwnd) / 2`"
+      ],
+      "correctIndex": 1,
+      "explanation": "Flow control (`rwnd`) protects the receiver's buffer from overflowing, while congestion control (`cwnd`) protects intermediate routers. The sender caps unacknowledged bytes to `min(rwnd, cwnd)`.",
+      "shortcut": "Effective TCP window = min(rwnd, cwnd)."
+    },
+    {
+      "id": "mock4-tech-27",
+      "topic": "CN",
+      "subtopic": "HTTP Status Codes 401 vs 403 vs 429",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "A client sends a valid, unexpired JWT bearer token identifying a `USER`-role account to an `ADMIN`-only endpoint `DELETE /api/users/42`. Which HTTP status code is semantically accurate?",
+      "options": [
+        "`401 Unauthorized`",
+        "`403 Forbidden`",
+        "`404 Not Found`",
+        "`409 Conflict`"
+      ],
+      "correctIndex": 1,
+      "explanation": "`401` means unauthenticated (missing/invalid credentials); `403 Forbidden` means the server authenticated who you are, yet your role lacks authorization for the action.",
+      "shortcut": "401 = Who are you? (AuthN missing); 403 = I know you, no permission (AuthZ denied)."
+    },
+    {
+      "id": "mock4-tech-28",
+      "topic": "CN",
+      "subtopic": "MTU & Path MTU Discovery",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "In IPv6, intermediate routers are FORBIDDEN from fragmenting packets. How do two IPv6 endpoints discover the bottleneck MTU along a network path?",
+      "options": [
+        "Routers shrink TCP payloads silently without notifying the sender",
+        "The sender sets large packets and receives an ICMPv6 `Packet Too Big` error message carrying the next-hop link MTU (Path MTU Discovery)",
+        "IPv6 restricts all packets worldwide to 512 bytes",
+        "DNS TXT records advertise router MTUs"
+      ],
+      "correctIndex": 1,
+      "explanation": "IPv6 delegates fragmentation strictly to source hosts using Path MTU Discovery (PMTUD) triggered by ICMPv6 Type 2 `Packet Too Big` feedback.",
+      "shortcut": "IPv6: no router fragmentation -> source runs PMTUD via ICMPv6 Packet Too Big."
+    },
+    {
+      "id": "mock4-tech-29",
+      "topic": "CN",
+      "subtopic": "DHCP 4-Step DORA Sequence",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "When a freshly booted laptop joins a Wi-Fi network without a static IP, what is the exact four-message DHCP handshake order used to lease an IPv4 address?",
+      "options": [
+        "Request -> Discover -> Offer -> Acknowledge",
+        "Discover -> Offer -> Request -> Acknowledge (DORA)",
+        "SYN -> SYN-ACK -> ACK -> Lease",
+        "ARP -> Offer -> Grant -> Confirm"
+      ],
+      "correctIndex": 1,
+      "explanation": "DHCP follows `DORA`: client broadcasts `DHCPDISCOVER`, servers reply with `DHCPOFFER`, client broadcasts `DHCPREQUEST` selecting one offer, and server confirms via `DHCPACK`.",
+      "shortcut": "Mnemonic: D-O-R-A (Discover, Offer, Request, Acknowledge)."
+    },
+    {
+      "id": "mock4-tech-30",
+      "topic": "DSA",
+      "subtopic": "Topological Sort vs Cycle Detection",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Using 3-color DFS (`WHITE`=unvisited, `GRAY`=on current recursion stack, `BLACK`=finished) on a directed graph, what definitively proves the existence of a directed cycle?",
+      "options": [
+        "Encountering a cross-edge to a `BLACK` vertex",
+        "Encountering a back-edge pointing to a `GRAY` vertex currently active on the recursion call stack",
+        "Visiting a `WHITE` vertex with in-degree > 1",
+        "Having disconnected components"
+      ],
+      "correctIndex": 1,
+      "explanation": "In a directed graph, an edge to an already finished `BLACK` node can simply be a forward/cross edge in a DAG (e.g., diamond dependency), whereas an edge to a `GRAY` ancestor proves a directed cycle.",
+      "shortcut": "Directed cycle in DFS <=> edge to a GRAY (active-stack) node."
+    },
+    {
+      "id": "mock4-tech-31",
+      "topic": "DSA",
+      "subtopic": "Merge Sort Stability & In-Place",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Why does Java's `Arrays.sort(Object[])` (TimSort, hybrid Merge+Insertion) guarantee stability for sorting objects whereas `Arrays.sort(int[])` (Dual-Pivot QuickSort) does not need to preserve order?",
+      "options": [
+        "QuickSort is always slower on primitives",
+        "Primitive `int` values carry no satellite identity to distinguish equal values, whereas object multi-key sorts depend on stability (preserved by Merge/TimSort using `O(N)` buffer)",
+        "QuickSort cannot sort arrays larger than 10,000 elements",
+        "Merge Sort uses O(1) extra space in Java"
+      ],
+      "correctIndex": 1,
+      "explanation": "Equal primitive `int`s are indistinguishable, so faster in-place Dual-Pivot QuickSort is used; equal objects (`Employee` sorted by dept then salary) require stability, provided by TimSort.",
+      "shortcut": "Objects -> TimSort (stable); Primitives -> Dual-Pivot QuickSort (in-place fast)."
+    },
+    {
+      "id": "mock4-tech-32",
+      "topic": "DSA",
+      "subtopic": "KMP Failure Function (LPS Array)",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "What is the Longest Proper Prefix-Suffix (`lps`) array computed by the Knuth-Morris-Pratt (KMP) algorithm for pattern `\"ABABAC\"`?",
+      "options": [
+        "`[0, 0, 1, 2, 3, 0]`",
+        "`[0, 0, 1, 2, 1, 0]`",
+        "`[0, 1, 1, 2, 3, 0]`",
+        "`[0, 0, 1, 2, 3, 1]`"
+      ],
+      "correctIndex": 0,
+      "explanation": "Prefixes: `A`(0), `AB`(0), `ABA`->`A`(1), `ABAB`->`AB`(2), `ABABA`->`ABA`(3), `ABABAC`->none(0). Result: `[0, 0, 1, 2, 3, 0]`.",
+      "shortcut": "Match longest border of each prefix: 0, 0, 1(A), 2(AB), 3(ABA), 0(C)."
+    },
+    {
+      "id": "mock4-tech-33",
+      "topic": "DSA",
+      "subtopic": "MST Kruskal vs Prim Sparse vs Dense",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "When computing a Minimum Spanning Tree on a very DENSE undirected graph where `E ≈ V^2` (using an adjacency matrix), which approach is asymptotically faster?",
+      "options": [
+        "Kruskal's algorithm (`O(E log E)` = `O(V^2 log V)`)",
+        "Prim's algorithm without a binary heap (linear min-key scan: `O(V^2)`)",
+        "Depth-First Search (`O(V + E)`)",
+        "Bellman-Ford (`O(V * E)`)"
+      ],
+      "correctIndex": 1,
+      "explanation": "Array-based Prim's runs in `O(V^2)` without sorting `V^2` edges, beating Kruskal's `O(V^2 log V)` on dense graphs.",
+      "shortcut": "Dense (E ~ V^2) -> O(V^2) Prim; Sparse (E ~ V) -> Kruskal O(E log E)."
+    },
+    {
+      "id": "mock4-tech-34",
+      "topic": "SE",
+      "subtopic": "Spring Boot Actuator & Health Probes",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "In Kubernetes deployments of Spring Boot Actuator services, why should `/actuator/health/liveness` NOT fail simply because an external third-party payment API is temporarily down (unlike `/readiness`)?",
+      "options": [
+        "Kubernetes ignores readiness probes completely",
+        "If liveness fails, Kubernetes restarts the pod in a crash loop (even though restarting won't fix the external API); readiness failure merely removes the pod from Service load-balancing traffic safely",
+        "Liveness probes return HTML instead of JSON",
+        "Readiness probes delete persistent volumes"
+      ],
+      "correctIndex": 1,
+      "explanation": "Liveness restarts stuck JVM processes; Readiness stops routing new traffic during temporary dependency outages without triggering destructive CrashLoopBackOff restarts.",
+      "shortcut": "Liveness fail -> restart container; Readiness fail -> stop sending traffic."
+    },
+    {
+      "id": "mock4-tech-35",
+      "topic": "SE",
+      "subtopic": "Agile Story Points vs Hours",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "In Scrum agile estimation, what do Story Points measure rather than raw wall-clock hours?",
+      "options": [
+        "Exact developer overtime compensation",
+        "Relative effort combining task complexity, uncertainty/risk, and volume of work—which naturally calibrates into team velocity over sprints",
+        "Lines of Java code written per day",
+        "Database query execution time in milliseconds"
+      ],
+      "correctIndex": 1,
+      "explanation": "Story points estimate relative size (effort + complexity + risk) decoupled from individual speed differences.",
+      "shortcut": "Story points = relative complexity + effort + risk, not wall-clock hours."
+    },
+    {
+      "id": "mock4-tech-36",
+      "topic": "SE",
+      "subtopic": "12-Factor App Configuration",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "According to the Twelve-Factor App methodology, how should environment-specific credentials (DB URLs, API secrets) be supplied to an application across Dev, Staging, and Production?",
+      "options": [
+        "Hardcoded inside `application-prod.properties` committed to Git",
+        "Injected strictly via environment variables (`Config`), keeping the build artifact completely identical and environment-agnostic across stages",
+        "Stored inside browser `localStorage`",
+        "Compiled into a separate `.jar` per server IP"
+      ],
+      "correctIndex": 1,
+      "explanation": "Factor III (Config) separates immutable build artifacts from environment variables so secrets never enter Git and the exact same container/JAR runs everywhere.",
+      "shortcut": "Strict separation of immutable code artifact and env-var config."
+    }
+  ],
+  "codingProblems": [
+    {
+      "id": "mock4-c01",
+      "topic": "Dynamic Programming & Arrays",
+      "subtopic": "Kadane's Subarray with Bounds",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "title": "Maximum Sum Contiguous Subarray with Indices",
+      "statement": "Given an integer array A of length N (must choose a NON-EMPTY contiguous subarray), find the maximum possible subarray sum along with its 0-based start and end indices `[L, R]`. If multiple subarrays achieve the maximum sum, pick the one with the smallest start index `L` (and if `L` also ties, the shortest length `R - L`).",
+      "inputFormat": "Line 1: Integer N.\nLine 2: N space-separated integers A[0..N-1].",
+      "outputFormat": "Three space-separated integers: `<maxSum> <L> <R>`.",
+      "constraints": [
+        "1 <= N <= 10^5",
+        "-10^9 <= A[i] <= 10^9",
+        "Target complexity: O(N) time, O(1) space"
+      ],
+      "testCases": [
+        { "input": "9\n-2 1 -3 4 -1 2 1 -5 4\n", "expectedOutput": "6 3 6", "isSample": true, "note": "Subarray [4, -1, 2, 1] at indices 3..6" },
+        { "input": "5\n5 4 -1 7 8\n", "expectedOutput": "23 0 4", "isSample": true },
+        { "input": "6\n-8 -3 -6 -2 -5 -4\n", "expectedOutput": "-2 3 3", "isSample": false },
+        { "input": "3\n1 2 3\n", "expectedOutput": "6 0 2", "isSample": false },
+        { "input": "5\n-1 3 -2 3 -1\n", "expectedOutput": "4 1 3", "isSample": false },
+        { "input": "3\n0 0 0\n", "expectedOutput": "0 0 0", "isSample": false },
+        { "input": "5\n4 -1 2 -7 5\n", "expectedOutput": "5 0 2", "isSample": false }
+      ],
+      "starterCode": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        long[] a = new long[n];\n        for (int i = 0; i < n; i++) a[i] = sc.nextLong();\n        // Write your solution here\n    }\n}",
+        "python": "import sys\n\ndata = list(map(int, sys.stdin.read().split()))\nn = data[0]\na = data[1:1+n]\n# Write your solution here\n",
+        "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n; cin >> n;\n    // Write your solution here\n    return 0;\n}\n"
+      },
+      "solutions": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        long[] a = new long[n];\n        for (int i = 0; i < n; i++) a[i] = sc.nextLong();\n        long best = a[0], cur = a[0];\n        int bl = 0, br = 0, cl = 0;\n        for (int i = 1; i < n; i++) {\n            if (a[i] > cur + a[i]) {\n                cur = a[i];\n                cl = i;\n            } else {\n                cur += a[i];\n            }\n            if (cur > best || (cur == best && (cl < bl || (cl == bl && (i - cl) < (br - bl))))) {\n                best = cur;\n                bl = cl;\n                br = i;\n            }\n        }\n        System.out.println(best + \" \" + bl + \" \" + br);\n    }\n}",
+        "python": "import sys\n\ndata = list(map(int, sys.stdin.read().split()))\nn = data[0]\na = data[1:1+n]\nbest = cur = a[0]\nbl = br = cl = 0\nfor i in range(1, n):\n    if a[i] > cur + a[i]:\n        cur = a[i]\n        cl = i\n    else:\n        cur += a[i]\n    if cur > best or (cur == best and (cl < bl or (cl == bl and (i - cl) < (br - bl)))):\n        best = cur\n        bl = cl\n        br = i\nprint(best, bl, br)\n"
+      },
+      "timeComplexity": "O(N) single Kadane scan tracking current start index `cl`.",
+      "spaceComplexity": "O(1) extra space beyond input array.",
+      "edgeCases": [
+        "All negative numbers must return the largest negative single element (`-2 3 3`)",
+        "Strictly `>` (not `>=`) in `a[i] > cur + a[i]` preserves earliest `cl` when zero prefix sums appear? Wait: if `cur == 0` and `a[i] == 0`, `cur + a[i] == a[i]`, keeping `cl` earlier while `best == 0` prefers shortest length `0..0`!",
+        "64-bit `long` required since subarray sums can reach `10^14`"
+      ]
+    },
+    {
+      "id": "mock4-c02",
+      "topic": "Arrays & Prefix Products",
+      "subtopic": "Product Except Self Modulo",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "title": "Product of Array Except Self (Without Division)",
+      "statement": "Given an integer array A of length N, compute an array P of length N where P[i] equals the product of all elements of A except A[i], taken modulo `1000000007` (normalized into `[0, 1000000006]`). You MUST solve this in O(N) time WITHOUT using the division operator.",
+      "inputFormat": "Line 1: Integer N.\nLine 2: N space-separated integers A[0..N-1].",
+      "outputFormat": "N space-separated integers P[0..N-1] modulo 1000000007.",
+      "constraints": [
+        "2 <= N <= 10^5",
+        "-10^9 <= A[i] <= 10^9",
+        "No division allowed (zeroes may appear in A)"
+      ],
+      "testCases": [
+        { "input": "4\n1 2 3 4\n", "expectedOutput": "24 12 8 6", "isSample": true },
+        { "input": "5\n-1 1 0 -3 3\n", "expectedOutput": "0 0 9 0 0", "isSample": true },
+        { "input": "4\n0 0 5 6\n", "expectedOutput": "0 0 0 0", "isSample": false },
+        { "input": "4\n2 3 5 7\n", "expectedOutput": "105 70 42 30", "isSample": false },
+        { "input": "3\n100000 100000 100000\n", "expectedOutput": "999999937 999999937 999999937", "isSample": false },
+        { "input": "3\n-2 -3 -4\n", "expectedOutput": "12 8 6", "isSample": false },
+        { "input": "2\n42 1\n", "expectedOutput": "1 42", "isSample": false }
+      ],
+      "starterCode": {
+        "java": "import java.util.*;\n\npublic class Main {\n    static final long MOD = 1000000007L;\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        long[] a = new long[n];\n        for (int i = 0; i < n; i++) a[i] = sc.nextLong();\n        // Write your solution here\n    }\n}",
+        "python": "import sys\n\nMOD = 1000000007\ndata = list(map(int, sys.stdin.read().split()))\nn = data[0]\na = data[1:1+n]\n# Write your solution here\n",
+        "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n; cin >> n;\n    // Write your solution here\n    return 0;\n}\n"
+      },
+      "solutions": {
+        "java": "import java.util.*;\n\npublic class Main {\n    static final long MOD = 1000000007L;\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        long[] a = new long[n];\n        for (int i = 0; i < n; i++) a[i] = ((sc.nextLong() % MOD) + MOD) % MOD;\n        long[] res = new long[n];\n        long pref = 1;\n        for (int i = 0; i < n; i++) {\n            res[i] = pref;\n            pref = (pref * a[i]) % MOD;\n        }\n        long suf = 1;\n        for (int i = n - 1; i >= 0; i--) {\n            res[i] = (res[i] * suf) % MOD;\n            suf = (suf * a[i]) % MOD;\n        }\n        StringBuilder sb = new StringBuilder();\n        for (int i = 0; i < n; i++) {\n            if (i > 0) sb.append(' ');\n            sb.append(res[i]);\n        }\n        System.out.println(sb.toString());\n    }\n}",
+        "python": "import sys\n\nMOD = 1000000007\ndata = list(map(int, sys.stdin.read().split()))\nn = data[0]\na = data[1:1+n]\nres = [1] * n\np = 1\nfor i in range(n):\n    res[i] = p\n    p = (p * (a[i] % MOD)) % MOD\ns = 1\nfor i in range(n - 1, -1, -1):\n    res[i] = (res[i] * s) % MOD\n    s = (s * (a[i] % MOD)) % MOD\nprint(' '.join(map(str, res)))\n"
+      },
+      "timeComplexity": "O(N) two linear passes (prefix pass + suffix pass).",
+      "spaceComplexity": "O(1) auxiliary space beyond output array.",
+      "edgeCases": [
+        "One zero yields product of others at that index and 0 everywhere else",
+        "Two or more zeros yield all 0s",
+        "Negative entries in Java need `((x % MOD) + MOD) % MOD` normalization"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "setId": "sql-set-4",
+  "title": "SQL Set 04: University Courses, Prerequisites & Grading",
+  "description": "Division queries, top scorers per course, pass percentage calculations, and orphan enrollment checks.",
+  "durationMinutes": 45,
+  "queries": [
+    {
+      "id": "sql-4-q01",
+      "topic": "SQL",
+      "subtopic": "Relational Division",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "title": "Students Enrolled in ALL Core Courses",
+      "prompt": "Find `student_id` and `student_name` of students enrolled in every course present in `core_courses`, ordered by `student_id`.",
+      "schemaSql": "CREATE TABLE students (student_id INT PRIMARY KEY, student_name TEXT); CREATE TABLE core_courses (course_code TEXT PRIMARY KEY); CREATE TABLE enrollments (student_id INT, course_code TEXT);",
+      "seedSql": "INSERT INTO students VALUES (1,'Aditi'),(2,'Bhavesh'),(3,'Charu'); INSERT INTO core_courses VALUES ('CS101'),('CS102'),('CS103'); INSERT INTO enrollments VALUES (1,'CS101'),(1,'CS102'),(1,'CS103'),(1,'EL201'),(2,'CS101'),(2,'CS102'),(3,'CS101'),(3,'CS102'),(3,'CS103');",
+      "expectedColumns": ["student_id", "student_name"],
+      "expectedRows": [
+        [1, "Aditi"],
+        [3, "Charu"]
+      ],
+      "solutionSql": "SELECT s.student_id, s.student_name FROM students s JOIN enrollments e ON s.student_id = e.student_id JOIN core_courses c ON e.course_code = c.course_code GROUP BY s.student_id, s.student_name HAVING COUNT(DISTINCT c.course_code) = (SELECT COUNT(*) FROM core_courses) ORDER BY s.student_id;",
+      "explanation": "Inner-joining `core_courses` ignores electives (`EL201`), then `HAVING COUNT(DISTINCT c.course_code) = (SELECT COUNT(*) FROM core_courses)` performs exact relational division."
+    },
+    {
+      "id": "sql-4-q02",
+      "topic": "SQL",
+      "subtopic": "ROW_NUMBER & Tie-Breaking",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "title": "Top 2 Scores Per Course",
+      "prompt": "Return `course_id`, `student_name`, and `marks` for the top 2 students in each course (break ties by `student_name` ascending). Order by `course_id` ascending, `marks` descending, `student_name` ascending.",
+      "schemaSql": "CREATE TABLE grades (course_id TEXT, student_name TEXT, marks INT);",
+      "seedSql": "INSERT INTO grades VALUES ('DBMS','Zara',91),('DBMS','Aman',91),('DBMS','Kiran',84),('OS','Maya',88),('OS','Dev',95),('OS','Ritu',79);",
+      "expectedColumns": ["course_id", "student_name", "marks"],
+      "expectedRows": [
+        ["DBMS", "Aman", 91],
+        ["DBMS", "Zara", 91],
+        ["OS", "Dev", 95],
+        ["OS", "Maya", 88]
+      ],
+      "solutionSql": "WITH ranked AS (SELECT course_id, student_name, marks, ROW_NUMBER() OVER (PARTITION BY course_id ORDER BY marks DESC, student_name ASC) AS rn FROM grades) SELECT course_id, student_name, marks FROM ranked WHERE rn <= 2 ORDER BY course_id ASC, marks DESC, student_name ASC;",
+      "explanation": "`ROW_NUMBER()` with `(marks DESC, student_name ASC)` deterministically caps each partition to 2 rows."
+    },
+    {
+      "id": "sql-4-q03",
+      "topic": "SQL",
+      "subtopic": "ROUND & Percentage",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "title": "Course Pass Percentage (Marks >= 40)",
+      "prompt": "For each `course_code` in `exam_results`, compute `pass_pct` rounded to 2 decimal places (`ROUND(100.0 * pass_count / total, 2)`). Order by `course_code` ascending.",
+      "schemaSql": "CREATE TABLE exam_results (roll_no INT, course_code TEXT, marks INT);",
+      "seedSql": "INSERT INTO exam_results VALUES (1,'CN',60),(2,'CN',35),(3,'CN',40),(4,'JAVA',80),(5,'JAVA',90),(6,'JAVA',39),(7,'JAVA',55);",
+      "expectedColumns": ["course_code", "pass_pct"],
+      "expectedRows": [
+        ["CN", 66.67],
+        ["JAVA", 75.0]
+      ],
+      "solutionSql": "SELECT course_code, ROUND(100.0 * SUM(CASE WHEN marks >= 40 THEN 1 ELSE 0 END) / COUNT(*), 2) AS pass_pct FROM exam_results GROUP BY course_code ORDER BY course_code;",
+      "explanation": "Multiplying by `100.0` (floating point) avoids SQLite integer division truncation before `ROUND(..., 2)`."
+    },
+    {
+      "id": "sql-4-q04",
+      "topic": "SQL",
+      "subtopic": "LEFT JOIN NULL Check",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "title": "Faculty Without Assigned Sections",
+      "prompt": "Return `prof_id` and `prof_name` of faculty members who have zero assigned rows in `sections`, ordered by `prof_id`.",
+      "schemaSql": "CREATE TABLE faculty (prof_id INT PRIMARY KEY, prof_name TEXT); CREATE TABLE sections (sec_id INT PRIMARY KEY, prof_id INT);",
+      "seedSql": "INSERT INTO faculty VALUES (1,'Dr. Rao'),(2,'Dr. Iyer'),(3,'Dr. Bose'); INSERT INTO sections VALUES (10,1),(11,3);",
+      "expectedColumns": ["prof_id", "prof_name"],
+      "expectedRows": [
+        [2, "Dr. Iyer"]
+      ],
+      "solutionSql": "SELECT f.prof_id, f.prof_name FROM faculty f LEFT JOIN sections s ON f.prof_id = s.prof_id WHERE s.sec_id IS NULL ORDER BY f.prof_id;",
+      "explanation": "Filtering `WHERE s.sec_id IS NULL` after a `LEFT JOIN` yields unmatched parent records."
+    },
+    {
+      "id": "sql-4-q05",
+      "topic": "SQL",
+      "subtopic": "NULL Handling in Aggregates",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "title": "Compare Submitted Scores vs All-Student Average",
+      "prompt": "Compute `submitted_count` (non-NULL scores), `total_students`, and `avg_submitted` rounded to 1 decimal place per `quiz_id` in `quiz_scores`. Order by `quiz_id`.",
+      "schemaSql": "CREATE TABLE quiz_scores (quiz_id INT, student_id INT, score INT);",
+      "seedSql": "INSERT INTO quiz_scores VALUES (1,101,80),(1,102,90),(1,103,NULL),(2,101,50),(2,102,NULL);",
+      "expectedColumns": ["quiz_id", "submitted_count", "total_students", "avg_submitted"],
+      "expectedRows": [
+        [1, 2, 3, 85.0],
+        [2, 1, 2, 50.0]
+      ],
+      "solutionSql": "SELECT quiz_id, COUNT(score) AS submitted_count, COUNT(*) AS total_students, ROUND(AVG(score), 1) AS avg_submitted FROM quiz_scores GROUP BY quiz_id ORDER BY quiz_id;",
+      "explanation": "`COUNT(score)` and `AVG(score)` automatically skip NULLs, whereas `COUNT(*)` counts every row including absent submissions."
+    }
+  ]
+}

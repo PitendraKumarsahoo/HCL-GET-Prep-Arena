@@ -1,0 +1,406 @@
+{
+  "setId": "tech-set-7",
+  "title": "Technical MCQ Set 07: Concurrency Locks, Disk Scheduling & SQL CASE",
+  "description": "Covers synchronized class vs instance locks, BigDecimal equals vs compareTo, Collectors.toMap trap, SCAN disk scheduling, OSPF/BGP, and JDBC pools.",
+  "durationMinutes": 35,
+  "questions": [
+    {
+      "id": "tech-7-q01",
+      "topic": "Output Prediction",
+      "subtopic": "BigDecimal equals() vs compareTo()",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "What does the following Java code print?",
+      "codeSnippet": "BigDecimal a = new BigDecimal(\"1.0\");\nBigDecimal b = new BigDecimal(\"1.00\");\nSystem.out.println(a.equals(b) + \" \" + (a.compareTo(b) == 0));",
+      "options": [
+        "true true",
+        "false true",
+        "true false",
+        "false false"
+      ],
+      "correctIndex": 1,
+      "explanation": "`BigDecimal.equals()` compares BOTH numeric value AND scale (`1.0` scale 1 != `1.00` scale 2 => `false`). `BigDecimal.compareTo()` compares numeric value ignoring scale (`0` => `true`)."
+    },
+    {
+      "id": "tech-7-q02",
+      "topic": "Output Prediction",
+      "subtopic": "Autoboxing NullPointerException",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "What happens when the following Java code executes?",
+      "codeSnippet": "Integer val = null;\nint res = (val != null) ? val : 0;\nInteger x = null;\nint y = true ? x : 0;\nSystem.out.println(res + \" \" + y);",
+      "options": [
+        "Prints `0 0`",
+        "Prints `0 null`",
+        "Throws `NullPointerException` on `int y = true ? x : 0;` due to unboxing `x`",
+        "Compilation error on ternary operator"
+      ],
+      "correctIndex": 2,
+      "explanation": "In `true ? x : 0`, one branch is `Integer` and the other is primitive `int`, so Java unboxes `x` (`x.intValue()`) even though the branch evaluates to `x` directly, throwing `NullPointerException`!"
+    },
+    {
+      "id": "tech-7-q03",
+      "topic": "Output Prediction",
+      "subtopic": "Collectors.toMap Duplicate Key Trap",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "What happens when executing `Stream.of(\"apple\", \"apricot\").collect(Collectors.toMap(s -> s.charAt(0), s -> s))`?",
+      "options": [
+        "Returns `{a=apple}`",
+        "Returns `{a=apricot}`",
+        "Throws `IllegalStateException: Duplicate key` at runtime",
+        "Compilation error"
+      ],
+      "correctIndex": 2,
+      "explanation": "The 2-argument `Collectors.toMap(keyMapper, valueMapper)` throws `IllegalStateException` on duplicate keys unless you pass a 3rd merge-function argument like `(v1, v2) -> v2`."
+    },
+    {
+      "id": "tech-7-q04",
+      "topic": "Java",
+      "subtopic": "Static vs Instance synchronized Monitor",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "Class `Counter` has `synchronized void incInstance()` and `static synchronized void incStatic()`. If Thread T1 enters `obj.incInstance()` while Thread T2 calls `Counter.incStatic()`, do they block each other?",
+      "options": [
+        "Yes, both acquire the same global JVM lock",
+        "No, `incInstance()` locks on `obj` (`this` instance monitor), whereas `incStatic()` locks on `Counter.class` monitor",
+        "Yes, unless `Counter` implements `Runnable`",
+        "Only if `obj` is marked `final`"
+      ],
+      "correctIndex": 1,
+      "explanation": "Instance synchronized methods acquire the object instance lock (`this`), whereas static synchronized methods acquire the `Class` object lock (`Counter.class`); they are completely independent monitors."
+    },
+    {
+      "id": "tech-7-q05",
+      "topic": "Java",
+      "subtopic": "ForkJoinPool & Work-Stealing",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "How does Java's `ForkJoinPool` keep worker threads balanced during uneven divide-and-conquer tasks?",
+      "options": [
+        "By moving all tasks onto a single main thread",
+        "Via work-stealing: idle worker threads steal tasks from the tail of busy workers' double-ended queues (deques)",
+        "By locking a single global priority queue on every task push/pop",
+        "By spawning an unbounded OS thread per subtask"
+      ],
+      "correctIndex": 1,
+      "explanation": "Each worker pushes/pops its own subtasks LIFO at the head of its deque (cache-friendly), while idle threads steal older subtasks FIFO from the tail of busy workers' deques."
+    },
+    {
+      "id": "tech-7-q06",
+      "topic": "OOP",
+      "subtopic": "Abstract Class Constructor Execution",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Why can an `abstract class` in Java define constructors even though it cannot be instantiated directly with `new`?",
+      "options": [
+        "To prevent subclasses from compiling",
+        "To initialize the abstract class's own fields and invariants when invoked via `super(...)` from a concrete subclass constructor",
+        "To allow static methods to create instances silently",
+        "Java forbids constructors inside abstract classes"
+      ],
+      "correctIndex": 1,
+      "explanation": "Concrete subclasses invoke `super(...)` during construction, allowing the abstract base class to initialize shared fields cleanly."
+    },
+    {
+      "id": "tech-7-q07",
+      "topic": "SQL",
+      "subtopic": "Conditional Pivot via CASE WHEN",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Table `Txns(dept, status, amount)` has `status` in `('PAID', 'FAILED')`. Which query outputs one row per `dept` with separate `paid_total` and `failed_total` columns?",
+      "options": [
+        "`SELECT dept, SUM(amount) WHERE status='PAID', SUM(amount) WHERE status='FAILED' FROM Txns GROUP BY dept`",
+        "`SELECT dept, SUM(CASE WHEN status='PAID' THEN amount ELSE 0 END) AS paid_total, SUM(CASE WHEN status='FAILED' THEN amount ELSE 0 END) AS failed_total FROM Txns GROUP BY dept`",
+        "`SELECT dept, COUNT(status='PAID'), COUNT(status='FAILED') FROM Txns`",
+        "`SELECT dept, SUM(amount) FROM Txns GROUP BY dept, status`"
+      ],
+      "correctIndex": 1,
+      "explanation": "Conditional aggregation (`SUM(CASE WHEN ... THEN amount ELSE 0 END)`) pivots status categories into side-by-side columns in one table scan."
+    },
+    {
+      "id": "tech-7-q08",
+      "topic": "SQL",
+      "subtopic": "ALL vs ANY Subquery Quantifier",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "Which query finds employees in `Emp` whose salary is strictly greater than EVERY salary in department 20 (assuming no NULL salaries)?",
+      "options": [
+        "`SELECT name FROM Emp WHERE salary > ANY (SELECT salary FROM Emp WHERE dept_id = 20)`",
+        "`SELECT name FROM Emp WHERE salary > ALL (SELECT salary FROM Emp WHERE dept_id = 20)`",
+        "`SELECT name FROM Emp WHERE salary IN (SELECT MAX(salary) FROM Emp WHERE dept_id = 20)`",
+        "`SELECT name FROM Emp WHERE salary <> ALL (SELECT salary FROM Emp WHERE dept_id = 20)`"
+      ],
+      "correctIndex": 1,
+      "explanation": "`> ALL (...)` requires the salary to exceed every returned value (equivalent to `> MAX(salary)` when non-empty and non-null), whereas `> ANY (...)` only requires exceeding the minimum."
+    },
+    {
+      "id": "tech-7-q09",
+      "topic": "DBMS",
+      "subtopic": "ARIES Crash Recovery Phases",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "In the ARIES database crash recovery algorithm, what is the correct sequence of its three recovery passes?",
+      "options": [
+        "Undo -> Redo -> Analysis",
+        "Analysis -> Redo -> Undo",
+        "Redo -> Undo -> Analysis",
+        "Checkpoint -> Undo -> Analysis"
+      ],
+      "correctIndex": 1,
+      "explanation": "ARIES runs: (1) Analysis (scans forward from last checkpoint to identify dirty pages & active loser transactions), (2) Redo (repeats history from smallest RecLSN), and (3) Undo (rolls back uncommitted loser transactions backward)."
+    },
+    {
+      "id": "tech-7-q10",
+      "topic": "DBMS",
+      "subtopic": "Physical Join Algorithms",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "When joining two large unsorted tables on an equality condition (`a.key = b.key`) without usable indexes, which physical join algorithm typically delivers the best performance when one table's hash table fits in memory?",
+      "options": [
+        "Nested-Loop Join (`O(N * M)`)",
+        "Hash Join (build hash table on smaller relation, probe with larger)",
+        "Cartesian Cross Join",
+        "Sequential Sort-Merge without external sort"
+      ],
+      "correctIndex": 1,
+      "explanation": "Hash Join hashes the smaller build input in `O(M)` and streams the probe input in `O(N)`, avoiding the `O(N*M)` nested scan and `O(N log N)` sorting of Sort-Merge."
+    },
+    {
+      "id": "tech-7-q11",
+      "topic": "OS",
+      "subtopic": "Disk Scheduling SSTF Numerical",
+      "difficulty": "hard",
+      "source_tag": "reported",
+      "question": "A disk head starts at cylinder `50` with pending requests `{82, 170, 43, 140, 24, 16, 190}`. What is the total head movement (in cylinders) using Shortest Seek Time First (SSTF)?",
+      "options": ["172", "208", "240", "288"],
+      "correctIndex": 1,
+      "explanation": "From 50, closest is 43 (7), then 24 (19), then 16 (8), then from 16 jump to 82 (66), then 140 (58), then 170 (30), then 190 (20). Total = 7 + 19 + 8 + 66 + 58 + 30 + 20 = 208 cylinders (equivalently (50 - 16) + (190 - 16) = 34 + 174 = 208)."
+    },
+    {
+      "id": "tech-7-q12",
+      "topic": "OS",
+      "subtopic": "Inverted Page Table Purpose",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Why does a 64-bit OS sometimes use an Inverted Page Table (one entry per physical frame) instead of per-process hierarchical page tables?",
+      "options": [
+        "To double page fault latency",
+        "To bound page table memory strictly to physical RAM size rather than scaling with virtual address space * process count",
+        "To allow processes to bypass virtual-to-physical translation",
+        "To store file directories inside CPU L1 cache"
+      ],
+      "correctIndex": 1,
+      "explanation": "An inverted page table maintains a single global table with one entry per physical page frame (hashed by `<PID, VPN>`), keeping page table overhead proportional to installed physical RAM."
+    },
+    {
+      "id": "tech-7-q13",
+      "topic": "CN",
+      "subtopic": "Routing Protocols (RIP vs OSPF vs BGP)",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "Which pairing of routing protocol and underlying algorithm/scope is CORRECT?",
+      "options": [
+        "RIP -> Link-State (Dijkstra) across Autonomous Systems",
+        "OSPF -> Intra-AS Link-State (Dijkstra); BGP -> Inter-AS Path-Vector",
+        "BGP -> Intra-AS Distance-Vector using hop count max 15",
+        "OSPF -> UDP port 520 broadcast every 30s"
+      ],
+      "correctIndex": 1,
+      "explanation": "RIP is intra-AS distance-vector (Bellman-Ford, max 15 hops); OSPF is intra-AS link-state (Dijkstra SPF); BGP is the internet's inter-AS path-vector protocol."
+    },
+    {
+      "id": "tech-7-q14",
+      "topic": "CN",
+      "subtopic": "TCP vs UDP Header Overhead",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "What are the minimum fixed header sizes of a standard UDP header and a standard TCP header (without options) respectively?",
+      "options": [
+        "4 bytes and 16 bytes",
+        "8 bytes and 20 bytes",
+        "12 bytes and 24 bytes",
+        "20 bytes and 40 bytes"
+      ],
+      "correctIndex": 1,
+      "explanation": "A UDP header is 8 bytes (Src Port, Dst Port, Length, Checksum = 4 * 2B). A standard TCP header without options is 20 bytes."
+    },
+    {
+      "id": "tech-7-q15",
+      "topic": "DSA",
+      "subtopic": "Red-Black Tree Height Bound",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "In a Red-Black Tree containing `N` internal nodes, what is the guaranteed upper bound on the height of the tree (number of edges on the longest root-to-NIL path)?",
+      "options": [
+        "At most `log2(N + 1)`",
+        "At most `2 * log2(N + 1)`",
+        "At most `N / 2`",
+        "Exact `sqrt(N)`"
+      ],
+      "correctIndex": 1,
+      "explanation": "Because no two consecutive red nodes appear on a path and every path has equal black-height `bh >= h/2`, a Red-Black Tree satisfies `h <= 2 * log2(N + 1)`, guaranteeing `O(log N)` operations."
+    },
+    {
+      "id": "tech-7-q16",
+      "topic": "DSA",
+      "subtopic": "Floyd-Warshall Negative Cycle Check",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "After running the Floyd-Warshall all-pairs shortest path algorithm on graph `G`, how do you detect whether `G` contains a negative-weight cycle?",
+      "options": [
+        "Check if any `dist[i][j]` is negative for `i != j`",
+        "Check if any diagonal entry `dist[i][i] < 0`",
+        "Check if the graph is disconnected",
+        "Floyd-Warshall cannot detect negative cycles"
+      ],
+      "correctIndex": 1,
+      "explanation": "Initially `dist[i][i] = 0`. If a vertex `i` can reach itself along a negative total-weight cycle, `dist[i][i]` becomes `< 0`."
+    },
+    {
+      "id": "tech-7-q17",
+      "topic": "JDBC",
+      "subtopic": "HikariCP Connection Pool Leak",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "In a Spring Boot app using HikariCP (default pool size 10), why does forgetting to close a manual `Connection` obtained from `dataSource.getConnection()` quickly freeze the entire application?",
+      "options": [
+        "JDBC closes the JVM after 10 queries",
+        "After 10 unclosed borrows, the pool is exhausted and all subsequent threads block until `connectionTimeout` then throw `SQLTransientConnectionException`",
+        "HikariCP drops all database tables upon leak detection",
+        "SQLite switches to read-only mode"
+      ],
+      "correctIndex": 1,
+      "explanation": "Connections borrowed from a pool must be closed (`try-with-resources`) to return them to the pool. Otherwise pool exhaustion blocks every incoming request."
+    },
+    {
+      "id": "tech-7-q18",
+      "topic": "SE",
+      "subtopic": "Blue-Green vs Canary Deployment",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "How does a Canary release differ from a standard Blue-Green deployment?",
+      "options": [
+        "Canary deploys code without automated tests",
+        "Blue-Green switches 100% of traffic atomically between two identical environments, whereas Canary routes a small subset (e.g., 5%) of live traffic to the new version first to validate metrics before full rollout",
+        "Blue-Green only works for SQL databases",
+        "Canary requires shutting down production servers during rollout"
+      ],
+      "correctIndex": 1,
+      "explanation": "Blue-Green maintains two full environments and flips the router all at once; Canary progressively shifts small traffic percentages while monitoring error/latency SLOs."
+    },
+    {
+      "id": "tech-7-q19",
+      "topic": "Java",
+      "subtopic": "HashSet Internal Backing",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "How is `java.util.HashSet<E>` implemented internally in the JDK?",
+      "options": [
+        "As a sorted Red-Black tree of `E`",
+        "Backed by a `HashMap<E, Object>` where elements are keys mapped to a shared dummy constant `PRESENT`",
+        "As a synchronized `Vector<E>`",
+        "As a bloom filter with fixed 64-bit buckets"
+      ],
+      "correctIndex": 1,
+      "explanation": "`HashSet` delegates `add/remove/contains` to an internal `HashMap<E, Object>` storing each element as a key with a single dummy `Object PRESENT` value."
+    },
+    {
+      "id": "tech-7-q20",
+      "topic": "SQL",
+      "subtopic": "SQL Injection via LIKE Wildcards",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "In SQL, what does the pattern `WHERE code LIKE 'A_B%'` match?",
+      "options": [
+        "Only exact string `'A_B%'`",
+        "Any string starting with `'A'`, followed by ANY single character, then `'B'`, then zero or more characters",
+        "Strings containing `'A'`, zero or more chars, then `'B'`",
+        "Strings ending with `'B'` only"
+      ],
+      "correctIndex": 1,
+      "explanation": "In SQL `LIKE`, `_` matches any single character and `%` matches zero or more characters."
+    },
+    {
+      "id": "tech-7-q21",
+      "topic": "OS",
+      "subtopic": "Zombie vs Orphan Process",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "On Unix/Linux, what is a Zombie (`Z` state) process?",
+      "options": [
+        "A process whose parent exited while it is still running",
+        "A terminated child process whose exit status has not yet been reaped by its parent via `wait()`/`waitpid()`",
+        "A kernel thread executing infinite CPU loops",
+        "A swapped-out process waiting for disk I/O"
+      ],
+      "correctIndex": 1,
+      "explanation": "When a child terminates, its memory is freed, but its process table slot (PID + exit status) remains as a Zombie until the parent calls `wait()`. (An Orphan is a still-running child whose parent died, adopted by `init`/PID 1.)"
+    },
+    {
+      "id": "tech-7-q22",
+      "topic": "CN",
+      "subtopic": "HTTP Conditional GET & ETag",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "When a browser sends `If-None-Match: \"v42\"` and the server confirms the resource ETag is still `\"v42\"`, which HTTP status code should the server return without re-sending the body?",
+      "options": [
+        "204 No Content",
+        "304 Not Modified",
+        "301 Moved Permanently",
+        "412 Precondition Failed"
+      ],
+      "correctIndex": 1,
+      "explanation": "`304 Not Modified` instructs the client to reuse its cached copy, saving payload bandwidth."
+    },
+    {
+      "id": "tech-7-q23",
+      "topic": "DSA",
+      "subtopic": "Inorder Traversal of BST",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Which traversal of a valid Binary Search Tree yields all node keys in non-decreasing sorted order?",
+      "options": [
+        "Preorder",
+        "Inorder (Left -> Root -> Right)",
+        "Postorder",
+        "Level-order (BFS)"
+      ],
+      "correctIndex": 1,
+      "explanation": "Because every key in the left subtree is <= root <= right subtree, Inorder traversal visits keys in sorted order."
+    },
+    {
+      "id": "tech-7-q24",
+      "topic": "Java",
+      "subtopic": "Garbage Collection G1GC Regions",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "What distinguishes the G1 (Garbage-First) collector (default since Java 9) from the older Parallel GC?",
+      "options": [
+        "G1 never performs Stop-The-World pauses",
+        "G1 partitions the heap into equal-sized regions and prioritizes collecting regions with the most garbage first to meet configurable pause-time goals",
+        "G1 eliminates the JVM Stack",
+        "G1 disables reference counting in Metaspace"
+      ],
+      "correctIndex": 1,
+      "explanation": "G1 divides the heap into small regions (young/old/humongous) and runs concurrent marking + incremental evacuations prioritizing highest-garbage regions (`Garbage-First`)."
+    },
+    {
+      "id": "tech-7-q25",
+      "topic": "Output Prediction",
+      "subtopic": "Java Interface Constant & Method Inheritance",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "What does the following Java code print?",
+      "codeSnippet": "interface Config {\n  int LIMIT = 5;\n  static void info() { System.out.print(\"CFG \"); }\n}\nclass App implements Config {\n  public static void main(String[] args) {\n    System.out.print(LIMIT + \" \");\n    Config.info();\n  }\n}",
+      "options": [
+        "Compilation error: `LIMIT` is not initialized",
+        "5 CFG",
+        "0 CFG",
+        "Compilation error: `info()` must be overridden in `App`"
+      ],
+      "correctIndex": 1,
+      "explanation": "Interface fields are implicitly `public static final` constants (`LIMIT = 5`). Interface `static` methods belong solely to the interface and are called via `Config.info()`."
+    }
+  ]
+}

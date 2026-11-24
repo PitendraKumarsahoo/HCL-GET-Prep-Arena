@@ -1,0 +1,412 @@
+{
+  "setId": "tech-set-8",
+  "title": "Technical MCQ Set 08: Production Java, SQL Windows & Networking",
+  "description": "Covers ExecutorService, Stream.parallel traps, SQL LAG/LEAD & OFFSET pagination, 4NF, priority inversion, CORS preflight, and Spring qualifiers.",
+  "durationMinutes": 35,
+  "questions": [
+    {
+      "id": "tech-8-q01",
+      "topic": "Output Prediction",
+      "subtopic": "StringBuilder Capacity vs Length",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "What does the following Java snippet print?",
+      "codeSnippet": "StringBuilder sb = new StringBuilder(\"HCL\");\nSystem.out.println(sb.length() + \":\" + sb.capacity());",
+      "options": [
+        "3:3",
+        "3:16",
+        "3:19",
+        "4:16"
+      ],
+      "correctIndex": 2,
+      "explanation": "`new StringBuilder(String str)` allocates an internal buffer of `str.length() + 16` characters! Here `3 + 16 = 19` capacity while `length()` is `3`, printing `3:19`."
+    },
+    {
+      "id": "tech-8-q02",
+      "topic": "Output Prediction",
+      "subtopic": "Java Checked vs Unchecked Compilation",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "What happens when compiling the following Java snippet?",
+      "codeSnippet": "void test() {\n  try {\n    System.out.println(\"ok\");\n  } catch (java.io.IOException e) {\n    System.out.println(\"err\");\n  }\n}",
+      "options": [
+        "Prints `ok`",
+        "Compilation error: `exception IOException is never thrown in body of corresponding try statement`",
+        "Throws `IOException` at runtime",
+        "Prints `ok` then `err`"
+      ],
+      "correctIndex": 1,
+      "explanation": "Java rejects catching a specific checked exception (other than `Exception` or `Throwable`) if no statement inside the `try` block can actually throw it."
+    },
+    {
+      "id": "tech-8-q03",
+      "topic": "Output Prediction",
+      "subtopic": "Floating-Point NaN Comparison",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "Determine the IEEE-754 floating-point NaN comparison result produced by this Java snippet:",
+      "codeSnippet": "double x = 0.0 / 0.0;\nSystem.out.println((x == x) + \" \" + Double.isNaN(x));",
+      "options": [
+        "Throws `ArithmeticException`",
+        "true false",
+        "false true",
+        "true true"
+      ],
+      "correctIndex": 2,
+      "explanation": "Unlike integer division (`0 / 0`), floating-point `0.0 / 0.0` evaluates to `Double.NaN`. Per IEEE-754, `NaN` is never equal to anything including itself (`x == x` is `false`), while `Double.isNaN(x)` returns `true`."
+    },
+    {
+      "id": "tech-8-q04",
+      "topic": "Java",
+      "subtopic": "ExecutorService shutdown vs shutdownNow",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "How does `executor.shutdown()` differ from `executor.shutdownNow()` in Java?",
+      "options": [
+        "`shutdown()` kills active threads immediately with `Thread.stop()`",
+        "`shutdown()` rejects new tasks while letting already submitted/queued tasks finish; `shutdownNow()` clears the pending queue and interrupts active worker threads",
+        "`shutdownNow()` blocks until every queued task completes normally",
+        "Both behave identically unless using virtual threads"
+      ],
+      "correctIndex": 1,
+      "explanation": "`shutdown()` initiates a graceful stop (finishing submitted and queued tasks); `shutdownNow()` attempts immediate cancellation by returning queued tasks and calling `interrupt()` on running workers."
+    },
+    {
+      "id": "tech-8-q05",
+      "topic": "Java",
+      "subtopic": "Parallel Stream Shared Pool Pitfall",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "Why is calling `.parallelStream()` for blocking JDBC or HTTP I/O calls inside a high-traffic Spring Boot web server dangerous?",
+      "options": [
+        "`parallelStream()` throws `NotSerializableException` on HTTP threads",
+        "All `parallelStream()` calls share the JVM-wide `ForkJoinPool.commonPool()`, so blocking I/O starves unrelated parallel streams across the entire application",
+        "`parallelStream()` runs single-threaded unless `volatile` is set",
+        "`parallelStream()` skips `filter()` predicates"
+      ],
+      "correctIndex": 1,
+      "explanation": "`ForkJoinPool.commonPool()` has size `CPU cores - 1`; blocking its threads on network/DB I/O stalls every other caller relying on the common pool. Use a dedicated `ExecutorService` or Java 21 virtual threads."
+    },
+    {
+      "id": "tech-8-q06",
+      "topic": "OOP",
+      "subtopic": "final Class, Method & Reference",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "If you declare `final List<String> tags = new ArrayList<>();`, which operation is ILLEGAL?",
+      "options": [
+        "`tags.add(\"java\");`",
+        "`tags.clear();`",
+        "`tags = new ArrayList<>();`",
+        "`tags.size();`"
+      ],
+      "correctIndex": 2,
+      "explanation": "`final` makes the reference variable constant (cannot be reassigned to a different `ArrayList`), NOT the underlying object immutable (`add`/`clear` still mutate the list)."
+    },
+    {
+      "id": "tech-8-q07",
+      "topic": "SQL",
+      "subtopic": "LAG() Window Function Delta",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Given `DailySales(dt, rev)`, which SQL expression computes each day's revenue change compared to the immediately preceding day?",
+      "options": [
+        "`rev - MIN(rev) OVER ()`",
+        "`rev - LAG(rev, 1) OVER (ORDER BY dt)`",
+        "`rev - LEAD(rev, 1) OVER (ORDER BY dt)`",
+        "`rev - AVG(rev) OVER (PARTITION BY dt)`"
+      ],
+      "correctIndex": 1,
+      "explanation": "`LAG(rev, 1) OVER (ORDER BY dt)` fetches the prior row's `rev` ordered chronologically (`LEAD` fetches the next row)."
+    },
+    {
+      "id": "tech-8-q08",
+      "topic": "SQL",
+      "subtopic": "Pagination Keyset vs OFFSET Trap",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "Why does `LIMIT 20 OFFSET 100000` degrade on large tables and risk skipping/duplicating rows during live pagination?",
+      "options": [
+        "SQL forbids `OFFSET` values above 65,535",
+        "The DB must scan and discard 100,000 rows first, and concurrent inserts shift row positions between page requests (use keyset/cursor pagination `WHERE id > last_id` instead)",
+        "`OFFSET` locks the entire table in `SERIALIZABLE` mode",
+        "`LIMIT` disables primary key indexes"
+      ],
+      "correctIndex": 1,
+      "explanation": "Offset pagination still traverses/counts `OFFSET + LIMIT` rows and suffers drift when rows are inserted/deleted; keyset pagination (`WHERE id > :cursor ORDER BY id LIMIT 20`) stays `O(log N)` via index seek."
+    },
+    {
+      "id": "tech-8-q09",
+      "topic": "DBMS",
+      "subtopic": "Fourth Normal Form (4NF)",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "Table `DevSkills(dev_id, language, certification)` stores independent multi-valued attributes (`dev_id ->> language` and `dev_id ->> certification`) in one all-key table `(dev_id, language, certification)`. Which normal form is violated?",
+      "options": [
+        "2NF",
+        "3NF",
+        "BCNF",
+        "4NF (multi-valued dependency)"
+      ],
+      "correctIndex": 3,
+      "explanation": "Because the table is all-key, there are no non-trivial functional dependencies (so BCNF holds), yet Cartesian repetition of two independent multi-valued facts violates 4NF."
+    },
+    {
+      "id": "tech-8-q10",
+      "topic": "DBMS",
+      "subtopic": "Write Skew Anomaly in Snapshot Isolation",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "Two on-call doctors check that 2 doctors are on duty, and both concurrently update their OWN distinct row to `off_call` under Snapshot Isolation, leaving 0 doctors on duty. What is this concurrency anomaly called?",
+      "options": [
+        "Dirty Read",
+        "Write Skew",
+        "Lost Update on the same row",
+        "Deadlock Livelock"
+      ],
+      "correctIndex": 1,
+      "explanation": "Write Skew occurs when two transactions read overlapping data, then update DISJOINT rows in ways that jointly violate a multi-row invariant under Snapshot Isolation (fixed by `SERIALIZABLE` or `SELECT ... FOR UPDATE`)."
+    },
+    {
+      "id": "tech-8-q11",
+      "topic": "OS",
+      "subtopic": "Priority Inversion & Inheritance",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "A low-priority thread `L` holds mutex `M` needed by high-priority thread `H`, while medium-priority CPU-bound thread `M_med` continuously preempts `L`. How do real-time OS kernels resolve this Priority Inversion?",
+      "options": [
+        "By killing thread `H` after 10 ms",
+        "Priority Inheritance: temporarily boosting `L`'s priority to `H`'s priority until `L` releases mutex `M`",
+        "Converting `M` into a busy-wait spinlock on a single core",
+        "Switching the scheduler to FCFS permanently"
+      ],
+      "correctIndex": 1,
+      "explanation": "Priority Inheritance elevates the lock-holder `L` to the highest waiting thread's priority (`H`) so `M_med` cannot preempt `L` and starve `H`."
+    },
+    {
+      "id": "tech-8-q12",
+      "topic": "OS",
+      "subtopic": "Copy-on-Write (CoW) after fork()",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Why does calling `fork()` followed immediately by `execve()` in a 2 GB parent process remain fast on modern Linux?",
+      "options": [
+        "`fork()` skips creating a new PID",
+        "Copy-on-Write (CoW) shares read-only physical memory pages between parent and child, copying pages only when either writes before `execve()` replaces the address space",
+        "`fork()` copies all 2 GB sequentially to swap space",
+        "`execve()` runs inside the parent's stack frame"
+      ],
+      "correctIndex": 1,
+      "explanation": "CoW duplicates only page table entries initially marked read-only; physical pages are duplicated lazily on write faults, so `fork()+exec()` avoids copying 2 GB needlessly."
+    },
+    {
+      "id": "tech-8-q13",
+      "topic": "CN",
+      "subtopic": "CORS Preflight OPTIONS Request",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "When a React frontend on `https://app.example.com` sends a `PUT` request with `Authorization: Bearer ...` and `Content-Type: application/json` to `https://api.example.com`, what does the browser send FIRST?",
+      "options": [
+        "A DNS AXFR zone transfer",
+        "An automatic CORS preflight `OPTIONS` request checking `Access-Control-Allow-Methods` and `Access-Control-Allow-Headers`",
+        "A `HEAD` request to `/robots.txt`",
+        "An unencrypted `HTTP 0.9` probe"
+      ],
+      "correctIndex": 1,
+      "explanation": "Non-simple cross-origin requests (methods other than GET/HEAD/POST or custom headers like `Authorization` and `application/json`) trigger a browser CORS preflight `OPTIONS` check."
+    },
+    {
+      "id": "tech-8-q14",
+      "topic": "CN",
+      "subtopic": "DNS Recursive vs Iterative Query",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "In standard internet DNS resolution, which query type is sent by your laptop's stub resolver to your ISP/local recursive resolver, and which is typically used by that resolver toward Root and TLD nameservers?",
+      "options": [
+        "Laptop sends iterative; resolver sends recursive to Root",
+        "Laptop sends recursive; resolver performs iterative queries (following referrals from Root -> TLD -> Authoritative)",
+        "Both always use TCP multicast",
+        "Laptop queries Root servers directly via ARP"
+      ],
+      "correctIndex": 1,
+      "explanation": "The client asks its recursive resolver for a final answer (recursive), while Root/TLD servers return referrals (iterative) to offload state from Root infrastructure."
+    },
+    {
+      "id": "tech-8-q15",
+      "topic": "DSA",
+      "subtopic": "Kahn's Algorithm Cycle Detection",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "While running Kahn's BFS topological sort (using vertex in-degrees) on a directed graph with `V` vertices, how do you know the graph contains a cycle?",
+      "options": [
+        "At least one vertex starts with out-degree 0",
+        "The output topological list terminates with fewer than `V` vertices (remaining vertices still have `inDegree > 0`)",
+        "The queue size exceeds `V / 2`",
+        "Every edge has weight 1"
+      ],
+      "correctIndex": 1,
+      "explanation": "Vertices belonging to or reachable only from a directed cycle never drop to `inDegree == 0`, so Kahn's algorithm processes strictly fewer than `V` vertices."
+    },
+    {
+      "id": "tech-8-q16",
+      "topic": "DSA",
+      "subtopic": "Segment Tree Complexity",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Given an integer array of size `N`, what are the time complexities of a single point-update and a range-sum query `[L, R]` using a Segment Tree?",
+      "options": [
+        "Update `O(N)`, Query `O(1)`",
+        "Update `O(log N)`, Query `O(log N)`",
+        "Update `O(1)`, Query `O(N)`",
+        "Update `O(log N)`, Query `O(N)`"
+      ],
+      "correctIndex": 1,
+      "explanation": "A Segment Tree balances both point updates and arbitrary range queries in `O(log N)` time with `O(N)` build time and `4N` space."
+    },
+    {
+      "id": "tech-8-q17",
+      "topic": "JDBC",
+      "subtopic": "execute() vs executeQuery() vs executeUpdate()",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "What does `statement.execute(sql)` return as its `boolean` return value?",
+      "options": [
+        "`true` if at least 1 row was updated, `false` otherwise",
+        "`true` if the first result is a `ResultSet` (e.g., `SELECT`), and `false` if it is an update count or no result (e.g., `INSERT`/`UPDATE`/DDL)",
+        "`true` only if the SQL syntax is valid without running it",
+        "`true` if autoCommit is enabled"
+      ],
+      "correctIndex": 1,
+      "explanation": "`execute()` supports arbitrary/dynamic SQL: it returns `true` when `getResultSet()` should be called and `false` when `getUpdateCount()` applies."
+    },
+    {
+      "id": "tech-8-q18",
+      "topic": "SE",
+      "subtopic": "Open-Closed Principle (OCP)",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Replacing a growing `if (type.equals(\"UPI\")) ... else if (type.equals(\"CARD\")) ...` block with a `PaymentStrategy` interface and separate concrete implementations satisfies which SOLID principle?",
+      "options": [
+        "Interface Segregation Principle",
+        "Open-Closed Principle (open for extension, closed for modification)",
+        "Single Table Inheritance",
+        "Law of Demeter only"
+      ],
+      "correctIndex": 1,
+      "explanation": "Adding a new payment method (`WalletPayment`) simply adds a new class implementing `PaymentStrategy` without modifying existing tested checkout code."
+    },
+    {
+      "id": "tech-8-q19",
+      "topic": "Java",
+      "subtopic": "Spring Bean Disambiguation (@Primary / @Qualifier)",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Two beans `SmtpMailer` and `SesMailer` both implement `MailerService`. Without `@Primary` or `@Qualifier`, what happens when Spring Boot injects `private final MailerService mailer;`?",
+      "options": [
+        "Spring picks the alphabetically first bean silently",
+        "Startup fails with `NoUniqueBeanDefinitionException`",
+        "Spring injects `null`",
+        "Spring creates a dynamic proxy combining both beans"
+      ],
+      "correctIndex": 1,
+      "explanation": "When multiple candidate beans match an injection point by type and neither `@Primary` nor `@Qualifier` (nor matching field/parameter name) resolves the ambiguity, Spring throws `NoUniqueBeanDefinitionException`."
+    },
+    {
+      "id": "tech-8-q20",
+      "topic": "SQL",
+      "subtopic": "DELETE vs TRUNCATE Rollback in Transactions",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "In Oracle SQL (unlike PostgreSQL), why can a `DELETE FROM Temp;` inside a transaction be undone with `ROLLBACK`, whereas `TRUNCATE TABLE Temp;` cannot?",
+      "options": [
+        "Oracle forbids transactions on `Temp` tables",
+        "In Oracle, DDL statements like `TRUNCATE` issue an implicit `COMMIT` before and after execution, preventing rollback",
+        "`DELETE` stores deleted rows inside browser cookies",
+        "`TRUNCATE` deletes only NULL rows"
+      ],
+      "correctIndex": 1,
+      "explanation": "In Oracle (and MySQL), `TRUNCATE` is a DDL command that triggers an implicit commit, whereas PostgreSQL supports transactional DDL allowing `TRUNCATE` to roll back inside `BEGIN...ROLLBACK`."
+    },
+    {
+      "id": "tech-8-q21",
+      "topic": "OS",
+      "subtopic": "Kernel-Level vs User-Level Threads",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "What is the major limitation of pure Many-to-One (user-level only) thread libraries when one user thread invokes a blocking OS `read()` syscall?",
+      "options": [
+        "The OS allocates 10x more stack memory",
+        "Because the kernel sees only a single process, the blocking syscall blocks ALL user-level threads in that process and prevents multi-core parallelism",
+        "User-level threads cannot share global heap variables",
+        "Context switching between user threads requires a ring-0 kernel trap"
+      ],
+      "correctIndex": 1,
+      "explanation": "In a pure Many-to-One model, the kernel schedules only the single underlying kernel thread, so a blocking syscall stalls the entire process and cannot utilize multiple CPU cores."
+    },
+    {
+      "id": "tech-8-q22",
+      "topic": "CN",
+      "subtopic": "Subnet Broadcast vs Network Address",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Which IPv4 address belongs to the SAME `/28` subnet as `10.0.4.37`?",
+      "options": [
+        "`10.0.4.16`",
+        "`10.0.4.30`",
+        "`10.0.4.45`",
+        "`10.0.4.50`"
+      ],
+      "correctIndex": 2,
+      "explanation": "A `/28` mask has block size `2^(32-28) = 16`. Multiples of 16: `0, 16, 32, 48, ...`. Thus `10.0.4.37` lies in `10.0.4.32/28` (range `.32` to `.47`). Only `10.0.4.45` falls inside `[32, 47]`."
+    },
+    {
+      "id": "tech-8-q23",
+      "topic": "DSA",
+      "subtopic": "Adjacency List vs Adjacency Matrix",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "A graph has `V = 100,000` vertices and `E = 250,000` edges. Why is an Adjacency List strongly preferred over an Adjacency Matrix?",
+      "options": [
+        "Adjacency Matrix checks edge `(u, v)` in `O(V)` time",
+        "An Adjacency Matrix would require `10^10` cells (~10–40 GB RAM), whereas an Adjacency List uses `O(V + E)` space (~few MB)",
+        "Adjacency Lists work only on undirected trees",
+        "Adjacency Matrices cannot represent weighted edges"
+      ],
+      "correctIndex": 1,
+      "explanation": "Sparse graphs (`E << V^2`) blow up `O(V^2)` matrix memory (`10^10` entries), while an adjacency list stores only existing edges in `O(V + E)` memory."
+    },
+    {
+      "id": "tech-8-q24",
+      "topic": "Java",
+      "subtopic": "OutOfMemoryError vs Exception Handling",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "In Java's `Throwable` hierarchy, why should application business logic generally NOT `catch (Throwable t)` or `catch (Error e)`?",
+      "options": [
+        "`Error` is a checked exception that cannot be caught",
+        "`Error` subclasses (like `OutOfMemoryError` or `StackOverflowError`) represent severe JVM/system failures that business handlers cannot reliably recover from",
+        "Catching `Throwable` disables JVM garbage collection",
+        "`Error` extends `RuntimeException`"
+      ],
+      "correctIndex": 1,
+      "explanation": "`Error` and `Exception` both extend `Throwable` directly (`Error` is unchecked). Catching `Throwable` swallows fatal JVM `Error`s like `OutOfMemoryError` instead of letting fail-fast diagnostics surface."
+    },
+    {
+      "id": "tech-8-q25",
+      "topic": "Output Prediction",
+      "subtopic": "Java Stream flatMap vs map",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "What does the following Java 8 Stream snippet print?",
+      "codeSnippet": "List<List<Integer>> grid = List.of(List.of(1, 2), List.of(3, 4));\nlong sum = grid.stream()\n  .flatMap(Collection::stream)\n  .mapToInt(Integer::intValue)\n  .sum();\nSystem.out.println(sum);",
+      "options": [
+        "2",
+        "4",
+        "10",
+        "Compilation error"
+      ],
+      "correctIndex": 2,
+      "explanation": "`flatMap(Collection::stream)` flattens `[[1, 2], [3, 4]]` into a single `Stream<Integer>` of `1, 2, 3, 4`, and `sum()` returns `10`."
+    }
+  ]
+}

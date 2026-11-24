@@ -1,0 +1,89 @@
+{
+  "setId": "coding-set-3",
+  "title": "Coding Set 03: Hashing & Frequency Counters",
+  "description": "Reported HCL array & string hashing problems: exact pair-sum counting with duplicates and first unique character index.",
+  "durationMinutes": 60,
+  "problems": [
+    {
+      "id": "code-3-p01",
+      "topic": "Hashing",
+      "subtopic": "Two-Sum Frequency Counting",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "title": "Count Pairs with Given Sum",
+      "statement": "Given an integer array A of size N and a target integer K, count the total number of index pairs (i, j) with 0 <= i < j < N such that A[i] + A[j] == K. Duplicates are allowed and each distinct index pair counts separately.",
+      "inputFormat": "Line 1: Two integers N and K.\nLine 2: N space-separated integers A[0..N-1].",
+      "outputFormat": "A single integer representing the count of pairs.",
+      "constraints": [
+        "1 <= N <= 10^5",
+        "-10^9 <= A[i], K <= 10^9",
+        "Answer fits in 64-bit signed integer"
+      ],
+      "testCases": [
+        { "input": "4 6\n1 5 7 -1\n", "expectedOutput": "2", "isSample": true, "note": "(1,5) and (7,-1)" },
+        { "input": "4 2\n1 1 1 1\n", "expectedOutput": "6", "isSample": true, "note": "C(4,2) = 6" },
+        { "input": "5 10\n2 4 6 8 10\n", "expectedOutput": "2", "isSample": false },
+        { "input": "6 0\n-3 3 -3 3 0 0\n", "expectedOutput": "5", "isSample": false },
+        { "input": "1 5\n5\n", "expectedOutput": "0", "isSample": false },
+        { "input": "5 -4\n-2 -2 -2 0 -4\n", "expectedOutput": "4", "isSample": false },
+        { "input": "4 100\n1 2 3 4\n", "expectedOutput": "0", "isSample": false }
+      ],
+      "starterCode": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        long k = sc.nextLong();\n        // Write your solution here\n    }\n}",
+        "python": "import sys\n\ndata = list(map(int, sys.stdin.read().split()))\nn, k = data[0], data[1]\narr = data[2:2+n]\n# Write your solution here\n",
+        "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n; long long k;\n    cin >> n >> k;\n    // Write your solution here\n    return 0;\n}\n"
+      },
+      "solutions": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        long k = sc.nextLong();\n        Map<Long, Long> freq = new HashMap<>();\n        long count = 0;\n        for (int i = 0; i < n; i++) {\n            long x = sc.nextLong();\n            count += freq.getOrDefault(k - x, 0L);\n            freq.put(x, freq.getOrDefault(x, 0L) + 1L);\n        }\n        System.out.println(count);\n    }\n}",
+        "python": "import sys\nfrom collections import defaultdict\n\ndata = list(map(int, sys.stdin.read().split()))\nn, k = data[0], data[1]\nfreq = defaultdict(int)\ncount = 0\nfor x in data[2:2+n]:\n    count += freq[k - x]\n    freq[x] += 1\nprint(count)\n"
+      },
+      "timeComplexity": "O(N) average time via single-pass hash map lookup.",
+      "spaceComplexity": "O(N) for the frequency map.",
+      "edgeCases": [
+        "All identical elements equal to K/2 ('1 1 1 1', K=2 => 6 pairs)",
+        "Negative values and target K <= 0",
+        "Pair count up to N*(N-1)/2 overflows 32-bit int when N=10^5 -> use `long`"
+      ]
+    },
+    {
+      "id": "code-3-p02",
+      "topic": "Strings & Hashing",
+      "subtopic": "First Unique Character",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "title": "First Non-Repeating Character in String",
+      "statement": "Given a string S of printable ASCII characters, find the 0-based index and character of the first non-repeating character in S. Print '<index> <char>' if found, or '-1' if every character repeats.",
+      "inputFormat": "A single line containing string S.",
+      "outputFormat": "Print '<index> <char>' or '-1'.",
+      "constraints": [
+        "1 <= |S| <= 10^5",
+        "Case-sensitive ('A' and 'a' are distinct)"
+      ],
+      "testCases": [
+        { "input": "hcltech\n", "expectedOutput": "2 l", "isSample": true },
+        { "input": "aabbcc\n", "expectedOutput": "-1", "isSample": true },
+        { "input": "swiss\n", "expectedOutput": "1 w", "isSample": false },
+        { "input": "AaBbCcD\n", "expectedOutput": "0 A", "isSample": false },
+        { "input": "abacabad\n", "expectedOutput": "3 c", "isSample": false },
+        { "input": "z\n", "expectedOutput": "0 z", "isSample": false },
+        { "input": "xxyyzzw\n", "expectedOutput": "6 w", "isSample": false }
+      ],
+      "starterCode": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.nextLine();\n        // Write your solution here\n    }\n}",
+        "python": "import sys\n\ns = sys.stdin.readline().rstrip('\\n')\n# Write your solution here\n",
+        "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    string s;\n    getline(cin, s);\n    // Write your solution here\n    return 0;\n}\n"
+      },
+      "solutions": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.nextLine();\n        int[] freq = new int[256];\n        for (int i = 0; i < s.length(); i++) freq[s.charAt(i)]++;\n        for (int i = 0; i < s.length(); i++) {\n            if (freq[s.charAt(i)] == 1) {\n                System.out.println(i + \" \" + s.charAt(i));\n                return;\n            }\n        }\n        System.out.println(-1);\n    }\n}",
+        "python": "import sys\nfrom collections import Counter\n\ns = sys.stdin.readline().rstrip('\\r\\n')\ncnt = Counter(s)\nfor i, ch in enumerate(s):\n    if cnt[ch] == 1:\n        print(f'{i} {ch}')\n        break\nelse:\n    print(-1)\n"
+      },
+      "timeComplexity": "O(N) two-pass scan.",
+      "spaceComplexity": "O(1) — fixed 256-entry ASCII frequency table.",
+      "edgeCases": [
+        "All repeating characters -> '-1'",
+        "Single-character string -> '0 <char>'",
+        "Case sensitivity ('A' != 'a')"
+      ]
+    }
+  ]
+}

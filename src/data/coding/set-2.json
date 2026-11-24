@@ -1,0 +1,89 @@
+{
+  "setId": "coding-set-2",
+  "title": "Coding Set 02: Number Theory & Array Equalization",
+  "description": "Reported HCL coding rounds: prime check / smallest prime factor and equalizing array elements via step X.",
+  "durationMinutes": 75,
+  "problems": [
+    {
+      "id": "code-2-p01",
+      "topic": "Number Theory",
+      "subtopic": "Prime & Smallest Factor",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "title": "Prime or Smallest Prime Divisor",
+      "statement": "Given an integer N (N >= 2), determine if N is prime. If N is prime, print 'PRIME'. Otherwise, print its smallest prime divisor (> 1).",
+      "inputFormat": "A single integer N.",
+      "outputFormat": "Print 'PRIME' if N is prime, else print the smallest prime divisor.",
+      "constraints": [
+        "2 <= N <= 10^12",
+        "Must run in O(sqrt(N)) time"
+      ],
+      "testCases": [
+        { "input": "29\n", "expectedOutput": "PRIME", "isSample": true },
+        { "input": "91\n", "expectedOutput": "7", "isSample": true, "note": "91 = 7 * 13" },
+        { "input": "2\n", "expectedOutput": "PRIME", "isSample": false },
+        { "input": "1000000007\n", "expectedOutput": "PRIME", "isSample": false },
+        { "input": "999983\n", "expectedOutput": "PRIME", "isSample": false },
+        { "input": "10201\n", "expectedOutput": "101", "isSample": false },
+        { "input": "999999999999\n", "expectedOutput": "3", "isSample": false }
+      ],
+      "starterCode": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        long n = sc.nextLong();\n        // Write your solution here\n    }\n}",
+        "python": "import sys\n\nn = int(sys.stdin.readline().strip())\n# Write your solution here\n",
+        "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    long long n;\n    cin >> n;\n    // Write your solution here\n    return 0;\n}\n"
+      },
+      "solutions": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        long n = sc.nextLong();\n        if (n % 2 == 0) {\n            System.out.println(n == 2 ? \"PRIME\" : \"2\");\n            return;\n        }\n        for (long d = 3; d * d <= n; d += 2) {\n            if (n % d == 0) {\n                System.out.println(d);\n                return;\n            }\n        }\n        System.out.println(\"PRIME\");\n    }\n}",
+        "python": "import sys\n\nn = int(sys.stdin.readline().strip())\nif n % 2 == 0:\n    print('PRIME' if n == 2 else 2)\nelse:\n    d = 3\n    ans = 'PRIME'\n    while d * d <= n:\n        if n % d == 0:\n            ans = str(d)\n            break\n        d += 2\n    print(ans)\n"
+      },
+      "timeComplexity": "O(sqrt(N)) trial division using odd divisors after 2.",
+      "spaceComplexity": "O(1).",
+      "edgeCases": [
+        "N = 2 (smallest even prime)",
+        "Large prime up to 10^9+7 requires `long` (`d * d <= n` avoids overflow up to 10^12)",
+        "Square of a prime (10201 = 101^2)"
+      ]
+    },
+    {
+      "id": "code-2-p02",
+      "topic": "Arrays & Math",
+      "subtopic": "Minimum Operations to Equalize",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "title": "Array Equalization by Adding or Subtracting X",
+      "statement": "You are given an integer array A of size N and a positive integer X. In one operation, you may add X to or subtract X from any single element of A. Determine whether all elements of A can be made equal. If impossible, print -1; otherwise print the minimum total number of operations required.",
+      "inputFormat": "Line 1: Two integers N and X.\nLine 2: N space-separated integers A[0..N-1].",
+      "outputFormat": "A single integer: minimum operations or -1.",
+      "constraints": [
+        "1 <= N <= 10^5",
+        "1 <= X <= 10^4",
+        "-10^6 <= A[i] <= 10^6"
+      ],
+      "testCases": [
+        { "input": "4 2\n2 4 6 8\n", "expectedOutput": "4", "isSample": true, "note": "Equalize to 4 or 6 -> |2-4|/2 + 0 + |6-4|/2 + |8-4|/2 = 1+0+1+2 = 4" },
+        { "input": "3 3\n1 4 5\n", "expectedOutput": "-1", "isSample": true, "note": "5 % 3 != 1 % 3" },
+        { "input": "1 5\n42\n", "expectedOutput": "0", "isSample": false },
+        { "input": "5 3\n-2 1 4 7 10\n", "expectedOutput": "6", "isSample": false },
+        { "input": "4 4\n8 8 8 8\n", "expectedOutput": "0", "isSample": false },
+        { "input": "5 5\n5 10 25 35 50\n", "expectedOutput": "14", "isSample": false },
+        { "input": "3 4\n-3 1 6\n", "expectedOutput": "-1", "isSample": false }
+      ],
+      "starterCode": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        long x = sc.nextLong();\n        long[] a = new long[n];\n        for (int i = 0; i < n; i++) a[i] = sc.nextLong();\n        // Write your solution here\n    }\n}",
+        "python": "import sys\n\ndata = list(map(int, sys.stdin.read().split()))\nn, x = data[0], data[1]\na = data[2:2+n]\n# Write your solution here\n",
+        "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n; long long x;\n    cin >> n >> x;\n    vector<long long> a(n);\n    for (int i = 0; i < n; i++) cin >> a[i];\n    // Write your solution here\n    return 0;\n}\n"
+      },
+      "solutions": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        long x = sc.nextLong();\n        long[] a = new long[n];\n        for (int i = 0; i < n; i++) a[i] = sc.nextLong();\n        long mod0 = ((a[0] % x) + x) % x;\n        for (int i = 1; i < n; i++) {\n            long m = ((a[i] % x) + x) % x;\n            if (m != mod0) {\n                System.out.println(-1);\n                return;\n            }\n        }\n        Arrays.sort(a);\n        long median = a[n / 2];\n        long ops = 0;\n        for (long v : a) ops += Math.abs(v - median) / x;\n        System.out.println(ops);\n    }\n}",
+        "python": "import sys\n\ndata = list(map(int, sys.stdin.read().split()))\nn, x = data[0], data[1]\na = data[2:2+n]\nrem = a[0] % x\nif any(v % x != rem for v in a):\n    print(-1)\nelse:\n    a.sort()\n    med = a[n // 2]\n    print(sum(abs(v - med) // x for v in a))\n"
+      },
+      "timeComplexity": "O(N log N) due to sorting to find the median.",
+      "spaceComplexity": "O(1) extra space beyond input array.",
+      "edgeCases": [
+        "Negative numbers require Euclidean non-negative modulo `((a[i] % x) + x) % x` in Java",
+        "Median minimizes sum of L1 distances `|a[i] - target|`",
+        "Sum of operations can exceed 32-bit `int`, so use `long`"
+      ]
+    }
+  ]
+}

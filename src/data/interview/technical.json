@@ -1,0 +1,2057 @@
+[
+  {
+    "id": "tech-qa-001",
+    "category": "Technical",
+    "topic": "OOP",
+    "subtopic": "Core Pillars",
+    "difficulty": "medium",
+    "source_tag": "reported",
+    "question": "Explain the four core pillars of Object-Oriented Programming and how abstraction differs from encapsulation in Java.",
+    "answer": "The four pillars of OOP are Encapsulation (bundling state and behavior inside a class while hiding internal fields behind accessors/validators), Abstraction (exposing essential service contracts while hiding implementation complexity via interfaces or abstract classes), Inheritance (reusing and extending behavior across an IS-A hierarchy), and Polymorphism (allowing one reference or method call to dispatch different implementations at compile time or runtime). Some textbooks add Persistence or Association as a fifth concept, though four are canonical. Encapsulation is about data protection and invariant enforcement at implementation level (`private` balance validated inside `withdraw()`), whereas abstraction is a design-level contract separating WHAT an operation does (`PaymentGateway.charge()`) from HOW Stripe or Razorpay executes it.",
+    "keyPoints": [
+      "Encapsulation hides internal state and enforces invariants (`private` fields + controlled methods).",
+      "Abstraction hides implementation details behind contracts (`interface` / `abstract class`).",
+      "Polymorphism supports compile-time overloading and runtime overriding (dynamic dispatch)."
+    ],
+    "followUp": "Can you achieve abstraction without encapsulation in Java?"
+  },
+  {
+    "id": "tech-qa-002",
+    "category": "Technical",
+    "topic": "OOP",
+    "subtopic": "Inheritance",
+    "difficulty": "medium",
+    "source_tag": "reported",
+    "question": "Describe the types of inheritance in Java and why Java forbids multiple class inheritance while permitting multiple interface implementation.",
+    "answer": "Java supports single, multilevel, and hierarchical class inheritance, plus multiple inheritance of type through interfaces (and hybrid combinations). Java disallows `class C extends A, B` to prevent the Diamond Problem—ambiguous method resolution and duplicated grandparent field state when two superclasses override or initialize the same ancestor differently. With Java 8+ interfaces having `default` methods, ambiguity is resolved explicitly at compile time: if two implemented interfaces define identical `default` signatures, the implementing class must override the method and can disambiguate via `InterfaceA.super.method()`.",
+    "keyPoints": [
+      "Classes: single, multilevel, hierarchical; Multiple inheritance only via interfaces.",
+      "Avoids state duplication and diamond dispatch ambiguity.",
+      "Java 8 default method clashes require explicit `InterfaceName.super.method()` override."
+    ]
+  },
+  {
+    "id": "tech-qa-003",
+    "category": "Technical",
+    "topic": "OOP",
+    "subtopic": "Interface vs Abstract Class",
+    "difficulty": "medium",
+    "source_tag": "reported",
+    "question": "Compare Java interfaces and abstract classes across constructors, state, multiple inheritance, and design intent.",
+    "answer": "An abstract class models an IS-A base family that shares common mutable instance state, non-public helper methods, and constructor initialization logic across closely related subclasses (`AbstractOrderProcessor`). An interface models a behavioral capability or cross-cutting contract (`Comparable`, `Serializable`, `PaymentProcessor`) that unrelated classes can implement simultaneously. Interfaces cannot declare constructors or mutable instance fields (all fields are implicitly `public static final`), though Java 8+ allows `default` and `static` methods and Java 9+ allows `private` helper methods inside interfaces. Abstract classes support any access modifier (`protected`, package-private) and single extension only.",
+    "keyPoints": [
+      "Abstract class: shared state, constructors, `protected` hooks, single inheritance.",
+      "Interface: `public static final` constants only, multiple implementation, `default`/`static`/`private` methods (Java 8/9+).",
+      "Rule of thumb: Prefer interfaces for capabilities/DI contracts; abstract classes for template-method shared state."
+    ]
+  },
+  {
+    "id": "tech-qa-004",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Serialization",
+    "difficulty": "medium-hard",
+    "source_tag": "reported",
+    "question": "Explain Java Serialization, the roles of `serialVersionUID` and `transient`, and why Externalizable or JSON is often preferred in modern services.",
+    "answer": "Serialization converts an in-memory object graph into a byte stream (`ObjectOutputStream`) for disk persistence or network transfer, requiring classes to implement marker interface `java.io.Serializable`. `transient` excludes sensitive or non-serializable fields (passwords, `Thread`, `Connection`) from the stream, restoring them to default values (`null`, `0`) on deserialization. `serialVersionUID` versions the class structure; if omitted, JVM computes a fragile hash sensitive to minor field/method edits, causing `InvalidClassException` across deployments. In modern Spring Boot services, native Java serialization is discouraged due to tight Java coupling, slow reflection, and deserialization gadget security risks; explicit Jackson JSON or Protobuf schemas are preferred.",
+    "keyPoints": [
+      "`Serializable` is a marker interface; `transient` and `static` fields are not serialized.",
+      "Always declare an explicit `private static final long serialVersionUID`.",
+      "Deserialization skips constructors unless superclass is non-`Serializable`."
+    ]
+  },
+  {
+    "id": "tech-qa-005",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Strings & Immutability",
+    "difficulty": "medium",
+    "source_tag": "reported",
+    "question": "Why is `java.lang.String` immutable and final, and when should you choose `StringBuilder` versus `StringBuffer`?",
+    "answer": "`String` is immutable and `final` for four reasons: (1) String Pool interning safely shares literals across threads without aliasing corruption; (2) `hashCode()` can be lazily cached once, making Strings ideal `HashMap` keys; (3) security-sensitive parameters (DB URLs, class names, file paths) cannot be mutated after validation checks; and (4) inherent thread-safety without synchronization. Use `StringBuilder` for loop concatenation within a single thread (no synchronization overhead, O(n) amortized) and `StringBuffer` only when multiple threads legitimately mutate the same buffer concurrently (methods are `synchronized`).",
+    "keyPoints": [
+      "Immutability enables String Constant Pool sharing, cached hashCode, security, and thread safety.",
+      "`StringBuilder` is unsynchronized and faster; `StringBuffer` synchronizes every method."
+    ]
+  },
+  {
+    "id": "tech-qa-006",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Collections",
+    "difficulty": "medium-hard",
+    "source_tag": "reported",
+    "question": "Contrast `HashMap`, `Hashtable`, and `ConcurrentHashMap` in locking granularity, null handling, and fail-fast vs fail-safe iteration.",
+    "answer": "`HashMap` is unsynchronized, permits one `null` key and multiple `null` values, and uses fail-fast iterators (`ConcurrentModificationException` via `modCount`). `Hashtable` is a legacy synchronized class locking the whole map on every method call and forbids `null` keys/values, creating severe contention. `ConcurrentHashMap` (Java 8+) eliminates coarse locks: reads are largely lock-free via `volatile` node fields, while writes use lock-free CAS for empty buckets and synchronize only on the head node of the target bin. It forbids `null` keys/values (because `get(k) == null` would be ambiguous under concurrency) and provides weakly consistent (fail-safe) iterators.",
+    "keyPoints": [
+      "`HashMap`: 1 null key allowed, unsynchronized, fail-fast iterator.",
+      "`ConcurrentHashMap`: no nulls allowed, per-bin locking + CAS, weakly consistent iterator."
+    ]
+  },
+  {
+    "id": "tech-qa-007",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Collections",
+    "difficulty": "medium",
+    "source_tag": "reported",
+    "question": "Compare `ArrayList` and `LinkedList` across memory layout, cache locality, random access, and real-world performance.",
+    "answer": "`ArrayList` wraps a contiguous resizable `Object[]` array (grows by ~1.5x on capacity overflow), offering O(1) index lookup (`get(i)`), compact memory (~1 reference per slot), and strong CPU cache-line locality; middle insertions/deletions cost O(n) `System.arraycopy`. `LinkedList` implements a doubly linked list with separate `Node<E>` heap objects (data + prev + next pointers, ~24–40 bytes overhead per element), giving O(n) index traversal (`get(i)`) and poor cache locality. Even for middle insertions, `LinkedList` still spends O(n) finding the node unless holding an active `ListIterator`. Prefer `ArrayList` or `ArrayDeque` (for queues/stacks) in nearly all production scenarios.",
+    "keyPoints": [
+      "`ArrayList`: O(1) random access, contiguous CPU cache locality, O(n) mid-insert.",
+      "`LinkedList`: high node memory overhead, O(n) random access, use `ArrayDeque` for FIFO/LIFO."
+    ]
+  },
+  {
+    "id": "tech-qa-008",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Exceptions",
+    "difficulty": "medium",
+    "source_tag": "reported",
+    "question": "Distinguish checked vs unchecked exceptions, `throw` vs `throws`, and nuances of `try-catch-finally` vs try-with-resources.",
+    "answer": "Checked exceptions (`IOException`, `SQLException`, subclasses of `Exception` excluding `RuntimeException`) represent recoverable external conditions enforced by the compiler via `try-catch` or `throws`. Unchecked exceptions (`NullPointerException`, `IllegalArgumentException`) inherit `RuntimeException` and typically signal programming bugs or violated preconditions. `throw` explicitly raises an exception instance inside a block, whereas `throws` declares propagatable checked exceptions in a method signature. `finally` runs regardless of exception outcome (unless `System.exit` or JVM crash), and returning inside `finally` overrides pending exceptions or try-block return values—an anti-pattern. Prefer `try-with-resources` (`AutoCloseable`), which closes resources automatically in reverse order and preserves primary exceptions via `getSuppressed()`.",
+    "keyPoints": [
+      "Checked = compile-time enforced (`Exception` non-Runtime); Unchecked = `RuntimeException` & `Error`.",
+      "Avoid `return` inside `finally` because it swallows thrown exceptions.",
+      "`try-with-resources` retains primary exception and attaches close errors as suppressed."
+    ]
+  },
+  {
+    "id": "tech-qa-009",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Java 8+ Features",
+    "difficulty": "medium-hard",
+    "source_tag": "reported",
+    "question": "Explain Java 8 Lambdas, Functional Interfaces, Streams (lazy vs terminal operations), and proper use of `Optional`.",
+    "answer": "A Functional Interface defines exactly one abstract method (`@FunctionalInterface`, e.g., `Predicate<T>`, `Function<T,R>`, `Consumer<T>`, `Supplier<T>`), enabling lambda expressions and method references as concise implementations. Java Streams provide a declarative pipeline over collections without mutating the source: intermediate operations (`filter`, `map`, `flatMap`, `sorted`) are lazy and execute only when a terminal operation (`collect`, `reduce`, `count`, `findFirst`) runs. `Optional<T>` models potentially absent method return values explicitly (`orElseGet` lazy supplier vs eager `orElse`), preventing blind `NullPointerException`s—it should NOT be used for entity fields, method parameters, or serialization.",
+    "keyPoints": [
+      "Intermediate stream ops are lazy; terminal ops trigger single-pass pipeline execution.",
+      "Prefer `orElseGet(() -> fallback())` over `orElse(fallback())` when fallback is expensive.",
+      "Use `Optional` strictly for return types, never class fields."
+    ]
+  },
+  {
+    "id": "tech-qa-010",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Multithreading",
+    "difficulty": "medium-hard",
+    "source_tag": "reported",
+    "question": "How do you create threads in Java, why prefer `ExecutorService` + `Callable`, and what is the difference between `synchronized`, `volatile`, and `AtomicInteger`?",
+    "answer": "Threads can run via `Runnable` (or subclassing `Thread`, though `Runnable`/`Callable` decouples task from execution) submitted to an `ExecutorService` thread pool, which reuses worker threads and returns `Future<T>` from `Callable`. `volatile` guarantees cross-thread visibility and prevents instruction reordering via happens-before semantics, NOT atomicity for compound read-modify-write ops like `count++`. `AtomicInteger` uses hardware CAS (`Unsafe`/VarHandle) for lock-free single-variable atomicity. `synchronized` (or `ReentrantLock`) provides both mutual exclusion and visibility across multi-step critical sections.",
+    "keyPoints": [
+      "`volatile` = visibility + ordering ONLY (not atomic for `x++`).",
+      "`AtomicInteger` = lock-free CAS for single scalar updates.",
+      "`ExecutorService` prevents unbounded thread creation OOMs."
+    ]
+  },
+  {
+    "id": "tech-qa-011",
+    "category": "Technical",
+    "topic": "JDBC",
+    "subtopic": "Database Connectivity",
+    "difficulty": "medium",
+    "source_tag": "reported",
+    "question": "Walk through the steps to connect a Java application to a database using JDBC and explain why `PreparedStatement` replaces `Statement`.",
+    "answer": "Standard JDBC steps: (1) Register/discover JDBC driver (`DriverManager` auto-loads via SPI in JDBC 4+, legacy `Class.forName(...)`); (2) Obtain `Connection` via `DriverManager.getConnection(url, user, pass)` or a `DataSource` pool like HikariCP; (3) Create `PreparedStatement` with parameterized `?` SQL; (4) Bind parameters (`setInt`, `setString`); (5) Execute (`executeQuery()` returning `ResultSet` for SELECT, `executeUpdate()` returning affected rows for DML); (6) Iterate `while (rs.next())` reading typed columns; (7) Close `ResultSet`, `PreparedStatement`, and `Connection` automatically using `try-with-resources`. `PreparedStatement` prevents SQL injection by separating SQL grammar from bound literals and lets the DB reuse precompiled execution plans.",
+    "keyPoints": [
+      "Always use `PreparedStatement` over string-concatenated `Statement`.",
+      "Wrap resources in `try-with-resources` so connections return to the pool even on exception."
+    ]
+  },
+  {
+    "id": "tech-qa-012",
+    "category": "Technical",
+    "topic": "DBMS",
+    "subtopic": "Normalization",
+    "difficulty": "medium-hard",
+    "source_tag": "reported",
+    "question": "Explain 1NF, 2NF, 3NF, and BCNF with concrete functional dependency examples and when controlled denormalization is justified.",
+    "answer": "1NF forbids multi-valued/nested cells (atomic values only). 2NF requires 1NF and removes partial dependencies where a non-prime attribute depends on part of a composite candidate key—e.g., `(StudentID, CourseID) -> CourseName` violates 2NF because `CourseID -> CourseName`. 3NF requires 2NF and eliminates transitive dependencies among non-prime attributes (`EmpID -> DeptID -> DeptHead`). BCNF strengthens 3NF: for every non-trivial dependency X -> Y, X must be a superkey (eliminating cases where a non-superkey determines a prime attribute). Controlled denormalization—storing precomputed totals or duplicated read columns—is justified in read-heavy analytics or dashboards when join costs degrade latency SLAs, provided writes maintain consistency.",
+    "keyPoints": [
+      "2NF: no partial dependency on composite key.",
+      "3NF: no non-prime -> non-prime transitive dependency.",
+      "BCNF: every determinant on LHS must be a superkey."
+    ]
+  },
+  {
+    "id": "tech-qa-013",
+    "category": "Technical",
+    "topic": "DBMS",
+    "subtopic": "ACID & Isolation",
+    "difficulty": "medium-hard",
+    "source_tag": "reported",
+    "question": "Explain ACID properties and map SQL transaction isolation levels to Dirty Reads, Non-Repeatable Reads, and Phantom Reads.",
+    "answer": "ACID stands for Atomicity (all-or-nothing via undo logs), Consistency (constraints/invariants hold before and after), Isolation (concurrent transactions appear serialized per level), and Durability (committed writes survive crashes via WAL redo flush). SQL levels: READ UNCOMMITTED allows Dirty Reads; READ COMMITTED blocks Dirty Reads but allows Non-Repeatable Reads (two reads of same row see different committed values); REPEATABLE READ prevents Dirty & Non-Repeatable Reads (row snapshot stability) though standard locking allows Phantom Reads (new matching rows inserted by others); SERIALIZABLE blocks all three via range locks or SSI conflict detection.",
+    "keyPoints": [
+      "Dirty Read -> prevented by READ COMMITTED+.",
+      "Non-Repeatable Read -> prevented by REPEATABLE READ+.",
+      "Phantom Read -> prevented by SERIALIZABLE (or MVCC snapshot in PostgreSQL REPEATABLE READ)."
+    ]
+  },
+  {
+    "id": "tech-qa-014",
+    "category": "Technical",
+    "topic": "SQL",
+    "subtopic": "Indexes",
+    "difficulty": "medium-hard",
+    "source_tag": "reported",
+    "question": "How do B+ Tree database indexes speed up queries, distinguish clustered vs non-clustered indexes, and explain index write overhead.",
+    "answer": "A B+ Tree index maintains sorted keys across shallow balanced internal routing nodes with all row pointers (or clustered data pages) linked sequentially at leaf level, turning O(n) table scans into O(log n) tree lookups plus fast range scans. A table can have only ONE clustered index because it dictates physical storage order of table rows (e.g., InnoDB Primary Key), whereas multiple non-clustered (secondary) indexes store key + primary key/row pointer separately, requiring a bookmark lookup unless the query is covered. Indexes accelerate SELECT/WHERE/JOIN/ORDER BY, but slow INSERT/UPDATE/DELETE and consume disk/buffer-pool RAM because every index tree must stay updated.",
+    "keyPoints": [
+      "Clustered index = physical row order (max 1 per table); Non-clustered = separate lookup structure.",
+      "Composite index `(a, b)` obeys leftmost prefix rule (helps `a` and `a,b`, usually NOT `b` alone)."
+    ]
+  },
+  {
+    "id": "tech-qa-015",
+    "category": "Technical",
+    "topic": "SQL",
+    "subtopic": "Joins",
+    "difficulty": "medium",
+    "source_tag": "reported",
+    "question": "Compare INNER, LEFT, RIGHT, FULL OUTER, CROSS, and SELF joins, and explain why filtering a LEFT JOIN table in WHERE turns it into an INNER JOIN.",
+    "answer": "INNER JOIN returns only matching key pairs; LEFT JOIN preserves all left rows filling unmatched right columns with NULL; RIGHT JOIN mirrors LEFT; FULL OUTER preserves unmatched rows on both sides; CROSS JOIN produces the Cartesian product (M x N); SELF JOIN aliases the same table twice (e.g., `emp e JOIN emp m ON e.mgr_id = m.id`). Placing `WHERE right_table.status = 'ACTIVE'` after a LEFT JOIN discards every preserved left row whose `right_table.status` became NULL, silently collapsing it into an INNER JOIN. Keep right-table filters inside the `ON` clause when unmatched left rows must remain.",
+    "keyPoints": [
+      "Right-table predicates belong in `ON` (before join preservation), not `WHERE` (after join), for LEFT JOIN.",
+      "SELF JOIN models hierarchies like employee-manager or category trees."
+    ]
+  },
+  {
+    "id": "tech-qa-016",
+    "category": "Technical",
+    "topic": "OS",
+    "subtopic": "Concurrency",
+    "difficulty": "medium",
+    "source_tag": "reported",
+    "question": "Differentiate a Process from a Thread in OS memory layout, context switch cost, and failure isolation.",
+    "answer": "A Process is an independent program execution unit owning an isolated virtual address space (code, data, heap, file descriptors, PCB). Inter-process communication requires explicit OS mechanisms (pipes, sockets, shared memory), and switching processes flushes or tags TLB/address-space mappings, costing more CPU cycles. A Thread is the smallest schedulable execution unit inside a process; peer threads share heap, globals, and open files while owning private stack, registers, and Program Counter. Thread context switches are fast, and sharing data is direct (requiring synchronization), though an unhandled crash or memory corruption in one thread brings down the entire host process.",
+    "keyPoints": [
+      "Processes isolate virtual memory; Threads share heap/code/files with private stacks & registers.",
+      "Thread switch avoids changing page table base (CR3), keeping TLB hot."
+    ]
+  },
+  {
+    "id": "tech-qa-017",
+    "category": "Technical",
+    "topic": "OS",
+    "subtopic": "Deadlocks",
+    "difficulty": "medium-hard",
+    "source_tag": "reported",
+    "question": "State the four Coffman conditions for deadlock and compare prevention, Banker's avoidance, and detection-recovery.",
+    "answer": "Deadlock requires four simultaneous conditions: Mutual Exclusion, Hold and Wait, No Preemption, and Circular Wait. Prevention structurally negates one condition (e.g., global numeric lock acquisition ordering breaks Circular Wait—most practical in Java). Avoidance (Banker's Algorithm) assumes max future claim is known upfront and grants requests only if the resulting state retains a safe execution sequence. Detection & Recovery allows deadlocks to form, detects cycles in Wait-For / Resource Allocation graphs periodically, and aborts or rolls back victim processes based on priority/work lost.",
+    "keyPoints": [
+      "All 4 Coffman conditions must hold together for deadlock.",
+      "Lock ordering is the simplest production-grade prevention in multi-lock Java code."
+    ]
+  },
+  {
+    "id": "tech-qa-018",
+    "category": "Technical",
+    "topic": "OS",
+    "subtopic": "CPU Scheduling",
+    "difficulty": "medium-hard",
+    "source_tag": "reported",
+    "question": "Define Turnaround Time, Waiting Time, and Response Time, and contrast SJF, Round Robin, and MLFQ scheduling.",
+    "answer": "Completion Time (CT) is when a process finishes; Turnaround Time `TAT = CT - Arrival Time`; Waiting Time `WT = TAT - Burst Time`; Response Time is first dispatch minus arrival. Shortest Job First (SJF/SRTF) provably minimizes average waiting time but risks starvation of long jobs and requires burst prediction. Round Robin assigns fixed time quantum `q` ensuring fairness and bounded response time—too small causes high context-switch overhead, too large degrades into FCFS. Multilevel Feedback Queue (MLFQ) dynamically demotes CPU-bound jobs and promotes I/O-bound or aging jobs to balance interactive latency and throughput.",
+    "keyPoints": [
+      "`TAT = CT - AT`, `WT = TAT - BT`.",
+      "Round Robin trades throughput for fair interactive response; SJF minimizes average WT."
+    ]
+  },
+  {
+    "id": "tech-qa-019",
+    "category": "Technical",
+    "topic": "CN",
+    "subtopic": "TCP/IP & OSI",
+    "difficulty": "medium",
+    "source_tag": "reported",
+    "question": "Compare the 7-layer OSI model with the 4/5-layer TCP/IP stack and assign HTTP, TLS, TCP, IP, ARP, and Ethernet to their layers.",
+    "answer": "OSI divides networking into Physical (1), Data Link (2), Network (3), Transport (4), Session (5), Presentation (6), and Application (7). TCP/IP merges Session/Presentation into Application (HTTPS/HTTP, DNS, TLS conceptually bridging App/Transport) alongside Transport (TCP/UDP), Internet (IPv4/IPv6, ICMP), and Network Access/Link (Ethernet, Wi-Fi, ARP translating IP to MAC). TCP ensures ordered, reliable byte streams via sequence numbers, ACKs, and flow/congestion control; IP handles best-effort packet routing across subnets using routers; Ethernet switches forward frames by MAC table inside a LAN.",
+    "keyPoints": [
+      "L2 Switch uses MAC addresses (Ethernet/ARP); L3 Router uses IP packets.",
+      "L4 TCP/UDP multiplexes connections using port numbers."
+    ]
+  },
+  {
+    "id": "tech-qa-020",
+    "category": "Technical",
+    "topic": "SE",
+    "subtopic": "SDLC Models",
+    "difficulty": "medium",
+    "source_tag": "reported",
+    "question": "Compare Waterfall, Agile Scrum, and V-Model SDLCs, and explain when an enterprise team selects each.",
+    "answer": "Waterfall flows sequentially (Requirements -> Design -> Implementation -> Testing -> Maintenance) and fits fixed-scope regulatory or hardware-coupled contracts where changes late in build are prohibitively costly. V-Model pairs each specification phase directly with its corresponding test tier (Unit, Integration, System, UAT) early. Agile Scrum delivers working software in short 1–4 week sprints with continuous stakeholder feedback, backlog reprioritization, daily standups, and CI/CD—ideal for evolving business products like web/mobile banking or SaaS portals where late discovery is expected.",
+    "keyPoints": [
+      "Waterfall = sequential, rigid scope; V-Model = verification/validation symmetry; Agile = iterative value + rapid feedback.",
+      "Agile reduces late-stage integration risk via continuous testing."
+    ]
+  },
+  {
+    "id": "tech-qa-021",
+    "category": "Technical",
+    "topic": "Spring Boot",
+    "subtopic": "Core & REST",
+    "difficulty": "medium-hard",
+    "source_tag": "reported",
+    "question": "Explain Spring IoC/Dependency Injection, `@RestController` vs `@Controller`, and why constructor injection is preferred over `@Autowired` field injection.",
+    "answer": "Spring IoC Container instantiates, configures, and wires `@Component`/`@Service`/`@Repository` beans automatically via Dependency Injection. `@Controller` returns view template names resolved by a ViewResolver (unless annotated `@ResponseBody`), while `@RestController` combines `@Controller + @ResponseBody` to serialize return DTOs directly as JSON via Jackson. Constructor injection is preferred over `@Autowired` field injection because dependencies can be marked `final` (immutability), required dependencies are guaranteed initialized before object use, circular dependencies fail loudly at startup, and unit tests can instantiate the class cleanly with mocks without spinning up a Spring context.",
+    "keyPoints": [
+      "Constructor injection ensures `final` immutability, testability without Spring, and early circular-dependency detection.",
+      "`@RestController = @Controller + @ResponseBody`."
+    ]
+  },
+  {
+    "id": "tech-qa-022",
+    "category": "Technical",
+    "topic": "Web & Frontend",
+    "subtopic": "JavaScript & React",
+    "difficulty": "medium-hard",
+    "source_tag": "reported",
+    "question": "Explain JavaScript variable/function hoisting, `this` binding in arrow functions, template literals, and how React's Virtual DOM reconciles updates.",
+    "answer": "Hoisting moves declarations (not initializations) conceptually to the top of scope: `var` initializes to `undefined` (error-prone), while `let`/`const` reside in a Temporal Dead Zone throwing `ReferenceError` before declaration; function declarations hoist completely while function expressions follow variable rules. Arrow functions have no own `this`—they lexically capture `this` from enclosing scope, preventing React event callback loss, and cannot be constructors. Template literals (backtick strings like `Hi ${name}`) allow embedded expressions and multi-line strings. React's Virtual DOM maintains a lightweight JS UI tree, diffs new vs previous fiber trees by element type and `key`, and batches minimal real DOM mutations.",
+    "keyPoints": [
+      "`let`/`const` hoist into Temporal Dead Zone (`ReferenceError` before init).",
+      "Arrow functions bind `this` lexically; regular functions bind dynamically by call site.",
+      "Stable unique `key` props let React reuse DOM nodes accurately across list reorders."
+    ]
+  },
+  {
+    "id": "tech-qa-023",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "HashCode & Equals",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "State the Java `equals()` and `hashCode()` contract and show what breaks when overriding only `equals()` on a `HashMap` key.",
+    "answer": "Contract: (1) `equals()` must be reflexive, symmetric, transitive, consistent, and false for `null`; (2) if `a.equals(b)` is true, `a.hashCode() == b.hashCode()` MUST hold; (3) unequal objects may share a hashCode (collision), though distinct hashes improve performance. If you override `equals()` without `hashCode()`, two logically identical `User(\"A\")` keys inherit different `Object.hashCode()` memory-derived ints, land in different `HashMap` buckets, and `map.get(new User(\"A\"))` returns `null` despite matching `equals()`—also creating duplicates inside `HashSet`.",
+    "keyPoints": [
+      "Equal objects MUST produce identical `hashCode()`.",
+      "Overriding only `equals()` causes `HashMap.get()` misses and duplicate entries in `HashSet`."
+    ]
+  },
+  {
+    "id": "tech-qa-024",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Generics",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "Explain Type Erasure in Java Generics and the PECS (`? extends T` vs `? super T`) wildcard principle.",
+    "answer": "Java Generics enforce compile-time type safety and then erase type parameters to their upper bound (usually `Object`) in bytecode, inserting implicit casts for backward compatibility with pre-Java 5 JVMs. Consequently, `new T()`, `instanceof List<String>`, and generic arrays (`new T[10]`) are illegal. PECS (Producer Extends, Consumer Super): use `List<? extends Number>` when reading/producing `Number` items safely (cannot add elements except `null` because actual subtype is unknown); use `List<? super Integer>` when writing/consuming `Integer` values safely (reads only as `Object`).",
+    "keyPoints": [
+      "Erasure removes runtime type arguments (`List<String>.class` does not exist).",
+      "PECS: `extends` to read/produce `T`; `super` to insert/consume `T`."
+    ]
+  },
+  {
+    "id": "tech-qa-025",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "JVM & Classloading",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "Trace the JVM classloader delegation hierarchy and the exact static/instance initialization order when instantiating a subclass.",
+    "answer": "JVM classloaders follow Parent Delegation: Application/System ClassLoader delegates up to Platform (Extension) ClassLoader, which delegates to Bootstrap ClassLoader (`java.lang.*`), preventing spoofed core classes from overriding standard JDK APIs. When instantiating `Child extends Parent`, execution runs strictly in order: (1) Parent static variables & static blocks (once at class load); (2) Child static variables & static blocks; (3) Parent instance fields & instance initializer blocks; (4) Parent constructor body; (5) Child instance fields & instance initializer blocks; (6) Child constructor body.",
+    "keyPoints": [
+      "Parent static -> Child static -> Parent instance/constructor -> Child instance/constructor.",
+      "Parent delegation protects core `java.*` classes from shadowing."
+    ]
+  },
+  {
+    "id": "tech-qa-026",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Garbage Collection",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "How does generational Garbage Collection work in HotSpot (G1GC vs ZGC) and what causes memory leaks in Java despite GC?",
+    "answer": "Based on the weak generational hypothesis (most objects die young), objects allocate into Eden, survivors age across S0/S1 via Minor GC copying, and long-lived objects promote to Old Gen. G1GC divides heap into equal regions and prioritizes regions packed with garbage to meet pause targets; ZGC uses colored pointers and load barriers for sub-millisecond concurrent compaction on multi-GB heaps. Java still suffers logical memory leaks when unreachable-by-intent objects stay referenced by GC Roots: unbounded static `Map` caches, unremoved listeners/observers, unclosed `ThreadLocal` pools without `.remove()`, and non-static inner classes capturing outer instances.",
+    "keyPoints": [
+      "GC collects unreachable objects (from GC roots: stacks, statics, JNI), not logically unused ones still referenced.",
+      "`ThreadLocal.remove()` in filters prevents thread-pool memory leaks."
+    ]
+  },
+  {
+    "id": "tech-qa-027",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Concurrency",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "Compare `synchronized`, `ReentrantLock`, and `CompletableFuture` for building responsive Java backends.",
+    "answer": "`synchronized` offers clean JVM-managed monitor locks with automatic unlock on block exit, including biased/lightweight lock optimizations. `ReentrantLock` adds `tryLock(timeout)` (preventing infinite deadlock hangs), interruptible lock waiting (`lockInterruptibly()`), fairness policies, and multiple `Condition` queues—requiring manual `unlock()` inside `finally`. `CompletableFuture` orchestrates non-blocking asynchronous pipelines (`supplyAsync`, `thenApply`, `thenCombine`, `exceptionally`), letting backends compose parallel downstream HTTP/DB calls without blocking request threads on sequential `Future.get()`.",
+    "keyPoints": [
+      "`ReentrantLock` supports `tryLock(timeout)` and multiple `Condition` variables.",
+      "`CompletableFuture` composes async stages without manual callback hell; pass a bounded custom Executor for I/O tasks."
+    ]
+  },
+  {
+    "id": "tech-qa-028",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Immutability & Records",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "How do you design a truly immutable class in classic Java versus using Java 16+ `record` types?",
+    "answer": "To make a classic class immutable: declare the class `final` (so subclasses can't override getters with mutable behavior), make all fields `private final`, omit setters, initialize fields via constructor making defensive copies of mutable inputs (`new ArrayList<>(items)` or `new Date(d.getTime())`), and return defensive copies or unmodifiable views (`List.copyOf`) from getters. Java `record` concisely generates `final` class, `private final` components, canonical constructor, accessors, `equals`, `hashCode`, and `toString`—though defensive copying inside a compact constructor is STILL required if a record component holds a mutable `List` or array.",
+    "keyPoints": [
+      "Class `final` + fields `private final` + defensive copies on input AND getter return.",
+      "Java `record` makes shallowly immutable carriers; copy mutable collections in compact constructor."
+    ]
+  },
+  {
+    "id": "tech-qa-029",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Collections",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Distinguish `Comparable` vs `Comparator` and explain why `HashSet`/`TreeSet` behave inconsistently if `compareTo` disagrees with `equals`.",
+    "answer": "`Comparable<T>` defines natural ordering inside the domain class itself via `compareTo(T other)` (single ordering, e.g., `String`). `Comparator<T>` defines external, pluggable orderings via `compare(a, b)` without modifying the class (`Comparator.comparing(Emp::getSalary).reversed()`). `HashSet` determines uniqueness via `hashCode() + equals()`, whereas `TreeSet`/`TreeMap` rely purely on `compareTo() == 0` (or `Comparator.compare == 0`). If two `BigDecimal` values (`2.0` and `2.00`) are equal in `compareTo` (`0`) yet `equals()` returns `false`, `HashSet` stores both while `TreeSet` keeps only one.",
+    "keyPoints": [
+      "`Comparable` = single natural order (`compareTo`); `Comparator` = multiple external strategies (`compare`).",
+      "`TreeSet` uses `compareTo == 0` for equality, ignoring `equals()`."
+    ]
+  },
+  {
+    "id": "tech-qa-030",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Collections",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "How does `LinkedHashMap` preserve insertion or access order, and how do you build an O(1) LRU cache with it?",
+    "answer": "`LinkedHashMap` extends `HashMap` by threading a doubly linked list across all entries (`before`/`after` pointers) in addition to hash bucket chains, preserving insertion order or—when constructed with `accessOrder = true`—moving any accessed (`get`/`put`) entry to the tail in O(1). By subclassing `LinkedHashMap(cap, 0.75f, true)` and overriding `protected boolean removeEldestEntry(Map.Entry<K,V> eldest) { return size() > MAX_CAPACITY; }`, you get a clean O(1) Least Recently Used (LRU) cache (wrap or guard with a lock for concurrency).",
+    "keyPoints": [
+      "Combines hash table O(1) lookup with doubly linked list O(1) eviction order.",
+      "Set `accessOrder = true` and override `removeEldestEntry` for LRU behavior."
+    ]
+  },
+  {
+    "id": "tech-qa-031",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Modern Java",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Explain `sealed` classes, pattern matching for `switch`, and Virtual Threads introduced across Java 17–21.",
+    "answer": "`sealed` classes/interfaces (`permits Card, Upi, NetBanking`) restrict which subtypes may extend them, enabling exhaustive compiler checks in `switch` pattern matching without a fragile `default` fallback. Virtual Threads (Java 21 Project Loom) are lightweight JVM-scheduled threads multiplexed onto a small pool of OS carrier threads; whenever a virtual thread blocks on JDBC/HTTP socket I/O, the JVM unmounts its stack frame without blocking the OS thread, letting familiar imperative one-thread-per-request Spring Boot apps handle tens of thousands of concurrent I/O calls cleanly.",
+    "keyPoints": [
+      "`sealed` hierarchies + pattern matching give algebraic data types and exhaustive `switch` checks.",
+      "Virtual threads scale blocking I/O workloads cheaply (avoid pinning via `synchronized` around I/O in Java 21)."
+    ]
+  },
+  {
+    "id": "tech-qa-032",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Streams",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Contrast `map()` vs `flatMap()` and explain common pitfalls of `parallelStream()` in web servers.",
+    "answer": "`map(T -> R)` transforms each element 1-to-1 (e.g., `Stream<Order>` -> `Stream<List<Item>>`). `flatMap(T -> Stream<R>)` maps each element to a sub-stream and flattens nested streams into one continuous `Stream<Item>`. Avoid `parallelStream()` indiscriminately inside Spring Boot request handlers: all default parallel streams share the single process-wide `ForkJoinPool.commonPool()` sized to CPU cores. Submitting blocking JDBC/HTTP calls inside `parallelStream()` starves other HTTP requests and risks non-thread-safe collector bugs unless using pure stateless CPU crunching on large data.",
+    "keyPoints": [
+      "`map` = 1-to-1 transform; `flatMap` = 1-to-many + flatten.",
+      "`parallelStream()` shares `ForkJoinPool.commonPool()`, dangerous for blocking I/O in web servers."
+    ]
+  },
+  {
+    "id": "tech-qa-033",
+    "category": "Technical",
+    "topic": "OOP",
+    "subtopic": "Polymorphism",
+    "difficulty": "medium",
+    "source_tag": "pyq-style",
+    "question": "Compare method overloading vs overriding, including static method hiding and covariant return types.",
+    "answer": "Overloading (compile-time polymorphism) shares a method name within the same/subclass with distinct parameter types, counts, or order; return type alone cannot distinguish overloads. Overriding (runtime polymorphism) redefines an inherited non-static, non-final, non-private instance method with identical parameters, equal or wider access visibility, narrower/fewer checked exceptions, and either identical or covariant (subtype) return type. Static methods belong to the class and are hidden, not dynamically dispatched: `Parent p = new Child(); p.staticMethod();` invokes `Parent.staticMethod()` based on reference type.",
+    "keyPoints": [
+      "Overloading resolves at compile time by reference types; Overriding resolves at runtime by object type.",
+      "Covariant return types allow subclass overrides to return a narrower subtype."
+    ]
+  },
+  {
+    "id": "tech-qa-034",
+    "category": "Technical",
+    "topic": "OOP",
+    "subtopic": "SOLID Principles",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Explain all five SOLID design principles with practical Java/Spring Boot examples.",
+    "answer": "S (Single Responsibility): Keep HTTP DTO mapping, tax calculation, and SQL persistence in separate classes so each changes for one reason. O (Open/Closed): Support new discount rules by implementing a `DiscountStrategy` interface injected as `List<DiscountStrategy>` rather than editing a growing `if-else` block. L (Liskov Substitution): Any subtype (`Square` vs `Rectangle`, or `ReadOnlyList` throwing on `add()`) must honor behavioral preconditions/postconditions expected by callers of the base type. I (Interface Segregation): Split fat interfaces into focused ones (`Printable`, `Scannable`) so classes don't implement dummy stubs. D (Dependency Inversion): High-level `OrderService` depends on `PaymentGateway` interface, not concrete `StripeClient`.",
+    "keyPoints": [
+      "Strategy pattern + Spring bean collection injection exemplifies Open/Closed + Dependency Inversion.",
+      "LSP forbids subclasses from breaking base-contract invariants (e.g., unexpected `UnsupportedOperationException`)."
+    ]
+  },
+  {
+    "id": "tech-qa-035",
+    "category": "Technical",
+    "topic": "OOP",
+    "subtopic": "Design Patterns",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "How do you implement a thread-safe Singleton in Java without double-checked locking bugs, and why might Spring Beans replace manual Singletons?",
+    "answer": "Use either an `enum Singleton { INSTANCE; }` (thread-safe, reflection-proof, serialization-safe) or the Bill Pugh Initialization-on-Demand Holder idiom (`private static class Holder { static final Foo INSTANCE = new Foo(); }`), which relies on JVM class-initialization locks lazily without `synchronized` overhead on `getInstance()`. If using Double-Checked Locking, `volatile` on the static instance field is mandatory to prevent publishing a partially constructed object via instruction reordering. In Spring Boot, managing classes as `@Service` singleton beans is preferred over static `getInstance()` because Spring allows easy mocking in unit tests.",
+    "keyPoints": [
+      "Holder idiom and `enum` avoid reflection/serialization/reordering pitfalls.",
+      "Prefer DI singleton beans over static globals for testability."
+    ]
+  },
+  {
+    "id": "tech-qa-036",
+    "category": "Technical",
+    "topic": "OOP",
+    "subtopic": "Design Patterns",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Contrast Composition over Inheritance and explain the Factory, Builder, and Strategy patterns in Java applications.",
+    "answer": "Favor composition (`HAS-A`) over inheritance (`IS-A`) because inheritance tightly couples subclasses to parent implementation details and allows only one parent. Factory centralizes object creation hiding concrete subclasses behind an interface (`NotificationFactory.of(\"EMAIL\")`). Builder solves telescoping constructors when creating objects with many optional validated fields cleanly (`HttpRequest.newBuilder().uri(...).timeout(...).build()`). Strategy encapsulates interchangeable runtime algorithms (`SortingStrategy`, `TaxCalculator`) injected cleanly via constructor.",
+    "keyPoints": [
+      "Composition decouples behavior at runtime; Inheritance fixes hierarchy at compile time.",
+      "Builder clarifies optional fields; Factory hides subtype instantiation; Strategy swaps algorithms."
+    ]
+  },
+  {
+    "id": "tech-qa-037",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Memory & Passing",
+    "difficulty": "medium",
+    "source_tag": "pyq-style",
+    "question": "Prove why Java is strictly pass-by-value even when mutating object fields inside a called method.",
+    "answer": "In Java, every argument—primitive or object reference—copies its value onto the callee's stack frame. For an object `User u = new User(\"A\")`, the variable `u` holds a memory reference value (say `0x4A20`). Calling `rename(u)` passes a copy of `0x4A20`: calling `param.setName(\"B\")` follows that copied address to mutate the shared heap object, whereas reassigning `param = new User(\"C\")` only overwrites the local stack copy without altering the caller's `u` pointer. Thus, references are passed by value, never by reference.",
+    "keyPoints": [
+      "Reassigning a parameter inside a method never changes the caller's variable.",
+      "Mutating fields via the copied reference affects the shared heap object."
+    ]
+  },
+  {
+    "id": "tech-qa-038",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Numeric & Wrapper Cache",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Explain Java's Integer Cache (`-128` to `127`) and why `==` fails unpredictably on boxed wrapper types.",
+    "answer": "`Integer.valueOf(int)` (used during autoboxing `Integer a = 127`) caches `Integer` objects for `[-128, 127]` per JLS (`-XX:AutoBoxCacheMax` can raise the upper bound). Hence `Integer a = 127, b = 127; a == b` is `true` (same cached reference), while `Integer x = 128, y = 128; x == y` is `false` because two distinct heap objects are allocated and `==` compares references on wrappers. Always use `.equals()` for wrapper equality and watch for `NullPointerException` when unboxing `null` `Integer` to `int`.",
+    "keyPoints": [
+      "`[-128, 127]` autoboxed `Integer` instances share pooled references.",
+      "Always use `.equals()` on `Integer`/`Long`, never `==`."
+    ]
+  },
+  {
+    "id": "tech-qa-039",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Strings & Pool",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Trace what happens in memory when executing `String s = new String(\"hcl\");` and `s.intern()`.",
+    "answer": "When the class loads, the literal `\"hcl\"` is placed in the String Constant Pool (residing inside the Heap since Java 7) if not already present. Executing `new String(\"hcl\")` explicitly allocates a SECOND distinct `String` object on the regular heap outside the pool, wrapping the same underlying `byte[]` coder data in modern JVMs. Calling `s.intern()` checks the pool: if an equal string already exists, it returns the canonical pooled reference (`s.intern() == \"hcl\"` is `true`); otherwise it adds `s` into the pool.",
+    "keyPoints": [
+      "`new String(\"lit\")` creates a non-pooled heap instance even if `\"lit\"` is pooled.",
+      "`intern()` returns the canonical pooled `String` reference."
+    ]
+  },
+  {
+    "id": "tech-qa-040",
+    "category": "Technical",
+    "topic": "Spring Boot",
+    "subtopic": "Transaction Management",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "How does `@Transactional` work under the hood in Spring Boot, and name three common pitfalls that break rollback behavior.",
+    "answer": "Spring creates a dynamic proxy (JDK or CGLIB) wrapping `@Service` beans; external calls entering the proxy open a DB transaction before invoking the target method and commit or roll back afterward. Three classic pitfalls: (1) **Self-invocation**: calling `this.saveOrder()` from another method in the same class bypasses the proxy completely; (2) **Checked exceptions**: by default `@Transactional` rolls back ONLY on unchecked `RuntimeException` and `Error` unless `rollbackFor = Exception.class` is configured; (3) **Swallowed exceptions**: catching a `RuntimeException` inside the method without rethrowing hides it from the proxy, causing silent partial commits.",
+    "keyPoints": [
+      "AOP proxy intercepts external calls only (self-invocation skips `@Transactional`).",
+      "Default rollback applies only to unchecked exceptions unless `rollbackFor` is specified."
+    ]
+  },
+  {
+    "id": "tech-qa-041",
+    "category": "Technical",
+    "topic": "Spring Boot",
+    "subtopic": "JPA & N+1 Problem",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "Diagnose the Hibernate/JPA N+1 query problem and compare `JOIN FETCH`, `@EntityGraph`, and `@BatchSize` fixes.",
+    "answer": "The N+1 problem happens when fetching N parent entities (`SELECT * FROM orders` — 1 query) triggers N lazy child queries (`SELECT * FROM order_items WHERE order_id = ?`) inside a loop or JSON serialization. Fixes: (1) JPQL `JOIN FETCH o.items` loads parents and children in 1 SQL join (careful: paginating `Pageable` with collection `JOIN FETCH` triggers in-memory pagination warnings in Hibernate!); (2) `@EntityGraph` declaratively selects associations to fetch eagerly per query method; (3) `@BatchSize(size = 50)` reduces N queries to `N/50` `WHERE order_id IN (...)` queries safely alongside pagination.",
+    "keyPoints": [
+      "1 query for parents + N lazy queries on children destroys DB throughput.",
+      "Avoid `JOIN FETCH` on collection associations combined with DB `LIMIT/OFFSET` pagination; batch fetch or split IDs instead."
+    ]
+  },
+  {
+    "id": "tech-qa-042",
+    "category": "Technical",
+    "topic": "Spring Boot",
+    "subtopic": "Auto-Configuration & Profiles",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Explain how `@SpringBootApplication` auto-configuration works and how `@Profile` + `application-{env}.yml` isolate environment configs.",
+    "answer": "`@SpringBootApplication` combines `@SpringBootConfiguration`, `@ComponentScan`, and `@EnableAutoConfiguration`. Auto-configuration reads `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports` and conditionally registers beans via `@ConditionalOnClass`, `@ConditionalOnMissingBean`, and `@ConditionalOnProperty` (e.g., configuring `DataSource` only if HikariCP/JDBC is on the classpath and you haven't defined your own). Spring Profiles (`spring.profiles.active=prod` + `@Profile(\"prod\")`) load environment-specific properties and conditional beans cleanly without rebuilding artifacts.",
+    "keyPoints": [
+      "`@ConditionalOnMissingBean` lets developer-defined beans override defaults seamlessly.",
+      "Keep secrets out of committed `application.yml`; inject via env vars or vault."
+    ]
+  },
+  {
+    "id": "tech-qa-043",
+    "category": "Technical",
+    "topic": "Spring Boot",
+    "subtopic": "REST API Design",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Compare `PUT` vs `PATCH`, idempotency across HTTP verbs, and centralized error handling with `@RestControllerAdvice`.",
+    "answer": "`GET`, `HEAD`, `PUT`, and `DELETE` are idempotent—repeating identical requests leaves server state identical after the first call (though `DELETE` may return 200 then 404). `POST` is non-idempotent (creates new resources or charges repeatedly unless protected by an `Idempotency-Key` header). `PUT` replaces an entire resource representation, whereas `PATCH` applies partial updates. `@RestControllerAdvice` + `@ExceptionHandler` intercepts exceptions globally across controllers to return consistent RFC 7807 `ProblemDetail` or structured JSON errors with accurate HTTP codes (`400` validation via `@Valid`, `404` missing, `409` conflict, `500` unexpected).",
+    "keyPoints": [
+      "PUT = full replacement (idempotent); PATCH = partial update; POST = non-idempotent creation.",
+      "`@RestControllerAdvice` centralizes DTO validation (`MethodArgumentNotValidException`) and domain errors."
+    ]
+  },
+  {
+    "id": "tech-qa-044",
+    "category": "Technical",
+    "topic": "Spring Boot",
+    "subtopic": "Security & JWT",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "Contrast stateful session cookies vs stateless JWT authentication in Spring Security, and explain JWT revocation trade-offs.",
+    "answer": "Stateful sessions store an opaque `JSESSIONID` cookie pointing to server/Redis session state—easy instant logout/revocation, requires shared session store across horizontal instances. Stateless JWT encodes signed claims (header.payload.HMAC/RSA signature) validated on each request by `OncePerRequestFilter` without a DB lookup—scalable across microservices, though payloads are base64-readable (never put secrets inside!) and true immediate revocation before expiry requires short-lived access tokens (5–15 min) paired with revocable refresh tokens or a Redis denylist.",
+    "keyPoints": [
+      "JWT payload is signed (integrity), NOT encrypted (confidentiality) unless JWE.",
+      "Use short access TTL + revocable refresh tokens to solve stateless logout."
+    ]
+  },
+  {
+    "id": "tech-qa-045",
+    "category": "Technical",
+    "topic": "Spring Boot",
+    "subtopic": "Caching & Validation",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "How do Bean Validation annotations (`@Valid`, `@NotBlank`, `@Size`) and `@Cacheable` / `@CacheEvict` work in Spring Boot?",
+    "answer": "Adding `@Valid` on a `@RequestBody` DTO triggers Jakarta Bean Validation (`@NotNull` != `@NotEmpty` != `@NotBlank`—`@NotBlank` trims whitespace on strings), rejecting malformed payloads with HTTP 400 before business logic executes. `@Cacheable(\"products\")` intercepts method calls via AOP proxy to return cached results from Caffeine/Redis on hit, executing the method only on miss; `@CacheEvict` invalidates stale entries upon `@Transactional` updates/deletes so read caches do not drift from database state.",
+    "keyPoints": [
+      "`@NotNull` allows `\"\"` and `\" \"`; `@NotEmpty` rejects `\"\"`; `@NotBlank` rejects whitespace-only strings.",
+      "Like `@Transactional`, `@Cacheable` uses proxies and ignores internal `this.` calls."
+    ]
+  },
+  {
+    "id": "tech-qa-046",
+    "category": "Technical",
+    "topic": "Spring Boot",
+    "subtopic": "Connection Pooling",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Why does Spring Boot bundle HikariCP by default, and how should pool size relate to DB CPU cores rather than thread count?",
+    "answer": "Opening a fresh TCP+TLS+auth database connection per HTTP request costs tens of milliseconds and exhausts DB file descriptors. HikariCP maintains pre-warmed reusable connections with minimal overhead and leak detection (`leak-detection-threshold`). Counter-intuitively, pool size should stay small (`~ (2 * DB_cores) + effective_spindle_count`, often 10–30 per app cluster total) rather than matching 200 Tomcat threads: too many active DB connections thrash disk/CPU locks and context switching, slowing throughput compared to queueing briefly at the app pool.",
+    "keyPoints": [
+      "Keep DB pool size bounded near DB core count, not web server thread count.",
+      "Always close JDBC/JPA transactions quickly (never hold a DB connection across slow external HTTP calls)."
+    ]
+  },
+  {
+    "id": "tech-qa-047",
+    "category": "Technical",
+    "topic": "JDBC",
+    "subtopic": "Batching & Injection",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "How do `addBatch()` / `executeBatch()`, `Statement.RETURN_GENERATED_KEYS`, and `ResultSet` scrollability improve JDBC performance and functionality?",
+    "answer": "Inserting 5,000 rows individually incurs 5,000 network round trips. Calling `ps.addBatch()` repeatedly inside `conn.setAutoCommit(false)` and flushing `ps.executeBatch()` every ~500 rows (with `rewriteBatchedStatements=true` in MySQL) cuts round trips dramatically while keeping transaction logs manageable. Passing `Statement.RETURN_GENERATED_KEYS` retrieves auto-increment primary keys via `ps.getGeneratedKeys()` cleanly in one insert round trip instead of querying `MAX(id)` (race-prone).",
+    "keyPoints": [
+      "Disable auto-commit + chunk batches (500–1000 rows) to minimize network RTT.",
+      "Use `getGeneratedKeys()` rather than `SELECT MAX(id)` for concurrency safety."
+    ]
+  },
+  {
+    "id": "tech-qa-048",
+    "category": "Technical",
+    "topic": "SQL",
+    "subtopic": "NULL Semantics",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Explain SQL three-valued logic (`TRUE`, `FALSE`, `UNKNOWN`) and why `NOT IN (SELECT ...)` fails silently when a NULL exists.",
+    "answer": "In SQL, `NULL` represents unknown/missing state, so `NULL = NULL` and `NULL != 5` both evaluate to `UNKNOWN`. `WHERE` filters keep ONLY `TRUE` rows, dropping `UNKNOWN`. Therefore `WHERE col NOT IN (1, 2, NULL)` expands to `col != 1 AND col != 2 AND col != NULL` -> `... AND UNKNOWN` -> `UNKNOWN` for EVERY row, returning ZERO rows! Prefer `NOT EXISTS (SELECT 1 FROM sub WHERE sub.id = outer.id)` (returns boolean TRUE/FALSE cleanly regardless of NULLs) or filter `WHERE id IS NOT NULL` inside subqueries.",
+    "keyPoints": [
+      "Always use `IS NULL` / `IS NOT NULL` and prefer `NOT EXISTS` over `NOT IN` on nullable columns.",
+      "`COUNT(*)` counts NULL rows; `COUNT(col)` ignores NULLs."
+    ]
+  },
+  {
+    "id": "tech-qa-049",
+    "category": "Technical",
+    "topic": "SQL",
+    "subtopic": "Window Functions",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Compare `ROW_NUMBER()`, `RANK()`, and `DENSE_RANK()`, and explain why window functions cannot appear directly in `WHERE`.",
+    "answer": "Over tied salary values `[100, 100, 80]`: `ROW_NUMBER()` assigns strict unique ordinals `(1, 2, 3)`; `RANK()` assigns `(1, 1, 3)` leaving gaps after ties; `DENSE_RANK()` assigns `(1, 1, 2)` with zero gaps—making `DENSE_RANK() = 2` ideal for 'second highest salary'. SQL logical evaluation runs `FROM/JOIN -> WHERE -> GROUP BY -> HAVING -> SELECT (window functions evaluate here) -> ORDER BY -> LIMIT`. Because `WHERE` runs before `SELECT`, wrap window computations in a CTE or subquery first before filtering.",
+    "keyPoints": [
+      "Evaluation order: `FROM -> WHERE -> GROUP BY -> HAVING -> SELECT/WINDOW -> ORDER BY -> LIMIT`.",
+      "Use `DENSE_RANK()` for N-th distinct rank; `ROW_NUMBER()` for exact deduplication."
+    ]
+  },
+  {
+    "id": "tech-qa-050",
+    "category": "Technical",
+    "topic": "SQL",
+    "subtopic": "Aggregation & Filtering",
+    "difficulty": "medium",
+    "source_tag": "pyq-style",
+    "question": "Distinguish `WHERE` vs `HAVING` and explain the difference between `UNION` and `UNION ALL`.",
+    "answer": "`WHERE` filters individual raw rows BEFORE `GROUP BY` runs and cannot reference aggregate functions (`SUM`, `COUNT`), whereas `HAVING` filters grouped buckets AFTER aggregation (though non-aggregate conditions belong in `WHERE` first for index usage and smaller group state). `UNION` merges compatible result sets and performs an expensive sort/hash pass to deduplicate rows; `UNION ALL` appends rows directly in O(n) without deduplication and should be preferred whenever duplicates are impossible or acceptable.",
+    "keyPoints": [
+      "Push selective row predicates into `WHERE`, not `HAVING`, so indexes prune rows early.",
+      "Prefer `UNION ALL` over `UNION` when uniqueness isn't required."
+    ]
+  },
+  {
+    "id": "tech-qa-051",
+    "category": "Technical",
+    "topic": "SQL",
+    "subtopic": "Subqueries & CTEs",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Compare correlated subqueries, Common Table Expressions (`WITH`), and `EXISTS` vs `IN` performance.",
+    "answer": "A non-correlated subquery runs once independently, while a correlated subquery references outer-row columns and conceptually re-evaluates per outer row unless the optimizer decorrelates it into a semi-join. CTEs (`WITH cte AS (...)`) improve readability and enable recursive queries (`WITH RECURSIVE`) for org charts or graph traversal. For checking existence across large tables, `EXISTS (SELECT 1 ...)` short-circuits immediately on the first index match and handles NULLs safely, whereas `IN` may materialize a large subquery list when the inner set dominates.",
+    "keyPoints": [
+      "`EXISTS` short-circuits on first match and handles NULLs safely.",
+      "`WITH RECURSIVE` traverses hierarchical trees cleanly in standard SQL."
+    ]
+  },
+  {
+    "id": "tech-qa-052",
+    "category": "Technical",
+    "topic": "SQL",
+    "subtopic": "Query Optimization",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "List five anti-patterns that prevent SQL databases from using an existing B-Tree index (`non-SARGable` predicates).",
+    "answer": "Non-SARGable predicates prevent index seeks and force full scans: (1) Wrapping the indexed column in a function (`WHERE YEAR(created_at) = 2025` instead of `created_at >= '2025-01-01' AND created_at < '2026-01-01'`); (2) Leading wildcards (`LIKE '%gmail.com'`); (3) Implicit type mismatch (`WHERE phone_varchar = 9876543210` forcing cast on column); (4) Skipping the leftmost column of a composite index `(a, b)` when filtering only by `b`; (5) Arithmetic on column (`WHERE salary * 1.1 > 90000` instead of `salary > 90000 / 1.1`).",
+    "keyPoints": [
+      "Keep indexed columns bare on one side of comparison operators (SARGable).",
+      "Inspect `EXPLAIN ANALYZE` to confirm Index Scan vs Seq Scan."
+    ]
+  },
+  {
+    "id": "tech-qa-053",
+    "category": "Technical",
+    "topic": "SQL",
+    "subtopic": "DDL & DML",
+    "difficulty": "medium",
+    "source_tag": "pyq-style",
+    "question": "Contrast `DELETE`, `TRUNCATE`, and `DROP` in transaction rollback safety, locks, triggers, and identity counter behavior.",
+    "answer": "`DELETE` is DML: removes rows matching `WHERE` one by one, fires `ON DELETE` triggers, logs every row in undo/redo logs so it rolls back cleanly, and leaves auto-increment counters intact. `TRUNCATE` is DDL (engine-dependent transaction behavior—transactional in PostgreSQL, auto-committing in MySQL/Oracle): deallocates data pages rapidly without scanning rows or firing row-level DELETE triggers, and resets identity counters. `DROP` removes data, indexes, constraints, and table schema metadata completely.",
+    "keyPoints": [
+      "`DELETE` = row-logged DML + triggers; `TRUNCATE` = fast page deallocation + resets identity; `DROP` = destroys table definition."
+    ]
+  },
+  {
+    "id": "tech-qa-054",
+    "category": "Technical",
+    "topic": "DBMS",
+    "subtopic": "Keys & Constraints",
+    "difficulty": "medium",
+    "source_tag": "pyq-style",
+    "question": "Differentiate Superkey, Candidate Key, Primary Key, Alternate Key, Foreign Key, and Surrogate vs Natural keys.",
+    "answer": "A Superkey uniquely identifies rows (including redundant columns like `{emp_id, name}`). A Candidate Key is a minimal Superkey with no unnecessary attributes (`{emp_id}`, `{ssn}`). One Candidate Key becomes the Primary Key (NOT NULL + UNIQUE), while remaining candidate keys become Alternate Keys. A Foreign Key enforces referential integrity referencing a PK/UNIQUE key (`ON DELETE CASCADE`/`RESTRICT`). Natural keys derive from domain data (`email`, `isbn`) and risk mutating; Surrogate keys (`BIGSERIAL`, `UUID`) are synthetic immutable identifiers preferred for stable FK joins.",
+    "keyPoints": [
+      "Candidate Key = minimal Superkey; Primary Key = chosen Candidate Key (`NOT NULL` + `UNIQUE`).",
+      "Prefer immutable surrogate keys (`id`) so domain edits (`email` change) never cascade updates across FKs."
+    ]
+  },
+  {
+    "id": "tech-qa-055",
+    "category": "Technical",
+    "topic": "DBMS",
+    "subtopic": "Concurrency Control",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "Contrast Pessimistic Locking (`SELECT ... FOR UPDATE`), Optimistic Locking (`@Version`), and MVCC snapshot reads.",
+    "answer": "Pessimistic locking acquires exclusive row locks upfront (`SELECT ... FOR UPDATE`), blocking contending writers until commit—suitable for high-contention financial balances where retries are undesirable, at the cost of lower concurrency and deadlock risk. Optimistic locking adds a numeric `version` column (`UPDATE acct SET bal = ?, version = version + 1 WHERE id = ? AND version = ?`), throwing `OptimisticLockException` if row count is 0 so callers retry—ideal for low-contention web forms. MVCC maintains versioned row tuples so readers never block writers and writers never block readers by reading consistent transaction snapshots.",
+    "keyPoints": [
+      "Pessimistic = lock upfront (`FOR UPDATE`); Optimistic = check `version` on commit.",
+      "MVCC decouples readers from writers without dirty reads."
+    ]
+  },
+  {
+    "id": "tech-qa-056",
+    "category": "Technical",
+    "topic": "DBMS",
+    "subtopic": "CAP & NoSQL",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Explain the CAP theorem and when you choose an ACID RDBMS over a NoSQL document or key-value store.",
+    "answer": "CAP states that during a network Partition (`P`, unavoidable in distributed clusters), a system must trade off strict linearizable Consistency (`C`—rejecting writes/reads on minority partitions) against Availability (`A`—answering every non-failing node even with stale reads). Choose PostgreSQL/MySQL when data has relational integrity, multi-entity ACID transactions (ledgers, orders, inventory), and flexible ad-hoc SQL joins. Choose Redis/DynamoDB/MongoDB for sub-ms session caches, flexible rapidly evolving event schemas, or massive horizontally sharded write throughput where eventual consistency suffices.",
+    "keyPoints": [
+      "Partitions (`P`) happen; real distributed choices are `CP` vs `AP` during partitions.",
+      "Never pick NoSQL just to skip schema design if domain data is inherently relational."
+    ]
+  },
+  {
+    "id": "tech-qa-057",
+    "category": "Technical",
+    "topic": "DBMS",
+    "subtopic": "Database Views & Sharding",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Compare regular Views vs Materialized Views, and distinguish Vertical Partitioning vs Horizontal Sharding.",
+    "answer": "A regular View is a saved named query evaluated live on every SELECT—zero extra storage, always fresh, enforces row/column security. A Materialized View persists precomputed query results on disk and requires explicit or scheduled `REFRESH`, trading freshness for millisecond analytics aggregations. Partitioning splits large tables within one DB instance (e.g., range by month for fast partition pruning/archival). Vertical partitioning splits wide rarely used columns (BLOBs) into separate tables; Horizontal Sharding distributes row subsets across separate DB servers by shard key (`tenant_id`) to scale write throughput.",
+    "keyPoints": [
+      "View = virtual query; Materialized View = stored precomputed snapshot requiring refresh.",
+      "Horizontal sharding scales writes across servers; watch out for cross-shard joins and hot shards."
+    ]
+  },
+  {
+    "id": "tech-qa-058",
+    "category": "Technical",
+    "topic": "OS",
+    "subtopic": "Memory Management",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Explain Virtual Memory, Paging, Page Faults, and the role of the TLB (Translation Lookaside Buffer).",
+    "answer": "Virtual Memory gives each process a contiguous isolated address space mapped dynamically by the OS and MMU onto fragmented physical RAM frames via page tables (typically 4 KB pages). If a referenced virtual page's valid bit is 0 (resides on disk swap or lazily unallocated), the CPU traps a Page Fault, letting the OS load the page into a free frame and restart the instruction. Because reading multi-level page tables in RAM on every memory access doubles latency, the hardware TLB caches recent VPN -> PFN translations inside the CPU achieving ~99% hit rates.",
+    "keyPoints": [
+      "TLB caches virtual-to-physical page translations; process context switches flush/tag TLB entries.",
+      "Excessive page faults beyond working set cause Thrashing (CPU idle waiting on disk swap)."
+    ]
+  },
+  {
+    "id": "tech-qa-059",
+    "category": "Technical",
+    "subtopic": "OS",
+    "subtopic": "Page Replacement",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Compare FIFO, LRU, and Optimal page replacement algorithms and explain Belady's Anomaly.",
+    "answer": "FIFO evicts the oldest loaded page regardless of recent usage; paradoxically, increasing physical frames under FIFO can INCREASE page faults—known as Belady's Anomaly. Optimal (Belady's algorithm) evicts the page unused farthest in the future (unimplementable online, serves as theoretical benchmark). LRU (Least Recently Used) evicts the page untouched longest, exploiting temporal locality and satisfying the stack property (immune to Belady's Anomaly); OS kernels approximate LRU cheaply via the Clock/Second-Chance reference bit.",
+    "keyPoints": [
+      "FIFO suffers Belady's Anomaly; Stack algorithms like LRU and Optimal never do.",
+      "OS uses Clock (Second-Chance) hardware reference bits to approximate LRU in O(1)."
+    ]
+  },
+  {
+    "id": "tech-qa-060",
+    "category": "Technical",
+    "topic": "OS",
+    "subtopic": "Synchronization",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "Distinguish a Binary Semaphore from a Mutex, and explain Priority Inversion and how Priority Inheritance solves it.",
+    "answer": "A Mutex has ownership: only the thread that locked it may unlock it, enabling priority inheritance and preventing accidental unlocks. A Binary Semaphore is a signaling mechanism without ownership (`signal()`/`wait()` can be called by different threads, ideal for producer-consumer handoff). Priority Inversion happens when a low-priority thread `L` holds a lock needed by high-priority `H`, while medium-priority `M` repeatedly preempts `L`, indirectly starving `H`. Priority Inheritance temporarily boosts `L`'s priority to `H`'s level until `L` releases the shared lock.",
+    "keyPoints": [
+      "Mutex enforces lock ownership; Semaphore is a counting/binary signal without ownership.",
+      "Priority Inheritance temporarily elevates lock-holder priority to break Priority Inversion."
+    ]
+  },
+  {
+    "id": "tech-qa-061",
+    "category": "Technical",
+    "topic": "OS",
+    "subtopic": "Process Control",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Contrast Zombie vs Orphan processes in Unix/Linux and explain Copy-on-Write (CoW) in `fork()`.",
+    "answer": "A Zombie process has already terminated (`exit()`), freeing memory and files, yet remains in the process table (`Z` state) solely so its parent can read its exit status via `wait()`/`waitpid()` (avoided by reaping children or ignoring `SIGCHLD`). An Orphan process is still running after its parent exits, and gets immediately reparented (`PPID = 1` / `init` or `systemd`) which automatically reaps it later. `fork()` avoids copying gigabytes of parent memory eagerly by sharing physical pages read-only with Copy-on-Write: a physical page duplicate happens lazily only when either parent or child writes to it.",
+    "keyPoints": [
+      "Zombie = dead child waiting for parent `wait()`; Orphan = live child adopted by PID 1.",
+      "Copy-on-Write makes `fork() + exec()` fast without duplicating unmodified RAM."
+    ]
+  },
+  {
+    "id": "tech-qa-062",
+    "category": "Technical",
+    "topic": "OS",
+    "subtopic": "Kernel & System Calls",
+    "difficulty": "medium",
+    "source_tag": "pyq-style",
+    "question": "Explain User Mode vs Kernel Mode switching during a system call and how I/O interrupts avoid busy-waiting.",
+    "answer": "Applications run unprivileged in User Mode (ring 3), forbidden from accessing hardware ports, page tables, or other processes' RAM. To read a file or open a socket, code executes a trap/syscall instruction (`syscall`), switching CPU privilege to Kernel Mode (ring 0), validating user pointers, scheduling disk/DMA work, and switching back upon completion. Using Interrupt-driven I/O + DMA, the CPU puts the requesting process in `Waiting`, runs other `Ready` processes, and lets the disk controller raise a hardware interrupt only after DMA finishes writing buffers to RAM.",
+    "keyPoints": [
+      "Syscalls switch privilege from User Mode to Kernel Mode via software trap.",
+      "DMA + hardware interrupts free the CPU from polling slow peripherals."
+    ]
+  },
+  {
+    "id": "tech-qa-063",
+    "category": "Technical",
+    "topic": "CN",
+    "subtopic": "HTTP & Web Protocols",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Compare HTTP/1.1, HTTP/2, and HTTP/3 (QUIC) across multiplexing, head-of-line blocking, and header compression.",
+    "answer": "HTTP/1.1 added keep-alive connections and pipelining, yet suffered application-level Head-of-Line (HoL) blocking (one slow response stalls the connection, forcing browsers to open 6 parallel TCP sockets). HTTP/2 introduced binary framing, HPACK header compression, and multiplexed streams over ONE TCP connection—solving HTTP-layer HoL blocking, though a single dropped TCP packet still stalls ALL multiplexed HTTP/2 streams at the transport layer. HTTP/3 runs over QUIC (UDP-based with built-in TLS 1.3), giving independent per-stream congestion/retransmission so packet loss in one stream never blocks sibling streams.",
+    "keyPoints": [
+      "HTTP/2 multiplexes over 1 TCP socket (still suffers TCP packet HoL blocking).",
+      "HTTP/3 uses QUIC over UDP so lost packets stall only their own stream."
+    ]
+  },
+  {
+    "id": "tech-qa-064",
+    "category": "Technical",
+    "topic": "CN",
+    "subtopic": "Subnetting & NAT",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Explain CIDR subnetting (`192.168.10.0/26`) and how NAT / PAT allows private LAN hosts to share one public IPv4 address.",
+    "answer": "In CIDR `/26`, 26 bits identify the network prefix and `32 - 26 = 6` bits identify hosts, yielding `2^6 = 64` addresses per subnet (`62` usable host IPs after reserving network `.0` and broadcast `.63`, mask `255.255.255.192`). Private RFC 1918 ranges (`10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`) are non-routable on the public Internet. Port Address Translation (PAT/NAPT) on a gateway router translates outbound private `(srcIP:srcPort)` tuples into `(publicIP:uniqueEphemeralPort)` recorded in a translation table so returning replies demultiplex cleanly back to the exact internal host.",
+    "keyPoints": [
+      "Usable hosts in `/n` IPv4 subnet = `2^(32 - n) - 2` (for n <= 30).",
+      "PAT multiplexes thousands of private devices behind one public IP using distinct port numbers."
+    ]
+  },
+  {
+    "id": "tech-qa-065",
+    "category": "Technical",
+    "topic": "CN",
+    "subtopic": "TCP Congestion Control",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "Contrast TCP Flow Control (`rwnd`) vs Congestion Control (`cwnd`), Slow Start, and Fast Retransmit.",
+    "answer": "Flow Control (`rwnd` advertised in TCP headers) prevents a fast sender from overflowing a slow receiver's socket receive buffer. Congestion Control (`cwnd`) prevents senders from saturating intermediate router queues across the network, capping in-flight bytes to `min(cwnd, rwnd)`. During Slow Start, `cwnd` doubles every RTT exponentially until hitting `ssthresh`, then switches to linear Congestion Avoidance (+1 MSS/RTT). On 3 duplicate ACKs (Fast Retransmit), TCP retransmits immediately without waiting for timeout and halves `cwnd` (Fast Recovery), whereas an RTO timeout collapses `cwnd` back to 1 MSS.",
+    "keyPoints": [
+      "`rwnd` protects the receiver; `cwnd` protects the network routers.",
+      "3 duplicate ACKs -> halve `cwnd` (multiplicative decrease); RTO timeout -> reset `cwnd = 1 MSS`."
+    ]
+  },
+  {
+    "id": "tech-qa-066",
+    "category": "Technical",
+    "topic": "CN",
+    "subtopic": "TLS & Security",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "How does HTTPS combine asymmetric and symmetric cryptography, and why does Certificate Authority trust matter?",
+    "answer": "Symmetric ciphers (AES-GCM, ChaCha20) are orders of magnitude faster for bulk payload encryption, while asymmetric cryptography (RSA/ECDSA + ECDHE key exchange) enables strangers to verify identity and derive a shared secret securely over an untrusted network without pre-shared passwords. During TLS handshake, the server presents an X.509 certificate signed by a trusted Certificate Authority (CA) binding its domain name to its public key—preventing Man-in-the-Middle impersonation. ECDHE also provides Forward Secrecy: compromising a server's long-term private key later cannot decrypt previously recorded traffic.",
+    "keyPoints": [
+      "Asymmetric crypto authenticates + exchanges keys; Symmetric AES encrypts session traffic.",
+      "CA chain prevents MitM spoofing; ECDHE guarantees Forward Secrecy."
+    ]
+  },
+  {
+    "id": "tech-qa-067",
+    "category": "Technical",
+    "topic": "CN",
+    "subtopic": "DNS & Load Balancing",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Compare L4 (TCP) vs L7 (HTTP) load balancing and explain DNS A, AAAA, CNAME, and TTL records.",
+    "answer": "An L4 Load Balancer forwards raw TCP/UDP packets based only on IP+Port without inspecting HTTP payloads or terminating TLS—ultra-low latency and protocol-agnostic. An L7 Load Balancer (NGINX, Envoy, AWS ALB) terminates TLS, inspects URLs/headers/cookies, routes `/api` vs `/static` separately, adds rate limiting, and pools backend connections. In DNS, `A` maps hostname to IPv4, `AAAA` maps to IPv6, `CNAME` aliases one domain name to another (not permitted at zone apex), and `TTL` dictates how many seconds resolvers may cache the answer.",
+    "keyPoints": [
+      "L4 = packet/connection routing (IP+Port); L7 = application-aware HTTP routing & TLS termination.",
+      "DNS TTL balances lookup speed against failover propagation time."
+    ]
+  },
+  {
+    "id": "tech-qa-068",
+    "category": "Technical",
+    "topic": "DSA",
+    "subtopic": "Sorting & Stability",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Contrast Merge Sort, Quick Sort, and Heap Sort across worst-case time, auxiliary space, stability, and why `Arrays.sort` uses dual strategies.",
+    "answer": "Merge Sort guarantees O(n log n) worst-case time and is stable, requiring O(n) auxiliary space (preferred for linked lists and external disk sorting). Quick Sort averages O(n log n) in-place (O(log n) stack) with superior cache locality, yet degrades to O(n^2) on adversarial pivots and is unstable. Heap Sort guarantees O(n log n) in O(1) space, though poor cache locality slows it in practice and it is unstable. Java's `Arrays.sort` uses Dual-Pivot Quicksort on primitives (where stability doesn't matter for equal ints) and TimSort (hybrid Merge + Insertion Sort) on `Object[]` because stability preserves prior sort keys.",
+    "keyPoints": [
+      "Primitives -> Dual-Pivot Quicksort (fast, unstable); Objects -> TimSort (stable, O(n) worst extra space).",
+      "Merge Sort is optimal for linked lists and multi-way external disk sort."
+    ]
+  },
+  {
+    "id": "tech-qa-069",
+    "category": "Technical",
+    "topic": "DSA",
+    "subtopic": "Trees & Graphs",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Compare BFS vs DFS traversal data structures, memory footprints, and cycle/shortest-path applications.",
+    "answer": "BFS explores level by level using a FIFO Queue (`ArrayDeque`), guaranteeing the shortest path in unweighted graphs and needing O(width) memory (heavy on wide trees). DFS dives deep along each branch via recursion or an explicit Stack, needing only O(height) memory and powering topological sorting, strongly connected components (Tarjan/Kosaraju), and cycle detection (3-color white/gray/black states for directed graphs; parent-tracking for undirected graphs). For weighted non-negative graphs, replace BFS queue with a min-heap (Dijkstra's algorithm).",
+    "keyPoints": [
+      "BFS + Queue = shortest unweighted path; DFS + Stack = cycle detection, topological sort.",
+      "Directed cycle detection needs a recursion-stack (`visiting`) set, not just `visited`."
+    ]
+  },
+  {
+    "id": "tech-qa-070",
+    "category": "Technical",
+    "topic": "DSA",
+    "subtopic": "Hashing vs BST",
+    "difficulty": "medium",
+    "source_tag": "pyq-style",
+    "question": "When would you choose a Balanced BST (`TreeMap`) over a Hash Table (`HashMap`) despite O(log n) vs O(1) lookup?",
+    "answer": "Choose `TreeMap` / Balanced BST whenever keys require ordering semantics that hashing destroys: range queries (`subMap(low, high)`), ordered iteration, finding floor/ceiling/predecessor/successor keys (`floorEntry`, `ceilingEntry`), or guaranteed worst-case O(log n) without hash-flooding collision degradation or occasional full-table O(n) rehashing pauses. Choose `HashMap` for pure point lookups (`get`/`put`) where order is irrelevant.",
+    "keyPoints": [
+      "HashMap = O(1) average point lookup, unordered, O(n) resize spikes.",
+      "TreeMap = O(log n) guaranteed, supports range queries, `floorKey`, `ceilingKey`."
+    ]
+  },
+  {
+    "id": "tech-qa-071",
+    "category": "Technical",
+    "topic": "DSA",
+    "subtopic": "Heaps & Priority Queues",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Prove why bottom-up `heapify` runs in O(n) time instead of O(n log n) and trace finding Kth largest using a min-heap.",
+    "answer": "Inserting n items top-down into a binary heap costs O(n log n) because ~n/2 leaf elements can sift up `log n` levels. Bottom-up `heapify` starts from the last non-leaf `n/2 - 1` down to 0 and sifts DOWN: half the nodes are leaves (0 swaps), a quarter sift <=1 level, an eighth <=2, giving geometric sum `n * sum(h / 2^(h+1)) = O(n)`. To find the Kth largest element in a stream of N items, maintain a min-heap of size K (`O(N log K)` time, `O(K)` space): whenever `size > K`, poll the smallest; the heap root is always the Kth largest.",
+    "keyPoints": [
+      "Bottom-up Floyd `heapify` runs in linear O(n) time.",
+      "Use a size-K MIN-heap for Kth largest (and MAX-heap for Kth smallest)."
+    ]
+  },
+  {
+    "id": "tech-qa-072",
+    "category": "Technical",
+    "topic": "DSA",
+    "subtopic": "Dynamic Programming",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "Distinguish Greedy algorithms from Dynamic Programming (Top-Down Memoization vs Bottom-Up Tabulation) with 0/1 vs Fractional Knapsack.",
+    "answer": "Greedy makes locally optimal irrevocable choices at each step (e.g., sorting items by value/weight ratio solves Fractional Knapsack optimally). When items are indivisible (0/1 Knapsack) or coin denominations are arbitrary, greedy fails because local gains block better global combinations. DP requires Overlapping Subproblems and Optimal Substructure: Top-Down Memoization caches recursive subproblems lazily; Bottom-Up Tabulation fills a DP table iteratively avoiding recursion stack overflow and enabling 2D->1D rolling space optimization.",
+    "keyPoints": [
+      "Fractional Knapsack = Greedy; 0/1 Knapsack = Dynamic Programming.",
+      "1D backward capacity iteration optimizes 0/1 Knapsack space from O(N*W) to O(W)."
+    ]
+  },
+  {
+    "id": "tech-qa-073",
+    "category": "Technical",
+    "topic": "DSA",
+    "subtopic": "Sliding Window & Two Pointers",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "When can a Sliding Window replace a Prefix Sum + HashMap for subarray sum problems?",
+    "answer": "Variable-size Sliding Window (`O(n)` time, `O(1)` space) works ONLY when the window property is monotonic as pointers advance—such as subarray sum <= K when ALL array numbers are non-negative (shrinking left strictly decreases sum, expanding right strictly increases it). Once negative numbers appear, shrinking left might increase sum, breaking monotonicity; you MUST switch to Prefix Sum + `HashMap<prefixSum, firstIndex/count>` (`O(n)` time and `O(n)` space).",
+    "keyPoints": [
+      "Non-negative numbers -> Sliding Window in O(1) extra space.",
+      "Negative numbers included -> Prefix Sum + HashMap in O(n) space."
+    ]
+  },
+  {
+    "id": "tech-qa-074",
+    "category": "Technical",
+    "topic": "DSA",
+    "subtopic": "Stacks & Queues",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Explain Monotonic Stacks/Deques and how they solve Next Greater Element and Sliding Window Maximum in O(n) time.",
+    "answer": "A Monotonic Stack maintains strictly increasing or decreasing elements: when a new element pops smaller predecessors off the stack, each popped element immediately discovers the incoming element as its Next Greater Element. Since every element enters and leaves the stack at most once, total time is O(n) instead of nested O(n^2) scans. Similarly, Sliding Window Maximum uses a Monotonic Decreasing Deque storing indices—evicting out-of-window front indices and smaller back indices before pushing—delivering window max at `deque.peekFirst()` in amortized O(1) per slide.",
+    "keyPoints": [
+      "Each index is pushed once and popped once -> guaranteed O(n) amortized time.",
+      "Store indices (not values) in monotonic structures to compute widths and window expirations."
+    ]
+  },
+  {
+    "id": "tech-qa-075",
+    "category": "Technical",
+    "topic": "DSA",
+    "subtopic": "Trie & Strings",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Compare a Trie (Prefix Tree) vs `HashSet<String>` for autocomplete and explain KMP prefix-function intuition.",
+    "answer": "A `HashSet` looks up exact strings in O(L) but cannot find all keys starting with prefix `'hcl'` without scanning every entry. A Trie shares common prefixes along paths of length L, answering `startsWith(prefix)` in O(P) and enumerating top suggestions directly down the prefix subtree—at higher node memory cost unless compressed into a Radix Tree. KMP substring search avoids resetting the text pointer on mismatch by precomputing LPS (Longest Proper Prefix which is also Suffix) on the pattern in O(M), guaranteeing O(N + M) worst-case matching.",
+    "keyPoints": [
+      "Trie excels at prefix search, dictionary word-break, and autocomplete.",
+      "KMP LPS array skips redundant comparisons, preventing O(N*M) worst case."
+    ]
+  },
+  {
+    "id": "tech-qa-076",
+    "category": "Technical",
+    "topic": "DSA",
+    "subtopic": "Union-Find (DSU)",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "Explain Disjoint Set Union (Union-Find) optimizations—Path Compression and Union by Rank/Size—and its classic applications.",
+    "answer": "DSU tracks dynamic connected components across two operations: `find(x)` and `union(x, y)`. Union by Rank/Size always attaches the shallower/smaller tree under the taller/larger root, preventing linear chains (`O(log n)` height). Path Compression flattens trees during `find(x)` by wiring visited nodes directly to the root (`parent[x] = find(parent[x])`). Combining both yields `O(alpha(N))` amortized time—practically O(1)—powering Kruskal's Minimum Spanning Tree, undirected cycle detection, and dynamic network connectivity.",
+    "keyPoints": [
+      "Path Compression + Union by Rank/Size achieves inverse Ackermann `O(alpha(N))` amortized time.",
+      "Ideal for Kruskal's MST and merging equivalence groups."
+    ]
+  },
+  {
+    "id": "tech-qa-077",
+    "category": "Technical",
+    "topic": "SE",
+    "subtopic": "Git Workflows",
+    "difficulty": "medium",
+    "source_tag": "pyq-style",
+    "question": "Compare `git merge` vs `git rebase` and explain when rewriting history with `rebase` is unsafe.",
+    "answer": "`git merge` preserves exact chronological branch topology by creating a merge commit joining parent histories. `git rebase` replays local branch commits linearly onto a moving base (`main`), creating a cleaner bisect-friendly linear log by rewriting commit SHA-1 hashes. Never rebase commits already pushed to a shared team branch (`main` or shared feature branches) because rewritten SHAs diverge from teammates' histories and force destructive `--force` pushes; reserve `rebase` for tidying private local branches before opening a PR.",
+    "keyPoints": [
+      "`merge` preserves true parallel history; `rebase` creates new SHAs for a linear commit log.",
+      "Golden rule: Never rebase shared public branches."
+    ]
+  },
+  {
+    "id": "tech-qa-078",
+    "category": "Technical",
+    "topic": "SE",
+    "subtopic": "Testing Pyramid",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Describe the Software Testing Pyramid, Mocking vs Stubbing in JUnit 5/Mockito, and why E2E tests sit at the apex.",
+    "answer": "The Testing Pyramid places fast, deterministic **Unit Tests** (70%+, JUnit 5 + Mockito testing pure business classes with mocked dependencies) at the base, **Integration Tests** (20%, `@SpringBootTest` / Testcontainers verifying real SQL queries, JSON serialization, and HTTP routing) in the middle, and slow brittle **End-to-End UI tests** (10%, Playwright/Selenium) at the top. A Stub returns canned responses (`when(repo.findById(1)).thenReturn(...)`), whereas a Mock additionally verifies behavior interactions (`verify(emailService, times(1)).send(...)`).",
+    "keyPoints": [
+      "Invert the pyramid (mostly slow E2E tests) and CI pipelines become flaky and slow.",
+      "Use Testcontainers for real SQL constraint/dialect integration verification over H2."
+    ]
+  },
+  {
+    "id": "tech-qa-079",
+    "category": "Technical",
+    "topic": "SE",
+    "subtopic": "CI/CD & Containers",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Explain the difference between a Docker Container and a Virtual Machine, and trace stages of a typical CI/CD pipeline.",
+    "answer": "A Virtual Machine virtualizes hardware via a hypervisor and bundles a full guest OS kernel per VM (GBs of RAM, minute boot times). A Docker Container packages application code, runtime, and user-space libraries into lightweight immutable layers sharing the host OS Linux kernel via namespaces (isolation) and cgroups (CPU/RAM limits)—booting in milliseconds. A CI/CD pipeline automates: `git push` -> Compile & Lint -> Unit/Integration Tests + SAST security scan -> Build & tag Docker image -> Deploy to Staging (canary/blue-green) -> Automated smoke checks -> Production rollout.",
+    "keyPoints": [
+      "Containers share the host OS kernel via namespaces & cgroups; VMs virtualize full guest OS kernels.",
+      "CI verifies every commit early; CD automates repeatable zero-downtime promotion."
+    ]
+  },
+  {
+    "id": "tech-qa-080",
+    "category": "Technical",
+    "topic": "Web & Frontend",
+    "subtopic": "React Hooks & Rendering",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Contrast `useState` vs `useRef`, explain `useEffect` cleanup & dependency pitfalls, and describe React batching.",
+    "answer": "`useState` stores reactive UI state whose setter schedules a component re-render asynchronously (React 18 batches multiple state updates across promises/timeouts automatically). `useRef` returns a mutable `.current` box preserved across renders whose updates do NOT trigger re-renders—ideal for DOM references, timer IDs, or tracking previous values. Omitting dependencies in `useEffect` traps stale closures, whereas returning a cleanup function prevents memory leaks by cancelling subscriptions, event listeners, or `AbortController` fetches before re-running or unmounting.",
+    "keyPoints": [
+      "Mutating `ref.current` never triggers re-renders; `setState` schedules re-render.",
+      "Always return cleanup functions from `useEffect` for timers, sockets, and fetch aborts."
+    ]
+  },
+  {
+    "id": "tech-qa-081",
+    "category": "Technical",
+    "topic": "Web & Frontend",
+    "subtopic": "JS Event Loop",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "Trace the JavaScript Event Loop across the Call Stack, Microtask Queue (`Promise.then`), and Macrotask Queue (`setTimeout`).",
+    "answer": "JavaScript executes synchronously on a single Call Stack. Async host APIs (`fetch`, `setTimeout`) delegate I/O outside JS and push callbacks onto queues when complete. After every synchronous script or macrotask finishes and the Call Stack empties, the Event Loop drains the ENTIRE Microtask Queue (`Promise.then`, `queueMicrotask`, `MutationObserver`)—including newly chained microtasks—BEFORE rendering frames or dequeuing the next single Macrotask (`setTimeout`, `setInterval`, UI click). Thus `Promise.resolve().then(...)` always logs before `setTimeout(..., 0)`.",
+    "keyPoints": [
+      "Order: Sync Call Stack -> Drain ALL Microtasks (`Promise`) -> Render -> 1 Macrotask (`setTimeout`).",
+      "Infinite recursive microtasks starve rendering and macrotasks."
+    ]
+  },
+  {
+    "id": "tech-qa-082",
+    "category": "Technical",
+    "topic": "Web & Frontend",
+    "subtopic": "Browser Security & APIs",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Explain CORS (preflight `OPTIONS`), XSS vs CSRF defenses, and `localStorage` vs `HttpOnly` cookies for storing auth tokens.",
+    "answer": "CORS is a browser Same-Origin Policy safeguard where cross-origin non-simple requests (custom headers like `Authorization`, JSON `POST`/`PUT`) trigger a preflight `OPTIONS` check asking the server for `Access-Control-Allow-Origin` and allowed methods/headers; curl/Postman ignore CORS because it's enforced by browsers. XSS injects executable scripts into pages (defend via framework escaping, CSP, never unsanitized `innerHTML`), whereas CSRF tricks an authenticated user's browser into forging cookie-bearing requests (defend via `SameSite=Lax/Strict` + CSRF tokens). Never store sensitive long-lived tokens in `localStorage` if XSS risk exists; prefer `HttpOnly; Secure; SameSite` cookies.",
+    "keyPoints": [
+      "CORS restricts cross-origin browser JS reads; configure allowed origins explicitly on Spring Boot, never wildcard `*` with credentials.",
+      "`HttpOnly` cookies shield tokens from JS `document.cookie` theft during XSS."
+    ]
+  },
+  {
+    "id": "tech-qa-083",
+    "category": "Technical",
+    "topic": "Machine Learning",
+    "subtopic": "Model Evaluation",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Explain the Bias-Variance Tradeoff, Overfitting vs Underfitting, and why Accuracy misleads on imbalanced datasets.",
+    "answer": "High Bias (underfitting) happens when a model is too simple to capture true patterns, yielding poor train AND validation scores. High Variance (overfitting) occurs when a complex model memorizes training noise, yielding ~99% train accuracy but poor unseen test generalization—mitigated via more data, L1/L2 regularization, dropout, tree depth limits, and cross-validation. On a 99% negative fraud dataset, a dummy predictor always outputting 'Not Fraud' scores 99% Accuracy yet catches zero fraud; use Precision, Recall, F1-score, and PR-AUC / ROC-AUC instead.",
+    "keyPoints": [
+      "Precision = TP / (TP + FP) (false alarm cost); Recall = TP / (TP + FN) (missed positive cost).",
+      "Cross-validation splits prevent overfitting hyperparameters to a single lucky split."
+    ]
+  },
+  {
+    "id": "tech-qa-084",
+    "category": "Technical",
+    "topic": "Machine Learning",
+    "subtopic": "Data Leakage & Regularization",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "Define Data Leakage in ML pipelines and compare L1 (Lasso) vs L2 (Ridge) regularization.",
+    "answer": "Data leakage occurs when information from the validation/test set or future target leaks into training features—commonly by calling `StandardScaler().fit_transform(X)` BEFORE `train_test_split`, or using post-event columns like `refund_date` to predict `order_cancellation`. Always fit scalers, encoders, and imputers inside a `Pipeline` strictly on training folds. L1 (Lasso) adds `lambda * sum(|w|)`, driving irrelevant feature weights to exact 0 (automatic feature selection), while L2 (Ridge) adds `lambda * sum(w^2)`, shrinking correlated weights smoothly toward zero.",
+    "keyPoints": [
+      "Fit preprocessing (`Scaler`, `TF-IDF`, `SMOTE`) ONLY on training folds inside CV pipelines.",
+      "L1 produces sparse zero weights; L2 shrinks large weights evenly."
+    ]
+  },
+  {
+    "id": "tech-qa-085",
+    "category": "Technical",
+    "topic": "Machine Learning",
+    "subtopic": "Supervised Algorithms",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Contrast Random Forest (Bagging) vs Gradient Boosted Trees (XGBoost/LightGBM Boosting) and explain Logistic Regression loss.",
+    "answer": "Random Forest trains many deep independent decision trees in parallel on bootstrap data samples + random feature subsets and averages predictions, primarily reducing **variance**. Gradient Boosting trains shallow trees sequentially where each new tree fits the negative gradient (residual errors) of prior trees, primarily reducing **bias**—usually outperforming RF on tabular benchmarks unless noisy data triggers overfitting. Logistic Regression models log-odds via sigmoid `1 / (1 + e^-z)` optimized using convex Binary Cross-Entropy (Log Loss) rather than MSE so gradients stay clean.",
+    "keyPoints": [
+      "Bagging (Random Forest) = parallel variance reduction; Boosting (XGBoost) = sequential residual/bias reduction.",
+      "Decision trees are scale-invariant; k-NN, SVM, and regularized Linear/Logistic models require feature scaling."
+    ]
+  },
+  {
+    "id": "tech-qa-086",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Cloning & Copying",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Explain Shallow Copy vs Deep Copy in Java and why copy constructors or factory methods are preferred over `Object.clone()`.",
+    "answer": "Shallow copy copies primitive fields and object references directly, meaning original and clone share nested mutable objects (mutating `clone.address.city` alters `original.address.city`). Deep copy recursively duplicates every mutable nested object so histories diverge cleanly. `Object.clone()` is error-prone: `Cloneable` is an inverted marker interface without a `clone()` signature, `super.clone()` bypasses constructors, and `final` fields cannot be reassigned inside `clone()`. Prefer explicit copy constructors (`new Order(existingOrder)`) or serialization/mapping DTOs.",
+    "keyPoints": [
+      "Copy constructors preserve `final` fields, skip `CloneNotSupportedException`, and document deep vs shallow intent."
+    ]
+  },
+  {
+    "id": "tech-qa-087",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "References",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "Contrast Strong, Soft, Weak, and Phantom references in Java (`WeakHashMap` use case).",
+    "answer": "Strong references (`Object o = new Object()`) prevent GC collection as long as reachable. `SoftReference` is collected only when the JVM nears `OutOfMemoryError` (useful for memory-sensitive caches). `WeakReference` is reclaimed eagerly on the next GC cycle once no strong references remain—powering `WeakHashMap` where entries evaporate automatically once external code drops the key reference (e.g., classloader metadata caches). `PhantomReference` always returns `null` on `.get()` and enqueues into a `ReferenceQueue` post-finalization to replace deprecated `finalize()` for native off-heap cleanup (alongside `java.lang.ref.Cleaner`).",
+    "keyPoints": [
+      "Strong (never GC'd while reachable) > Soft (GC'd on low memory) > Weak (GC'd next cycle) > Phantom (post-GC cleanup queue)."
+    ]
+  },
+  {
+    "id": "tech-qa-088",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Concurrency",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "Compare `CountDownLatch`, `CyclicBarrier`, and `Semaphore` with concrete backend synchronization scenarios.",
+    "answer": "`CountDownLatch(N)` is a one-shot gate: waiter thread(s) block on `await()` until worker threads invoke `countDown()` N times (e.g., waiting for 3 startup caches to warm before opening HTTP traffic; cannot reset). `CyclicBarrier(N)` blocks N peer threads at a rendezvous until all N arrive, executes an optional barrier action, and automatically resets for repeated phases/simulations. `Semaphore(permits)` bounds concurrent access to a scarce resource pool (e.g., max 5 concurrent external payment gateway calls).",
+    "keyPoints": [
+      "`CountDownLatch` = one-time N->0 countdown; `CyclicBarrier` = reusable N-party rendezvous; `Semaphore` = bounded concurrency permits."
+    ]
+  },
+  {
+    "id": "tech-qa-089",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Concurrency",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "Why should you avoid `Executors.newFixedThreadPool` or `newCachedThreadPool` in production without inspecting `ThreadPoolExecutor` parameters?",
+    "answer": "`Executors.newFixedThreadPool` uses an UNBOUNDED `LinkedBlockingQueue`: under downstream slowness, millions of queued `Runnable` tasks pile up until JVM throws `OutOfMemoryError`. Conversely, `Executors.newCachedThreadPool` uses `Integer.MAX_VALUE` max threads: traffic spikes spawn thousands of OS threads exhausting native stack memory and thrashing CPU context switches. In production, construct `ThreadPoolExecutor` explicitly with bounded `maxPoolSize`, a bounded `ArrayBlockingQueue`, and an explicit `RejectedExecutionHandler` (`CallerRunsPolicy` or fail-fast `AbortPolicy` returning HTTP 429/503).",
+    "keyPoints": [
+      "Bound BOTH thread count and work queue size to enforce backpressure instead of crashing with OOM."
+    ]
+  },
+  {
+    "id": "tech-qa-090",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Java Memory Model",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "Explain the Java Memory Model 'happens-before' guarantee and why CPU cache coherence alone isn't enough.",
+    "answer": "Compilers (JIT) and modern CPUs reorder instructions and buffer store writes locally for performance as long as single-threaded results look unchanged. Without synchronization, Thread B can observe stale fields or partially initialized objects written by Thread A. The JMM defines formal `happens-before` edges guaranteeing memory visibility and ordering: monitor unlock happens-before subsequent lock on same monitor, `volatile` write happens-before subsequent `volatile` read, `Thread.start()` happens-before actions inside that thread, and `Thread.join()` returns after thread termination.",
+    "keyPoints": [
+      "`happens-before` prevents JIT/CPU reordering visibility bugs across threads.",
+      "Final fields initialized properly in a constructor enjoy safe publication guarantees."
+    ]
+  },
+  {
+    "id": "tech-qa-091",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Exceptions & Errors",
+    "difficulty": "medium",
+    "source_tag": "pyq-style",
+    "question": "Distinguish `Error` vs `Exception`, and `ClassNotFoundException` vs `NoClassDefFoundError`.",
+    "answer": "`Error` (`OutOfMemoryError`, `StackOverflowError`) signals severe JVM/environment failures applications generally cannot recover from, whereas `Exception` models application-level faults. `ClassNotFoundException` is a **checked** exception thrown when code dynamically tries loading a missing class by string name at runtime (`Class.forName(\"com.foo.Bar\")`). `NoClassDefFoundError` is a **linkage Error** thrown when a class WAS present during compilation (`javac`) yet vanished from runtime classpath or failed static initialization earlier (`ExceptionInInitializerError`).",
+    "keyPoints": [
+      "`ClassNotFoundException` = dynamic string lookup failed; `NoClassDefFoundError` = compiled class missing/broken at runtime."
+    ]
+  },
+  {
+    "id": "tech-qa-092",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Enums & Switch",
+    "difficulty": "medium",
+    "source_tag": "pyq-style",
+    "question": "Explain why Java `enum` is far richer than integer constants and how `EnumSet`/`EnumMap` outperform `HashSet`/`HashMap`.",
+    "answer": "Every Java `enum` compiles to a type-safe `final` class extending `java.lang.Enum` with private constructors, supporting fields, abstract per-constant methods (Strategy without boilerplate), and `EnumSet` / `EnumMap`. Because enum ordinals are dense fixed integers, `EnumSet` encodes membership inside a single 64-bit `long` bitmask (`RegularEnumSet`) and `EnumMap` stores values inside a flat `Object[]` indexed by `key.ordinal()`—delivering O(1) lookup with zero hashing, zero bucket allocation, and enum declaration iteration order.",
+    "keyPoints": [
+      "`EnumSet` uses bit vectors; `EnumMap` uses flat ordinal arrays—always prefer them over `HashSet`/`HashMap` for enum keys."
+    ]
+  },
+  {
+    "id": "tech-qa-093",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Precision & BigDecimal",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Why must financial Java code never use `double`/`float` or `new BigDecimal(double)` for currency calculations?",
+    "answer": "IEEE 754 binary floating-point cannot represent base-10 fractions like `0.1` or `0.2` exactly (`0.1 + 0.2 == 0.30000000000000004`), causing silent penny drift across ledger totals. Calling `new BigDecimal(0.1)` copies that exact inaccurate binary float into `0.10000000000000000555...`! Instead, construct from strings (`new BigDecimal(\"0.10\")`) or `BigDecimal.valueOf(double)` (which uses `Double.toString`), specify explicit `RoundingMode.HALF_UP` / `HALF_EVEN` on divisions, and store integer minor units (paise/cents) in SQL `BIGINT` or `NUMERIC(19,4)`.",
+    "keyPoints": [
+      "Always use `new BigDecimal(\"19.99\")` (String constructor) or `BigDecimal.valueOf()`, never `new BigDecimal(0.1)`.",
+      "Note `BigDecimal.equals()` checks scale (`2.0` != `2.00`), whereas `compareTo()` checks numeric equality."
+    ]
+  },
+  {
+    "id": "tech-qa-094",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Fail-Fast Iterators",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Why does removing an element inside a `for-each` loop throw `ConcurrentModificationException` even in a single thread, and what are the three safe fixes?",
+    "answer": "An enhanced `for (String s : list)` desugars into `Iterator` checking `expectedModCount == list.modCount` on each `next()`. Calling `list.remove(s)` directly increments `list.modCount` without updating the iterator's `expectedModCount`, throwing `ConcurrentModificationException` immediately even with one thread. Three clean fixes: (1) `list.removeIf(s -> condition)` (Java 8+, clean and O(n) on `ArrayList`); (2) Explicit `Iterator<String> it = list.iterator(); while (it.hasNext()) { if (...) it.remove(); }`; (3) Copy/collect to a new filtered list via Streams.",
+    "keyPoints": [
+      "`ConcurrentModificationException` detects structural mutation during iteration, even single-threaded.",
+      "`Collection.removeIf()` is both concise and avoids O(n^2) shift traps on `ArrayList`."
+    ]
+  },
+  {
+    "id": "tech-qa-095",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Regex & Parsing",
+    "difficulty": "medium",
+    "source_tag": "pyq-style",
+    "question": "How do `Pattern.compile()` vs `String.matches()`, and `Matcher.find()` vs `Matcher.matches()` behave in Java regex?",
+    "answer": "`String.matches(regex)` compiles a new `Pattern` on EVERY invocation and attempts to match the **entire** string implicitly (`^...$`). Inside loops, precompile once as `private static final Pattern P = Pattern.compile(...)` to reuse the compiled NFA/state machine safely across threads (`Pattern` is immutable and thread-safe; `Matcher` is NOT thread-safe). Notice `matcher.matches()` requires matching the full input string, whereas `matcher.find()` scans substrings inside larger text.",
+    "keyPoints": [
+      "`Pattern` is thread-safe and reusable; `Matcher` is stateful per string.",
+      "Beware catastrophic backtracking (`(a+)+`) on untrusted regex inputs (ReDoS)."
+    ]
+  },
+  {
+    "id": "tech-qa-096",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "IO & NIO",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Contrast `java.io` blocking stream I/O vs `java.nio` Buffers/Channels/Selectors and explain why buffering matters.",
+    "answer": "Classic `FileInputStream.read()` reads one byte per OS syscall unless wrapped in `BufferedInputStream` (which amortizes syscalls into 8 KB chunks). `java.io` streams are unidirectional and blocking (one thread parked per socket). `java.nio` introduces bidirectional `Channel`s, explicit `ByteBuffer`s (`flip()`, `clear()`), and `Selector` multiplexing—enabling a single event-loop thread (used by Netty / WebFlux) to monitor thousands of non-blocking sockets ready for read/write.",
+    "keyPoints": [
+      "Always wrap byte/char file streams in `Buffered*` or `Files.newBufferedReader`.",
+      "NIO `Selector` powers high-concurrency non-blocking servers like Netty."
+    ]
+  },
+  {
+    "id": "tech-qa-097",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Reflection & Annotations",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "How do custom annotations with `@Retention(RetentionPolicy.RUNTIME)` and Reflection power frameworks like Spring and Jackson?",
+    "answer": "Annotations attach declarative metadata without executing logic themselves. `@Retention(SOURCE)` disappears after compile (`@Override`), `CLASS` stays in `.class` files ignored at runtime, and `RUNTIME` remains inspectable via `Class.getDeclaredFields()` / `Method.getAnnotation(...)` at startup. Spring scans `@Component`/`@RestController` annotations, inspects constructors via reflection to wire beans, and Jackson inspects `@JsonProperty` metadata to map JSON keys cleanly—paying reflection setup cost mainly at startup or caching `MethodHandle`s.",
+    "keyPoints": [
+      "Custom runtime annotations require `@Retention(RetentionPolicy.RUNTIME)` and `@Target(...)`."
+    ]
+  },
+  {
+    "id": "tech-qa-098",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Comparable Collections",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Compare `CopyOnWriteArrayList` vs `Collections.synchronizedList` for concurrent read-heavy vs write-heavy lists.",
+    "answer": "`Collections.synchronizedList` locks a single mutex around every `get`/`add`—cheap writes, yet iterators STILL require manual `synchronized(list)` blocks or throw `ConcurrentModificationException`. `CopyOnWriteArrayList` makes writes (`add`/`set`) copy the entire underlying array under a lock, while reads and iterators run completely lock-free over immutable array snapshots without throwing `ConcurrentModificationException`. Choose `CopyOnWriteArrayList` ONLY for tiny, overwhelmingly read-heavy listener registries; never for large frequently mutated lists.",
+    "keyPoints": [
+      "`CopyOnWriteArrayList`: lock-free snapshot reads, O(n) full-array copy on every write."
+    ]
+  },
+  {
+    "id": "tech-qa-099",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Functional Collectors",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Compare `Collectors.groupingBy`, `partitioningBy`, and `toMap` (including duplicate-key merge functions).",
+    "answer": "`Collectors.toMap(k -> k.id, v -> v)` throws `IllegalStateException: Duplicate key` on colliding keys unless you supply a 3rd merge lambda `(existing, replacement) -> existing` (and optionally a `LinkedHashMap::new` map factory). `groupingBy(Emp::getDept)` partitions elements into `Map<K, List<T>>` and composes downstream collectors like `groupingBy(Emp::getDept, counting())` or `mapping(...)`. `partitioningBy(predicate)` is a specialized `Map<Boolean, List<T>>` guaranteed to include both `true` and `false` keys.",
+    "keyPoints": [
+      "Always pass a merge function to `Collectors.toMap` if keys might collide."
+    ]
+  },
+  {
+    "id": "tech-qa-100",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Static & Final",
+    "difficulty": "medium",
+    "source_tag": "pyq-style",
+    "question": "Contrast `final`, `finally`, and `finalize()` / `Cleaner`, and explain `final` reference mutability.",
+    "answer": "`final` is a modifier: on variables it prevents reassignment (though a `final List` reference still lets you `.add()` items unless using `List.of()`); on methods it blocks overriding; on classes (`String`) it blocks inheritance. `finally` is an exception-handling cleanup block. `finalize()` was a deprecated, unpredictable pre-GC hook removed/deprecated due to resurrection bugs, pauses, and missed execution; use `AutoCloseable` with `try-with-resources` (plus `java.lang.ref.Cleaner` as safety net).",
+    "keyPoints": [
+      "`final List` locks the reference variable, NOT the list's internal elements."
+    ]
+  },
+  {
+    "id": "tech-qa-101",
+    "category": "Technical",
+    "topic": "OOP",
+    "subtopic": "Coupling & Cohesion",
+    "difficulty": "medium",
+    "source_tag": "pyq-style",
+    "question": "Distinguish Cohesion from Coupling and explain why high cohesion with loose coupling lowers maintenance cost.",
+    "answer": "Cohesion measures how tightly responsibilities inside a single module/class belong together (`InvoiceTaxCalculator` has high cohesion; a 2,000-line `Utils` god-class has low cohesion). Coupling measures how strongly modules depend on each other's concrete internals (sharing mutable global state or concrete implementations creates tight coupling; depending on narrow interfaces or DTOs creates loose coupling). High cohesion + loose coupling lets engineers modify or test one component safely without rippling regressions across unrelated modules.",
+    "keyPoints": [
+      "Target High Cohesion (focused single purpose) + Loose Coupling (narrow interfaces)."
+    ]
+  },
+  {
+    "id": "tech-qa-102",
+    "category": "Technical",
+    "topic": "OOP",
+    "subtopic": "Relationships",
+    "difficulty": "medium",
+    "source_tag": "pyq-style",
+    "question": "Compare Association, Aggregation, and Composition with concrete Java domain examples.",
+    "answer": "Association is any general structural link (`Doctor` treats `Patient`—both live independently). Aggregation is a weak 'has-a' ownership where parts outlive the container (`Department` has `Professor`s; closing the department doesn't destroy the professors, passed in via constructor/setter). Composition is strong exclusive lifecycle ownership (`Order` owns `OrderLineItem`s or `House` owns `Room`s; deleting the `Order` cascade-deletes its `OrderLineItem`s).",
+    "keyPoints": [
+      "Association (uses) < Aggregation (weak has-a, independent lifetime) < Composition (strong owns-a, shared lifetime)."
+    ]
+  },
+  {
+    "id": "tech-qa-103",
+    "category": "Technical",
+    "topic": "OOP",
+    "subtopic": "Anti-Patterns",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Explain the danger of calling an overridable method from a Java constructor.",
+    "answer": "During `new Child()`, the `Parent()` constructor runs BEFORE `Child`'s instance field initializers or constructor body execute. If `Parent()` invokes an overridable method overridden by `Child`, dynamic dispatch jumps into `Child.method()` while `Child`'s fields are still zero/`null` (`0`, `false`, `null`), throwing subtle `NullPointerException`s or corrupting invariants. Constructors should only call `private`, `final`, or `static` helpers.",
+    "keyPoints": [
+      "Dynamic dispatch resolves to subclass override even before subclass fields initialize."
+    ]
+  },
+  {
+    "id": "tech-qa-104",
+    "category": "Technical",
+    "topic": "SQL",
+    "subtopic": "Grouping & Rollup",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "How do `GROUP BY ROLLUP`, `CUBE`, and `GROUPING SETS` simplify multi-level SQL summary reports?",
+    "answer": "Instead of scanning a 10M-row sales table four separate times with `UNION ALL` for `(region, category)`, `(region)`, and grand total, `GROUP BY ROLLUP(region, category)` computes hierarchical subtotals left-to-right in a single pass. `CUBE(region, category)` emits every power-set combination `(region, cat)`, `(region)`, `(cat)`, and `()`. `GROUPING SETS((region), (category))` selects explicit custom subtotal combinations, using `GROUPING(col)` to distinguish real `NULL` category values from subtotal `NULL` placeholders.",
+    "keyPoints": [
+      "`ROLLUP` creates hierarchical drill-down totals; `CUBE` creates all combinations; `GROUPING(col)` disambiguates subtotal NULLs."
+    ]
+  },
+  {
+    "id": "tech-qa-105",
+    "category": "Technical",
+    "topic": "SQL",
+    "subtopic": "Window Frames",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "Distinguish `ROWS BETWEEN` vs `RANGE BETWEEN` in SQL window functions (moving averages & running totals).",
+    "answer": "In `SUM(amt) OVER (ORDER BY dt ROWS BETWEEN 6 PRECEDING AND CURRENT ROW)`, `ROWS` counts strictly 7 physical rows (true 7-row moving window). With `RANGE BETWEEN` (also the default when `ORDER BY` is specified without a frame clause!), tied `ORDER BY` peer values are grouped together—so `SUM(amt) OVER (ORDER BY dt)` gives identical cumulative totals for two orders on the same date rather than step-by-step increments unless you specify `ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW`.",
+    "keyPoints": [
+      "Default window frame with `ORDER BY` is `RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW` (includes tied peers!).",
+      "Specify `ROWS` explicitly for strict physical running sums or N-day moving averages."
+    ]
+  },
+  {
+    "id": "tech-qa-106",
+    "category": "Technical",
+    "topic": "SQL",
+    "subtopic": "Join Algorithms",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "Explain the three physical join algorithms used by SQL query planners: Nested Loop, Hash Join, and Sort-Merge Join.",
+    "answer": "Nested Loop Join scans outer rows and probes inner rows (very fast `O(M log N)` when the outer set is small and the inner join key has an index). Hash Join builds an in-memory hash table on the smaller relation's join keys and streams the larger table probing in `O(M + N)`—ideal for large unsorted equi-joins without usable indexes. Sort-Merge Join walks two pre-sorted (via index or sort) inputs with two pointers in `O(M + N)`, excelling on huge sorted joins and non-equi inequality merges.",
+    "keyPoints": [
+      "Small outer + indexed inner -> Nested Loop; Large unindexed equi-join -> Hash Join; Pre-sorted/indexed inputs -> Merge Join."
+    ]
+  },
+  {
+    "id": "tech-qa-107",
+    "category": "Technical",
+    "topic": "SQL",
+    "subtopic": "Pagination",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Why does `OFFSET 100000 LIMIT 20` degrade on deep pages, and how does Keyset (Seek) Pagination solve it?",
+    "answer": "`OFFSET 100000 LIMIT 20` forces the database to read, sort, and discard 100,000 rows before returning 20—scaling linearly worse on deeper pages and drifting/duplicating rows when concurrent inserts shift offsets. Keyset (Seek) Pagination anchors on the last seen indexed cursor (`WHERE (created_at, id) < (:lastTs, :lastId) ORDER BY created_at DESC, id DESC LIMIT 20`), jumping straight via B+ Tree index seek in constant O(log N) time with zero skipped or duplicated items.",
+    "keyPoints": [
+      "Always include a unique tie-breaker column (`id`) in `ORDER BY` and seek tuple for deterministic paging."
+    ]
+  },
+  {
+    "id": "tech-qa-108",
+    "category": "Technical",
+    "topic": "SQL",
+    "subtopic": "Triggers & Stored Procedures",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Evaluate pros and cons of Triggers and Stored Procedures versus keeping business logic in Spring Boot Java services.",
+    "answer": "Stored procedures and triggers execute close to data without network round trips and enforce last-line invariants even if ad-hoc scripts touch the DB. However, burying business rules in PL/SQL/triggers hides behavior from Java code searches, complicates Git diffs, automated unit testing, horizontal app scaling (moving load onto the harder-to-scale DB tier), and cross-database portability. Keep core domain workflows in testable Spring Boot services and reserve triggers sparingly for lightweight audit trails.",
+    "keyPoints": [
+      "App servers scale horizontally far more cheaply than a central RDBMS."
+    ]
+  },
+  {
+    "id": "tech-qa-109",
+    "category": "Technical",
+    "topic": "SQL",
+    "subtopic": "Conditional Aggregation",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "How do you pivot rows into summary columns in standard SQL without vendor-specific `PIVOT` syntax?",
+    "answer": "Use conditional aggregation inside `CASE WHEN` (or PostgreSQL `FILTER (WHERE ...)`): `SELECT dept, COUNT(CASE WHEN status = 'ACTIVE' THEN 1 END) AS active_cnt, SUM(CASE WHEN status = 'CHURNED' THEN mrr ELSE 0 END) AS churned_mrr FROM accounts GROUP BY dept`. It avoids multiple self-joins or subqueries and scans the base table once.",
+    "keyPoints": [
+      "`COUNT(CASE WHEN cond THEN 1 END)` works because `COUNT` skips implicit `ELSE NULL` values."
+    ]
+  },
+  {
+    "id": "tech-qa-110",
+    "category": "Technical",
+    "topic": "DBMS",
+    "subtopic": "Covering Indexes",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "What is a Covering Index (Index-Only Scan) and why can `SELECT *` prevent it?",
+    "answer": "A Covering Index contains EVERY column referenced in `WHERE`, `JOIN`, `ORDER BY`, and `SELECT` (either in the index key or `INCLUDE (col)` payload). The query engine reads answers strictly from leaf index pages (`Index-Only Scan`) without hopping to random heap table pages for extra columns. Running `SELECT *` pulls unindexed columns (`description`, `created_by`), forcing thousands of random heap lookups instead of a sequential index-only read.",
+    "keyPoints": [
+      "Selecting only needed DTO columns enables fast Index-Only Scans."
+    ]
+  },
+  {
+    "id": "tech-qa-111",
+    "category": "Technical",
+    "topic": "DBMS",
+    "subtopic": "SQL Injection",
+    "difficulty": "medium",
+    "source_tag": "pyq-style",
+    "question": "Explain how SQL injection works on string-concatenated queries and why dynamic `ORDER BY` column names still need an allowlist.",
+    "answer": "Concatenating `\"SELECT * FROM users WHERE name = '\" + input + \"'\"` lets attackers input `' OR '1'='1` or `'; DROP TABLE ...` to alter SQL syntax structure. Parameterized `PreparedStatement` `?` placeholders treat user values strictly as non-executable literals. However, `?` placeholders ONLY bind column values—not table names, column identifiers, or `ASC/DESC` keywords in dynamic sorting! Always validate dynamic `ORDER BY` sort fields against a strict server-side `Set`/`Map` allowlist.",
+    "keyPoints": [
+      "`PreparedStatement` protects value literals; dynamic column/table names require strict allowlists."
+    ]
+  },
+  {
+    "id": "tech-qa-112",
+    "category": "Technical",
+    "topic": "DBMS",
+    "subtopic": "Database Deadlocks",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "How do database row-lock deadlocks occur between two concurrent transactions and how should a Java backend handle them?",
+    "answer": "Transaction T1 updates Account 1 (acquires exclusive row lock on #1) while T2 updates Account 2 (holds lock on #2). Next T1 tries updating #2 and T2 tries updating #1—forming a lock cycle. The DB engine detects the cycle quickly, rolls back one victim transaction (throwing `DeadlockLoserDataAccessException` / SQLState `40P01`/`40001`), and lets the survivor commit. Prevent cycles by always locking multi-row transfers in sorted primary-key order (`min(a,b)` then `max(a,b)`), keeping transactions tiny, and adding bounded idempotent retry logic for transient serialization/deadlock errors.",
+    "keyPoints": [
+      "Acquire multi-row locks in deterministic ascending ID order.",
+      "Retry deadlock/serialization failures (`40001`/`40P01`) safely at transaction boundaries."
+    ]
+  },
+  {
+    "id": "tech-qa-113",
+    "category": "Technical",
+    "topic": "OS",
+    "subtopic": "Thrashing & Working Set",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Define Thrashing in virtual memory systems and how the Working Set model prevents it.",
+    "answer": "Thrashing happens when total active processes require more physical RAM frames than available: processes repeatedly page-fault, evict pages other active processes immediately need next, and spend nearly 100% of time swapping to disk while CPU utilization collapses. Denning's Working Set model tracks the distinct pages accessed within a recent time window `Delta`; if the sum of active working sets exceeds physical RAM, the OS swaps out/suspends selected processes until remaining processes run cleanly inside RAM.",
+    "keyPoints": [
+      "Warning sign: sudden plunge in CPU utilization alongside maxed disk swap I/O.",
+      "Working Set suspension restores locality instead of admitting too many concurrent jobs."
+    ]
+  },
+  {
+    "id": "tech-qa-114",
+    "category": "Technical",
+    "topic": "OS",
+    "subtopic": "IPC Mechanisms",
+    "difficulty": "medium",
+    "source_tag": "pyq-style",
+    "question": "Compare Inter-Process Communication mechanisms: Pipes, Message Queues, Shared Memory, and Unix Domain Sockets.",
+    "answer": "Anonymous Pipes provide unidirectional byte streams between related parent/child processes (e.g., shell `|`). Message Queues exchange structured bounded messages asynchronously decoupled in time. Shared Memory (`mmap` / `shm_open`) maps the exact same physical RAM pages into multiple processes' virtual spaces—zero kernel copy per read/write, highest throughput, requiring external mutexes/semaphores to coordinate. Unix Domain Sockets offer full-duplex socket APIs locally skipping TCP/IP network stack checksum/routing overhead.",
+    "keyPoints": [
+      "Shared memory is fastest IPC (zero syscall/copy per transfer) but needs explicit synchronization."
+    ]
+  },
+  {
+    "id": "tech-qa-115",
+    "category": "Technical",
+    "topic": "OS",
+    "subtopic": "File Systems & Inodes",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Explain Linux Inodes and compare Hard Links vs Symbolic (Soft) Links when deleting the original filename.",
+    "answer": "In Unix file systems, filenames live inside directory entries mapping `(filename -> inode_number)`, while the Inode itself stores permissions, owner, timestamps, size, and pointers to disk data blocks—NOT the filename. A Hard Link creates a second directory entry pointing directly to the SAME inode (incrementing link count); deleting the original filename leaves data completely accessible via the hard link until link count hits 0 and no open descriptors remain. A Symbolic Link stores a path string pointing to the original filename; deleting the original turns the symlink into a dangling broken link.",
+    "keyPoints": [
+      "Hard links share the same inode (same filesystem only); symlinks point to a path string (cross-filesystem + directories allowed)."
+    ]
+  },
+  {
+    "id": "tech-qa-116",
+    "category": "Technical",
+    "topic": "OS",
+    "subtopic": "Starvation & Aging",
+    "difficulty": "medium",
+    "source_tag": "pyq-style",
+    "question": "Distinguish Deadlock from Starvation/Livelock and explain how Aging solves starvation.",
+    "answer": "Deadlock blocks involved threads permanently waiting on each other (`0%` progress). Livelock keeps threads actively executing state changes in response to each other (like two polite people stepping left/right in a hallway) without advancing useful work. Starvation leaves a runnable low-priority job perpetually skipped because higher-priority or shorter jobs keep cutting ahead in Priority/SJF scheduling. **Aging** solves starvation by monotonically boosting the effective priority of queued jobs the longer they wait.",
+    "keyPoints": [
+      "Deadlock = blocked forever; Livelock = busy repeating state without progress; Starvation = runnable but indefinitely delayed."
+    ]
+  },
+  {
+    "id": "tech-qa-117",
+    "category": "Technical",
+    "topic": "OS",
+    "subtopic": "Kernel vs User Threads",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Compare Many-to-One, One-to-One, and M:N threading models (explaining Linux `pthreads` vs Go/Java Virtual Threads).",
+    "answer": "Many-to-One (legacy green threads) multiplexes user threads onto one OS kernel thread—fast switches, zero multi-core parallelism, and one blocking syscall stalls ALL threads. One-to-One (modern `pthreads`, standard Java `Thread`) maps each user thread to an OS kernel thread—true multi-core execution and isolated blocking syscalls, at ~1 MB stack and kernel scheduling cost. M:N (Go goroutines, Java 21 Virtual Threads) multiplexes millions of lightweight user-space tasks onto K OS carrier threads across non-blocking epoll/io_uring I/O.",
+    "keyPoints": [
+      "Standard `java.lang.Thread` is 1:1 with OS threads; `Thread.ofVirtual()` uses M:N scheduling."
+    ]
+  },
+  {
+    "id": "tech-qa-118",
+    "category": "Technical",
+    "topic": "CN",
+    "subtopic": "TCP vs UDP",
+    "difficulty": "medium",
+    "source_tag": "pyq-style",
+    "question": "Contrast TCP and UDP header overhead, connection state, and suitable real-world applications.",
+    "answer": "TCP (20+ byte header) provides connection-oriented, ordered, lossless, congestion-controlled byte streams via 3-way handshake, sequence/ACK numbers, and retransmissions—ideal for HTTP/REST, PostgreSQL JDBC, SMTP, and file transfers where accuracy beats jitter. UDP (8-byte header) is connectionless, unordered, and unacknowledged without retransmission delays—ideal for DNS queries, live VoIP/WebRTC video streams, online gaming telemetry, and QUIC/HTTP/3 where late retransmitted frames are useless.",
+    "keyPoints": [
+      "TCP = reliable ordered stream (no message boundaries); UDP = fast minimal datagrams (preserves message boundaries)."
+    ]
+  },
+  {
+    "id": "tech-qa-119",
+    "category": "Technical",
+    "topic": "CN",
+    "subtopic": "HTTP Status Codes",
+    "difficulty": "medium",
+    "source_tag": "pyq-style",
+    "question": "Distinguish HTTP 401 vs 403, 400 vs 422, 301 vs 302, and 502 vs 503 vs 504.",
+    "answer": "`401 Unauthorized` actually means **unauthenticated** (missing/invalid token); `403 Forbidden` means authenticated identity is known yet lacks permission. `400 Bad Request` flags malformed syntax/validation; `422 Unprocessable Content` flags valid JSON failing semantic rules. `301` is permanent redirect (browsers/SEO cache it); `302/307` is temporary. On reverse proxies: `502 Bad Gateway` = upstream returned corrupt/invalid response; `503 Service Unavailable` = overloaded/maintenance; `504 Gateway Timeout` = upstream failed to respond before proxy timeout.",
+    "keyPoints": [
+      "401 = Who are you? (Auth required); 403 = I know who you are, no permission."
+    ]
+  },
+  {
+    "id": "tech-qa-120",
+    "category": "Technical",
+    "topic": "CN",
+    "subtopic": "ARP, DHCP & ICMP",
+    "difficulty": "medium",
+    "source_tag": "pyq-style",
+    "question": "Trace what ARP, DHCP (DORA), and ICMP do when a fresh laptop plugs into an office Ethernet network.",
+    "answer": "First, **DHCP** runs DORA over UDP broadcast (Discover -> Offer -> Request -> Acknowledge) assigning the laptop an IPv4 address, subnet mask, default gateway IP, and DNS server. Next, to send packets off-subnet via the default gateway IP, the laptop broadcasts an **ARP** Request (`Who has gateway IP? Tell my MAC`), receives an ARP Reply caching `gatewayIP -> MAC`, and wraps IP packets inside Ethernet frames addressed to that MAC. **ICMP** carries control diagnostics like Echo Request/Reply (`ping`) and Time Exceeded (`traceroute`).",
+    "keyPoints": [
+      "DHCP leases IP config (DORA); ARP resolves local IP -> Layer-2 MAC; ICMP carries control/error diagnostics."
+    ]
+  },
+  {
+    "id": "tech-qa-121",
+    "category": "Technical",
+    "topic": "CN",
+    "subtopic": "REST vs WebSocket vs gRPC",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Compare REST/JSON, WebSockets, Server-Sent Events (SSE), and gRPC for backend communication.",
+    "answer": "REST/HTTP/JSON offers universal browser compatibility, human debuggability, and HTTP caching—ideal for public CRUD APIs. WebSockets upgrade HTTP into a full-duplex persistent TCP channel for low-latency bidirectional chat, multiplayer state, or collaborative editors. SSE pushes lightweight unidirectional server->client streams (live feeds, AI token streaming) over plain HTTP with auto-reconnect. gRPC runs Protobuf binary payloads over HTTP/2 with strict `.proto` code-generated contracts and bidirectional streaming—ideal for high-throughput internal Spring/Go microservice calls.",
+    "keyPoints": [
+      "Public CRUD -> REST; 1-way live stream -> SSE; 2-way interactive -> WebSocket; Internal service RPC -> gRPC."
+    ]
+  },
+  {
+    "id": "tech-qa-122",
+    "category": "Technical",
+    "topic": "CN",
+    "subtopic": "Routing & Packet Travel",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Explain how Source/Destination IP addresses vs MAC addresses change at each router hop across the Internet.",
+    "answer": "End-to-end **Source IP and Destination IP** normally stay unchanged inside the IP header across router hops (barring NAT gateways) so the final server knows who to reply to. Conversely, **Source MAC and Destination MAC** inside the Layer-2 Ethernet frame are stripped and rewritten at EVERY Layer-3 router hop to identify solely the next physical hop's NIC on that local link, while IP `TTL` decrements by 1 at each router to kill routing loops.",
+    "keyPoints": [
+      "IP addresses are end-to-end; MAC addresses are hop-by-hop on each physical link."
+    ]
+  },
+  {
+    "id": "tech-qa-123",
+    "category": "Technical",
+    "topic": "Spring Boot",
+    "subtopic": "Microservices Resilience",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "Explain the Circuit Breaker pattern (Closed, Open, Half-Open), Timeouts, and Retry with Exponential Backoff + Jitter.",
+    "answer": "Without bounded timeouts, one stalling downstream service hangs all caller threads causing cascading outages. Retrying immediately in sync creates a thundering herd; add **Exponential Backoff + Random Jitter** only for idempotent transient errors (`503`/`504`, never `400`). A **Circuit Breaker** (Resilience4j) stays **Closed** normally, trips **Open** when failure rate exceeds threshold (failing fast immediately with fallback without hammering the struggling dependency), and probes a few test calls in **Half-Open** after cooldown to decide whether to close again.",
+    "keyPoints": [
+      "Set connect + read timeouts everywhere; retry ONLY idempotent ops with backoff + jitter; protect with Circuit Breakers."
+    ]
+  },
+  {
+    "id": "tech-qa-124",
+    "category": "Technical",
+    "topic": "Spring Boot",
+    "subtopic": "Messaging & Kafka",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "When do you replace synchronous REST calls with asynchronous Kafka/RabbitMQ events, and how do Consumer Groups + Outbox prevent inconsistency?",
+    "answer": "Use async messaging for slow non-blocking side effects (email receipts, analytics, warehouse triggers) or traffic burst buffering so user checkout returns fast. Kafka partitions distribute ordered events across consumer-group instances (`1 partition -> 1 consumer per group`). To prevent dual-write inconsistency (DB commits `Order`, then process crashes before publishing to Kafka), use the **Transactional Outbox Pattern**: save both `orders` and an `outbox_events` row inside ONE local ACID transaction, and let a relay/CDC (Debezium) publish reliably with idempotent consumers.",
+    "keyPoints": [
+      "Transactional Outbox guarantees atomic DB commit + eventual event delivery without fragile 2PC."
+    ]
+  },
+  {
+    "id": "tech-qa-125",
+    "category": "Technical",
+    "topic": "Spring Boot",
+    "subtopic": "Observability & Actuator",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "How do Spring Boot Actuator health probes (liveness vs readiness) and MDC correlation IDs improve production operability?",
+    "answer": "Actuator exposes `/actuator/health/liveness` (is the JVM event loop alive or deadlocked -> Kubernetes restarts pod) separately from `/actuator/health/readiness` (can it accept traffic given DB/Kafka reachability -> Kubernetes removes pod from Load Balancer without killing it during temporary DB blips). Putting a `traceId` / `requestId` into SLF4J MDC via a servlet filter automatically tags every log line across Controller -> Service -> SQL for that HTTP request.",
+    "keyPoints": [
+      "Never tie liveness probe to external DB health, or a brief DB reboot triggers cascading pod restart storms."
+    ]
+  },
+  {
+    "id": "tech-qa-126",
+    "category": "Technical",
+    "topic": "Spring Boot",
+    "subtopic": "Rate Limiting & Idempotency",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "Contrast Token Bucket vs Sliding Window rate limiting and explain implementing idempotent payment APIs.",
+    "answer": "Token Bucket refills tokens at steady rate up to bucket capacity, permitting controlled short bursts while enforcing long-run average rate; Fixed Window counters suffer 2x boundary spikes around minute edges, fixed by Sliding Window logs/weighted counters in Redis. For idempotent payment `POST /charges`, require a client-generated UUID `Idempotency-Key` stored under a unique DB constraint alongside status & response snapshot: duplicate network retries hit the unique key and safely replay the original outcome instead of double-charging.",
+    "keyPoints": [
+      "`Idempotency-Key` + DB `UNIQUE` constraint turns non-idempotent `POST` charges retry-safe."
+    ]
+  },
+  {
+    "id": "tech-qa-127",
+    "category": "Technical",
+    "topic": "SE",
+    "subtopic": "Code Quality & Refactoring",
+    "difficulty": "medium",
+    "source_tag": "pyq-style",
+    "question": "What code smells warrant refactoring, and why must automated unit tests precede non-trivial refactoring?",
+    "answer": "Common smells include God classes, Long parameter lists, Deeply nested conditionals, Shotgun Surgery (one small feature forces edits across 12 files), Feature Envy, and Silent Exception Swallowing. Refactoring restructures internal design without changing external observable behavior; without a fast automated unit/integration test suite verifying existing contracts beforehand, refactoring easily introduces regressions disguised as cleanup.",
+    "keyPoints": [
+      "Use Guard Clauses (early returns) and Strategy objects to flatten deeply nested `if-else` pyramids."
+    ]
+  },
+  {
+    "id": "tech-qa-128",
+    "category": "Technical",
+    "topic": "SE",
+    "subtopic": "API Backward Compatibility",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Explain Expand-Contract zero-downtime database migrations and backward-compatible REST API evolution.",
+    "answer": "Renaming a SQL column directly breaks old app servers still running during rolling deployments. **Expand-Contract** evolves schemas in three steps: (1) Expand—add nullable new column `full_name`, dual-write old & new columns; (2) Migrate—backfill historical rows and deploy code reading `full_name`; (3) Contract—drop obsolete `name` column once zero instances reference it. In REST APIs, adding optional JSON fields is safe; renaming/removing fields or changing types requires `/api/v2` versioning.",
+    "keyPoints": [
+      "Always keep schema migrations compatible with BOTH the previous and incoming app versions during rolling deploys."
+    ]
+  },
+  {
+    "id": "tech-qa-129",
+    "category": "Technical",
+    "topic": "DSA",
+    "subtopic": "Linked Lists",
+    "difficulty": "medium",
+    "source_tag": "pyq-style",
+    "question": "Explain Floyd's Tortoise and Hare cycle detection math—why resetting slow to head finds the exact cycle entry node.",
+    "answer": "Let `L` be distance from head to cycle start, `C` cycle length, and `X` distance from cycle start to meeting point. Fast moves twice as far as slow: `2(L + X) = L + X + kC`, simplifying to `L = kC - X = (k - 1)C + (C - X)`. Therefore, moving one pointer from `head` by `L` steps and the other from meeting point by `L` steps at equal speed `1` guarantees both collide simultaneously at the exact cycle entry node in `O(n)` time and `O(1)` space.",
+    "keyPoints": [
+      "Step 1: detect meeting (`fast += 2, slow += 1`); Step 2: reset `slow = head`, advance both by 1 until equal."
+    ]
+  },
+  {
+    "id": "tech-qa-130",
+    "category": "Technical",
+    "topic": "DSA",
+    "subtopic": "Binary Search on Answer",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "Explain 'Binary Search on Answer' (Parametric Search) with an engineering scheduling or allocation example.",
+    "answer": "Whenever you must minimize the maximum load (or maximize the minimum spacing—like Koko Eating Bananas, Aggressive Cows, or allocating N pages across K painters) and a feasibility predicate `canFinish(limit)` flips monotonically from `false` to `true`, binary search over the numeric answer range `[low, high]` in `O(N log(Range))` rather than enumerating subsets exponentially. Invariant discipline: decide upfront whether `mid` shrinks `high = mid` (keep feasible candidate) or `low = mid + 1` to avoid infinite loops.",
+    "keyPoints": [
+      "Look for 'minimize the maximum' or 'maximize the minimum' + monotonic `isFeasible(x)` helper."
+    ]
+  },
+  {
+    "id": "tech-qa-131",
+    "category": "Technical",
+    "topic": "DSA",
+    "subtopic": "Bit Manipulation",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Describe XOR properties for finding unique elements and explain Brian Kernighan's `n & (n - 1)` trick.",
+    "answer": "XOR is commutative, associative, `a ^ a = 0`, and `a ^ 0 = a`. XORing an array where every element appears twice except one cancels pairs leaving the single unique element in `O(1)` space (if TWO unique elements exist, partition by any set bit `diff & -diff` in the combined XOR!). `n & (n - 1)` flips ONLY the lowest set bit of `n` to 0: repeating until `n == 0` counts set bits in `O(popcount)` time, and `(n > 0) && ((n & (n - 1)) == 0)` tests exact powers of 2 in O(1).",
+    "keyPoints": [
+      "`n & (n - 1)` clears lowest set bit; `n & -n` isolates lowest set bit."
+    ]
+  },
+  {
+    "id": "tech-qa-132",
+    "category": "Technical",
+    "topic": "DSA",
+    "subtopic": "Shortest Paths",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "Compare BFS, Dijkstra, Bellman-Ford, and Floyd-Warshall across edge weights and complexity.",
+    "answer": "Unweighted graphs use BFS `O(V + E)`. Non-negative weighted single-source graphs use Dijkstra with a min-heap `O((V + E) log V)` (greedy fails once negative edges let longer paths turn cheaper). Graphs with negative edges (and negative-cycle detection) use Bellman-Ford relaxing all E edges `V - 1` times in `O(V * E)`. Dense all-pairs shortest paths use Floyd-Warshall `O(V^3)` DP over intermediate vertices `k` (also detects negative cycles via `dist[i][i] < 0`).",
+    "keyPoints": [
+      "Dijkstra rejects negative edges; Bellman-Ford detects negative cycles in the V-th relaxation pass."
+    ]
+  },
+  {
+    "id": "tech-qa-133",
+    "category": "Technical",
+    "topic": "DSA",
+    "subtopic": "Space-Time Tradeoff",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Explain Kadane's Algorithm, Boyer-Moore Majority Voting, and Reservoir Sampling intuition.",
+    "answer": "Kadane's tracks `curMax = Math.max(x, curMax + x)` discarding negative prefixes to find max subarray sum in `O(n)` time, `O(1)` space (handling all-negative arrays cleanly!). Boyer-Moore Majority Voting finds an element appearing `> n/2` times in `O(1)` space by cancelling distinct pairs (`count == 0 ? candidate = x : count += (x == candidate ? 1 : -1)`), followed by a verification pass if majority isn't guaranteed. Reservoir Sampling picks `k` uniform random items from an unknown-length stream by replacing random slot `j < k` with probability `k / i`.",
+    "keyPoints": [
+      "Boyer-Moore requires a second verification pass when `> n/2` existence is unguaranteed."
+    ]
+  },
+  {
+    "id": "tech-qa-134",
+    "category": "Technical",
+    "topic": "DSA",
+    "subtopic": "Binary Trees",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "How do you validate a Binary Search Tree correctly (why checking only `left.val < root.val < right.val` is wrong) and compute LCA?",
+    "answer": "Checking only immediate children misses violations deep in subtrees (e.g., `root=10 -> right=15 -> left=5`, where `5 < 15` locally yet `5 < 10` violates the right-subtree bound!). Validate by passing strict `(minBound, maxBound)` intervals recursively using `Long` limits (avoiding `Integer.MIN_VALUE` edge bugs) or checking strict monotonic increase during Inorder traversal. Lowest Common Ancestor (LCA) returns root if root matches p or q or sits between split left/right non-null answers (or takes `O(h)` BST comparison splits).",
+    "keyPoints": [
+      "Maintain `(min, max)` bounds top-down or check strictly ascending inorder sequence."
+    ]
+  },
+  {
+    "id": "tech-qa-135",
+    "category": "Technical",
+    "topic": "Web & Frontend",
+    "subtopic": "JS Closures & Debounce",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Explain JavaScript Closures and contrast `debounce` vs `throttle` in search bars and scroll handlers.",
+    "answer": "A Closure pairs a function with its lexical outer environment so inner functions keep accessing outer variables even after the outer function returns—powering private state, React hooks, and rate-limiters. `debounce(fn, 300)` delays firing until 300 ms of quiet AFTER the last event (ideal for typeahead search API calls so you don't fire per keystroke). `throttle(fn, 100)` guarantees `fn` runs at most once every 100 ms continuously during sustained bursts (ideal for scroll progress or resize handlers).",
+    "keyPoints": [
+      "Debounce = wait for pause; Throttle = cap max execution frequency."
+    ]
+  },
+  {
+    "id": "tech-qa-136",
+    "category": "Technical",
+    "topic": "Web & Frontend",
+    "subtopic": "Equality & Prototypes",
+    "difficulty": "medium",
+    "source_tag": "pyq-style",
+    "question": "Contrast `==` vs `===` in JavaScript and explain how prototypal inheritance differs from class-based OOP.",
+    "answer": "`==` performs abstract type coercion (`0 == ''` is `true`, `null == undefined` is `true`, `[] == ![]` is `true`), creating subtle bugs; `===` checks strict value AND type equality without coercion (prefer `===` everywhere, or `Object.is` for `NaN`/`-0`). Unlike classical Java class blueprints, JavaScript uses Prototypal Delegation: every object carries an internal `[[Prototype]]` link (`Object.getPrototypeOf`); missing property lookups walk up the prototype chain until `null`. ES6 `class` syntax is cleaner syntactic sugar over prototype chains.",
+    "keyPoints": [
+      "Always default to `===`; reserve `==` at most for intentional `x == null` null-or-undefined checks."
+    ]
+  },
+  {
+    "id": "tech-qa-137",
+    "category": "Technical",
+    "topic": "Web & Frontend",
+    "subtopic": "Async & Promises",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Compare `Promise.all`, `Promise.allSettled`, `Promise.race`, and `Promise.any`.",
+    "answer": "`Promise.all` resolves when all succeed or **fast-fails** on the very first rejection. `Promise.allSettled` waits for every promise to finish and returns status objects (`fulfilled`/`rejected`)—ideal for dashboard widgets loading independently. `Promise.race` settles immediately with the first settled promise (either fulfill OR reject—great for implementing request timeouts). `Promise.any` resolves with the first **fulfilled** promise, rejecting with `AggregateError` only if ALL fail.",
+    "keyPoints": [
+      "`all` fast-fails; `allSettled` collects all outcomes; `race` takes first settled; `any` takes first success."
+    ]
+  },
+  {
+    "id": "tech-qa-138",
+    "category": "Technical",
+    "topic": "Machine Learning",
+    "subtopic": "Gradient Descent & Features",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Compare Batch, Stochastic (SGD), and Mini-Batch Gradient Descent, and explain StandardScaler vs MinMaxScaler.",
+    "answer": "Batch GD computes exact gradient over all N samples per step (smooth convergence, too slow for millions of rows). SGD updates weights per single sample (noisy steps help escape shallow local minima yet prevent vectorized GPU efficiency). Mini-Batch GD (32–256 samples) balances stable gradients with hardware vectorization. `StandardScaler` centers data to mean 0, unit variance (robust to mild outliers, preferred for linear models/SVM/PCA), whereas `MinMaxScaler` squashes into `[0, 1]` (sensitive to extreme outliers, useful for bounded pixel/neural inputs).",
+    "keyPoints": [
+      "Mini-Batch GD is standard in practice; never leak test statistics into scaler fitting."
+    ]
+  },
+  {
+    "id": "tech-qa-139",
+    "category": "Technical",
+    "topic": "Machine Learning",
+    "subtopic": "Clustering & Dimensionality",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Explain K-Means clustering assumptions/Elbow method and how PCA reduces correlated features.",
+    "answer": "K-Means partitions points into K spherical clusters by alternating centroid assignment and mean recalculation—requiring upfront K selection (guided via Elbow inertia bend + Silhouette score), scaling features first, and handling sensitivity to random initialization via `k-means++`; it struggles on non-convex shapes or outliers. PCA finds orthogonal principal axes capturing maximum variance via covariance eigenvectors, compressing correlated high-dimensional columns cleanly (always standardize features before PCA so large-unit columns like salary don't dominate age).",
+    "keyPoints": [
+      "Always standardize features before K-Means and PCA.",
+      "Use Silhouette score alongside Elbow curves to validate cluster separation."
+    ]
+  },
+  {
+    "id": "tech-qa-140",
+    "category": "Technical",
+    "topic": "Machine Learning",
+    "subtopic": "ML Deployment in Java Apps",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "How would you integrate a trained Python scikit-learn ML model cleanly into a Java Spring Boot production backend?",
+    "answer": "Two primary architectures: (1) **Sidecar / Microservice**: wrap the trained scikit-learn model in a lightweight FastAPI/Docker HTTP service with Pydantic schema validation and timeouts called asynchronously from Spring Boot (clean Python ecosystem parity, slight network hop); (2) **In-JVM Export (ONNX Runtime / PMML)**: export the trained pipeline to ONNX (`skl2onnx`) and load it directly inside Spring Boot using Microsoft's `onnxruntime` Java library for sub-millisecond in-process inference without Python runtime overhead.",
+    "keyPoints": [
+      "Keep preprocessing steps bundled inside the exported pipeline so train and inference transformations match identically."
+    ]
+  },
+  {
+    "id": "tech-qa-141",
+    "category": "Technical",
+    "topic": "DBMS",
+    "subtopic": "Query Execution Lifecycle",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Trace what happens inside PostgreSQL/MySQL from receiving a SQL string to returning result tuples.",
+    "answer": "Stages: (1) Connection/Auth check; (2) Parser converts SQL text into an AST checking syntax; (3) Analyzer/Binder resolves table/column names and permissions against catalog metadata; (4) Cost-Based Optimizer estimates row cardinalities from table histograms/statistics to pick optimal index scans and join algorithms; (5) Executor runs the physical plan tree pulling pages via the Buffer Pool (RAM cache) -> Disk only on miss; (6) Results stream back over wire protocol.",
+    "keyPoints": [
+      "Outdated `ANALYZE` table statistics mislead the Cost-Based Optimizer into bad join plans."
+    ]
+  },
+  {
+    "id": "tech-qa-142",
+    "category": "Technical",
+    "topic": "DBMS",
+    "subtopic": "B+ Tree vs Hash & LSM",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "Compare B+ Tree indexes vs Hash indexes vs LSM Trees (Log-Structured Merge Trees).",
+    "answer": "B+ Trees support equality AND fast range scans (`BETWEEN`, `>=`, `ORDER BY`) with balanced read/write performance—standard in PostgreSQL/MySQL. Hash indexes offer O(1) equality lookups ONLY (useless for ranges or sorting). LSM Trees (RocksDB, Cassandra) buffer writes in an in-memory MemTable + WAL and flush sorted immutable SSTables sequentially, converting random disk writes into sequential appends for massive write throughput at the expense of background compaction and read amplification across levels.",
+    "keyPoints": [
+      "B+ Tree = general OLTP read/range; Hash = equality only; LSM = extreme write-heavy ingestion."
+    ]
+  },
+  {
+    "id": "tech-qa-143",
+    "category": "Technical",
+    "topic": "OS",
+    "subtopic": "Cache & Memory Hierarchy",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "Explain False Sharing in multi-core CPU caches and why spatial locality makes `ArrayList` beat `LinkedList`.",
+    "answer": "CPUs fetch RAM in 64-byte cache lines (`ArrayList` stores adjacent element references contiguously, prefetching ~8–16 items per RAM miss; `LinkedList` nodes scatter randomly across the heap causing cache misses per hop). False Sharing occurs when two threads on separate cores frequently write independent variables (`counterA`, `counterB`) that happen to sit on the SAME 64-byte cache line: MESI cache coherence invalidates and bounces the shared cache line between cores, crippling parallel throughput—fixed via padding or `@Contended`.",
+    "keyPoints": [
+      "Cache lines move in 64-byte blocks: contiguous arrays maximize prefetch hits; false sharing destroys multi-thread writes."
+    ]
+  },
+  {
+    "id": "tech-qa-144",
+    "category": "Technical",
+    "topic": "CN",
+    "subtopic": "TCP Edge Cases",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "Explain why TCP sockets linger in `TIME_WAIT` (2 * MSL) and how Nagle's Algorithm interacts poorly with Delayed ACKs.",
+    "answer": "`TIME_WAIT` keeps the closing side's tuple occupied for `2 * Maximum Segment Lifetime` so: (1) its final ACK can be retransmitted if lost (preventing partner re-sending FIN forever), and (2) straggler delayed packets from the old connection expire from the network instead of corrupting a brand-new connection reusing the same port (`SO_REUSEADDR` helps servers restart cleanly). Nagle's Algorithm buffers small outbound writes until prior un-ACKed data returns, which paired with receiver Delayed ACKs causes ~40–200 ms stalls on interactive RPCs unless `TCP_NODELAY` is enabled.",
+    "keyPoints": [
+      "Enable `TCP_NODELAY` on low-latency RPC/database clients to disable Nagle buffering stalls."
+    ]
+  },
+  {
+    "id": "tech-qa-145",
+    "category": "Technical",
+    "topic": "Spring Boot",
+    "subtopic": "Web Architecture",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Contrast Servlet Filter vs Spring `HandlerInterceptor` vs AOP `@Aspect` in Spring MVC request processing.",
+    "answer": "Servlet `Filter` operates at the Tomcat/Servlet layer BEFORE `DispatcherServlet`—ideal for CORS headers, gzip compression, correlation MDC setup, and Spring Security filter chains (`HttpServletRequest`/`Response`). `HandlerInterceptor` runs inside Spring MVC AFTER controller method resolution—having access to `HandlerMethod` metadata/annotations via `preHandle`/`postHandle`/`afterCompletion`. AOP `@Aspect` wraps arbitrary Spring `@Service` / `@Repository` bean method calls completely independent of HTTP.",
+    "keyPoints": [
+      "Execution order: Filter -> DispatcherServlet -> HandlerInterceptor -> Controller -> AOP Aspect -> Service."
+    ]
+  },
+  {
+    "id": "tech-qa-146",
+    "category": "Technical",
+    "topic": "Java",
+    "subtopic": "Streams & Collectors",
+    "difficulty": "medium",
+    "source_tag": "pyq-style",
+    "question": "Write out mentally how you group employees by department and extract the highest-paid employee per department using Java 8 Streams.",
+    "answer": "Chain `Collectors.groupingBy` with `Collectors.maxBy` (or `collectingAndThen` to unwrap `Optional`): `employees.stream().collect(Collectors.groupingBy(Employee::getDept, Collectors.collectingAndThen(Collectors.maxBy(Comparator.comparingDouble(Employee::getSalary)), Optional::get)))`. Alternatively, `Collectors.toMap(Employee::getDept, Function.identity(), BinaryOperator.maxBy(Comparator.comparingDouble(Employee::getSalary)))` performs the exact reduction concisely in one pass without creating intermediate `Optional` wrappers.",
+    "keyPoints": [
+      "`toMap(keyFn, identity(), BinaryOperator.maxBy(...))` avoids intermediate `Optional` unwrapping cleanly."
+    ]
+  },
+  {
+    "id": "tech-qa-147",
+    "category": "Technical",
+    "topic": "SQL",
+    "subtopic": "Data Integrity",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Explain how `CHECK`, `UNIQUE` (null behavior), and `ON DELETE CASCADE` vs `ON DELETE RESTRICT` protect data quality.",
+    "answer": "`CHECK (price > 0 AND end_date >= start_date)` enforces domain invariants at DB level even across multiple clients. Standard SQL allows multiple `NULL` rows inside a `UNIQUE` column because two NULLs are unknown (`NULL != NULL`), though PostgreSQL 15+ adds `NULLS NOT DISTINCT` when only one NULL should exist. Prefer `ON DELETE RESTRICT` (or soft deletes `deleted_at`) on financial/order tables over `ON DELETE CASCADE`, preventing an accidental parent delete from wiping audit-critical child ledgers.",
+    "keyPoints": [
+      "In SQL, `UNIQUE` permits multiple `NULL` rows by default (`NULL != NULL`).",
+      "Restrict deletes on parent ledgers instead of dangerous silent `CASCADE`."
+    ]
+  },
+  {
+    "id": "tech-qa-148",
+    "category": "Technical",
+    "topic": "System Design",
+    "subtopic": "Caching Patterns",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "Explain Cache-Aside vs Write-Through caching and mitigate Cache Stampede and Cache Penetration.",
+    "answer": "In **Cache-Aside** (most common with Redis), the app checks Redis -> on miss queries SQL DB -> populates Redis with TTL; on write updates DB and deletes/invalidates the cache key. **Write-Through** writes synchronously to cache + DB together. **Cache Stampede** happens when a hot key expires and 1,000 requests hit the DB simultaneously—mitigated via per-key singleflight locks or probabilistic early refresh. **Cache Penetration** happens when bots query non-existent IDs repeatedly bypassing cache every time—mitigated by caching short-TTL null sentinels or a Bloom Filter upfront.",
+    "keyPoints": [
+      "Stampede = hot key expires under burst (fix: mutex/singleflight); Penetration = non-existent key misses (fix: Bloom filter / null TTL)."
+    ]
+  },
+  {
+    "id": "tech-qa-149",
+    "category": "Technical",
+    "topic": "System Design",
+    "subtopic": "URL Shortener & Scaling",
+    "difficulty": "hard",
+    "source_tag": "pyq-style",
+    "question": "Walk through designing a scalable URL Shortener covering Base62 encoding, 301 vs 302 redirects, and database partitioning.",
+    "answer": "Generate unique numeric IDs via distributed counter/Snowflake/range allocator (avoiding MD5 collision checks) and encode Base62 (`[0-9a-zA-Z]`, 7 chars = `62^7` ~ 3.5 trillion keys). Choose **302 Temporary Redirect** if click analytics must hit your servers on every redirect, or **301 Permanent Redirect** to offload traffic to browser caches. Place Redis in front of sharded key-value/SQL storage (`key = short_code`) because read-to-write ratio exceeds 100:1, plus rate limiting on creation endpoints.",
+    "keyPoints": [
+      "Base62 counter encoding avoids hash collisions; 302 preserves analytics accuracy while 301 optimizes browser caching."
+    ]
+  },
+  {
+    "id": "tech-qa-150",
+    "category": "Technical",
+    "topic": "SE",
+    "subtopic": "Debugging Methodology",
+    "difficulty": "medium-hard",
+    "source_tag": "pyq-style",
+    "question": "Walk through your structured incident debugging playbook when a Spring Boot + SQL endpoint suddenly returns 500s or slows to 5 seconds in staging.",
+    "answer": "Step 1 (**Observe**): Inspect structured logs by correlation `requestId` for stack traces, SQL exceptions, and HTTP error burst timing (did a deploy just land?). Step 2 (**Isolate layer**): Separate JVM CPU/GC saturation (`jstat`/Actuator metrics), HikariCP pool exhaustion (`connection timeout`), external API hang, or slow SQL query. Step 3 (**Reproduce & Measure**): Capture the offending SQL with parameters and run `EXPLAIN ANALYZE` or thread dump (`jstack`) for lock contention. Step 4 (**Fix & Guardrail**): Apply minimal verified fix (index, timeout, N+1 fetch, null guard) and add a regression test so the class of bug cannot recur.",
+    "keyPoints": [
+      "Read logs/metrics first -> narrow layer (App CPU/Pool vs DB vs Downstream) -> inspect `EXPLAIN ANALYZE` / `jstack` -> add regression test."
+    ]
+  }
+]

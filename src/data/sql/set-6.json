@@ -1,0 +1,98 @@
+{
+  "setId": "sql-set-6",
+  "title": "SQL Set 06: Logistics, Warehousing & Inventory Thresholds",
+  "description": "Stockout detection, carrier SLA compliance, cross-warehouse stock comparison, and cumulative weight packing.",
+  "durationMinutes": 45,
+  "queries": [
+    {
+      "id": "sql-6-q01",
+      "topic": "SQL",
+      "subtopic": "Inventory & Reorder Alerts",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "title": "SKUs Below Reorder Point Across All Warehouses",
+      "prompt": "Find `sku` and `total_qty` for products whose summed `qty_on_hand` across all `stock` rows is strictly less than their `reorder_level` in `sku_master`. Order by `sku`.",
+      "schemaSql": "CREATE TABLE sku_master (sku TEXT PRIMARY KEY, reorder_level INT); CREATE TABLE stock (wh_id INT, sku TEXT, qty_on_hand INT);",
+      "seedSql": "INSERT INTO sku_master VALUES ('SKU-A',50),('SKU-B',30),('SKU-C',20); INSERT INTO stock VALUES (1,'SKU-A',20),(2,'SKU-A',25),(1,'SKU-B',35),(2,'SKU-C',10),(3,'SKU-C',10);",
+      "expectedColumns": ["sku", "total_qty"],
+      "expectedRows": [
+        ["SKU-A", 45]
+      ],
+      "solutionSql": "SELECT m.sku, COALESCE(SUM(s.qty_on_hand), 0) AS total_qty FROM sku_master m LEFT JOIN stock s ON m.sku = s.sku GROUP BY m.sku, m.reorder_level HAVING COALESCE(SUM(s.qty_on_hand), 0) < m.reorder_level ORDER BY m.sku;",
+      "explanation": "`LEFT JOIN` ensures even zero-stock SKUs would appear; `SKU-C` has 20 which is not strictly `< 20`."
+    },
+    {
+      "id": "sql-6-q02",
+      "topic": "SQL",
+      "subtopic": "Date Comparison & SLA",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "title": "Carrier On-Time Delivery Rate",
+      "prompt": "Compute `carrier` and `on_time_pct` (percentage of parcels where `delivered_date <= promised_date`, rounded to 1 decimal place), keeping only carriers with at least 2 parcels. Order by `on_time_pct` DESC, `carrier` ASC.",
+      "schemaSql": "CREATE TABLE parcels (parcel_id INT PRIMARY KEY, carrier TEXT, promised_date TEXT, delivered_date TEXT);",
+      "seedSql": "INSERT INTO parcels VALUES (1,'BlueDart','2025-04-05','2025-04-04'),(2,'BlueDart','2025-04-06','2025-04-06'),(3,'BlueDart','2025-04-07','2025-04-09'),(4,'Delhivery','2025-04-05','2025-04-05'),(5,'Delhivery','2025-04-06','2025-04-06'),(6,'Xpress','2025-04-02','2025-04-03');",
+      "expectedColumns": ["carrier", "on_time_pct"],
+      "expectedRows": [
+        ["Delhivery", 100.0],
+        ["BlueDart", 66.7]
+      ],
+      "solutionSql": "SELECT carrier, ROUND(100.0 * SUM(CASE WHEN delivered_date <= promised_date THEN 1 ELSE 0 END) / COUNT(*), 1) AS on_time_pct FROM parcels GROUP BY carrier HAVING COUNT(*) >= 2 ORDER BY on_time_pct DESC, carrier ASC;",
+      "explanation": "ISO-8601 date strings (`YYYY-MM-DD`) compare chronologically; `HAVING COUNT(*) >= 2` excludes single-parcel carrier `Xpress`."
+    },
+    {
+      "id": "sql-6-q03",
+      "topic": "SQL",
+      "subtopic": "Window Cumulative Sum",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "title": "Select Boxes Within Truck 1000kg Capacity",
+      "prompt": "Boxes in `cargo` are loaded in ascending `load_order`. Return `box_id` and `weight_kg` of boxes that fit before cumulative weight exceeds 1000 kg. Order by `load_order`.",
+      "schemaSql": "CREATE TABLE cargo (box_id INT PRIMARY KEY, load_order INT, weight_kg INT);",
+      "seedSql": "INSERT INTO cargo VALUES (10,1,350),(20,2,400),(30,3,250),(40,4,150);",
+      "expectedColumns": ["box_id", "weight_kg"],
+      "expectedRows": [
+        [10, 350],
+        [20, 400],
+        [30, 250]
+      ],
+      "solutionSql": "WITH cum AS (SELECT box_id, load_order, weight_kg, SUM(weight_kg) OVER (ORDER BY load_order) AS running_wt FROM cargo) SELECT box_id, weight_kg FROM cum WHERE running_wt <= 1000 ORDER BY load_order;",
+      "explanation": "Running sum hits `350 + 400 + 250 = 1000` at box 30; box 40 reaches 1150 and is excluded."
+    },
+    {
+      "id": "sql-6-q04",
+      "topic": "SQL",
+      "subtopic": "Self-Join Pair Generation",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "title": "Distinct City Route Pairs with Both-Way Flights",
+      "prompt": "From `routes (origin, dest)`, find pairs `(city_a, city_b)` with `city_a < city_b` such that BOTH `(city_a -> city_b)` and `(city_b -> city_a)` exist. Order by `city_a`, `city_b`.",
+      "schemaSql": "CREATE TABLE routes (origin TEXT, dest TEXT);",
+      "seedSql": "INSERT INTO routes VALUES ('DEL','BLR'),('BLR','DEL'),('DEL','HYD'),('MAA','PNQ'),('PNQ','MAA');",
+      "expectedColumns": ["city_a", "city_b"],
+      "expectedRows": [
+        ["BLR", "DEL"],
+        ["MAA", "PNQ"]
+      ],
+      "solutionSql": "SELECT DISTINCT r1.origin AS city_a, r1.dest AS city_b FROM routes r1 JOIN routes r2 ON r1.origin = r2.dest AND r1.dest = r2.origin WHERE r1.origin < r1.dest ORDER BY city_a, city_b;",
+      "explanation": "The `r1.origin < r1.dest` predicate eliminates reversed duplicate pairs like `(DEL, BLR)` alongside `(BLR, DEL)`."
+    },
+    {
+      "id": "sql-6-q05",
+      "topic": "SQL",
+      "subtopic": "STRING & LIKE Filtering",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "title": "Express Tracking Numbers Matching Regional Prefix",
+      "prompt": "Return `tracking_no` and `hub` from `dispatch` where `tracking_no` starts with `'IND-'` and ends with `'-EXP'`, sorted alphabetically by `tracking_no`.",
+      "schemaSql": "CREATE TABLE dispatch (tracking_no TEXT PRIMARY KEY, hub TEXT);",
+      "seedSql": "INSERT INTO dispatch VALUES ('IND-402-EXP','Noida'),('IND-109-STD','Chennai'),('USA-200-EXP','Austin'),('IND-881-EXP','Bengaluru');",
+      "expectedColumns": ["tracking_no", "hub"],
+      "expectedRows": [
+        ["IND-402-EXP", "Noida"],
+        ["IND-881-EXP", "Bengaluru"]
+      ],
+      "solutionSql": "SELECT tracking_no, hub FROM dispatch WHERE tracking_no LIKE 'IND-%-EXP' ORDER BY tracking_no;",
+      "explanation": "`LIKE 'IND-%-EXP'` matches prefix `IND-` and suffix `-EXP` cleanly."
+    }
+  ]
+}

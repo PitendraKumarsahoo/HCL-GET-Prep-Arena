@@ -1,0 +1,89 @@
+{
+  "setId": "coding-set-1",
+  "title": "Coding Set 01: Sliding Window & Stack Balancing",
+  "description": "Two classic HCL reported string problems: minimum window covering all distinct characters and parenthesis validation with removal count.",
+  "durationMinutes": 75,
+  "problems": [
+    {
+      "id": "code-1-p01",
+      "topic": "Sliding Window",
+      "subtopic": "Minimum Distinct Window",
+      "difficulty": "hard",
+      "source_tag": "reported",
+      "title": "Smallest Substring Containing All Distinct Characters",
+      "statement": "Given a string S consisting of lowercase/uppercase ASCII letters, find the length of the smallest contiguous substring of S that contains every distinct character present in S at least once. If S is empty, print 0.",
+      "inputFormat": "A single line containing string S.",
+      "outputFormat": "A single integer denoting the minimum window length.",
+      "constraints": [
+        "1 <= |S| <= 10^5",
+        "S contains printable non-whitespace ASCII characters",
+        "Target complexity: O(|S|) time, O(1) alphabet space"
+      ],
+      "testCases": [
+        { "input": "aabcbcdbca\n", "expectedOutput": "4", "isSample": true, "note": "Substring 'dbca' has length 4" },
+        { "input": "aaab\n", "expectedOutput": "2", "isSample": true, "note": "Substring 'ab' has length 2" },
+        { "input": "aaaaa\n", "expectedOutput": "1", "isSample": false },
+        { "input": "abcdef\n", "expectedOutput": "6", "isSample": false },
+        { "input": "GEEKSGEEKSFOR\n", "expectedOutput": "8", "isSample": false },
+        { "input": "abacaba\n", "expectedOutput": "3", "isSample": false },
+        { "input": "x\n", "expectedOutput": "1", "isSample": false }
+      ],
+      "starterCode": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static int solve(String s) {\n        // Write your solution here\n        return 0;\n    }\n\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.hasNextLine() ? sc.nextLine().trim() : \"\";\n        System.out.println(solve(s));\n    }\n}",
+        "python": "import sys\n\ndef solve(s: str) -> int:\n    # Write your solution here\n    return 0\n\ns = sys.stdin.readline().strip()\nprint(solve(s))\n",
+        "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    string s;\n    if (!(cin >> s)) return 0;\n    // Write your solution here\n    return 0;\n}\n"
+      },
+      "solutions": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static int solve(String s) {\n        if (s == null || s.isEmpty()) return 0;\n        boolean[] seen = new boolean[256];\n        int distinct = 0;\n        for (int i = 0; i < s.length(); i++) {\n            char c = s.charAt(i);\n            if (!seen[c]) { seen[c] = true; distinct++; }\n        }\n        int[] freq = new int[256];\n        int left = 0, formed = 0, best = Integer.MAX_VALUE;\n        for (int right = 0; right < s.length(); right++) {\n            char rc = s.charAt(right);\n            if (freq[rc] == 0) formed++;\n            freq[rc]++;\n            while (formed == distinct) {\n                best = Math.min(best, right - left + 1);\n                char lc = s.charAt(left++);\n                freq[lc]--;\n                if (freq[lc] == 0) formed--;\n            }\n        }\n        return best;\n    }\n\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.hasNextLine() ? sc.nextLine().trim() : \"\";\n        System.out.println(solve(s));\n    }\n}",
+        "python": "import sys\n\ndef solve(s: str) -> int:\n    if not s:\n        return 0\n    need = len(set(s))\n    freq = {}\n    left = 0\n    formed = 0\n    best = len(s) + 1\n    for right, ch in enumerate(s):\n        freq[ch] = freq.get(ch, 0) + 1\n        if freq[ch] == 1:\n            formed += 1\n        while formed == need:\n            best = min(best, right - left + 1)\n            lch = s[left]\n            freq[lch] -= 1\n            if freq[lch] == 0:\n                formed -= 1\n            left += 1\n    return best\n\ns = sys.stdin.readline().strip()\nprint(solve(s))\n"
+      },
+      "timeComplexity": "O(N) — each pointer (`left`, `right`) visits each character at most once.",
+      "spaceComplexity": "O(K) where K <= 256 is the number of distinct ASCII characters.",
+      "edgeCases": [
+        "All characters identical ('aaaaa') -> answer is 1",
+        "All characters unique ('abcdef') -> answer is |S|",
+        "Case sensitivity ('a' vs 'A' treated distinctly)"
+      ]
+    },
+    {
+      "id": "code-1-p02",
+      "topic": "Stacks",
+      "subtopic": "Bracket Balancing",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "title": "Valid Parentheses & Minimum Bracket Removals",
+      "statement": "Given a string containing '(', ')', '{', '}', '[', and ']', determine if it is strictly balanced. Print 'VALID' if balanced; otherwise print 'INVALID <k>' where <k> is the minimum number of bracket deletions needed (treating each bracket type independently if unmatched, or overall unmatched count via a stack) to make the remaining string balanced.",
+      "inputFormat": "A single line containing the bracket string S (may be empty).",
+      "outputFormat": "Print 'VALID' if balanced, else 'INVALID <k>'.",
+      "constraints": [
+        "0 <= |S| <= 10^5",
+        "Characters belong strictly to (){}[]"
+      ],
+      "testCases": [
+        { "input": "{[()]}\n", "expectedOutput": "VALID", "isSample": true },
+        { "input": "([)]\n", "expectedOutput": "INVALID 2", "isSample": true, "note": "Unmatched '[' and ']' when closing ')' before '['" },
+        { "input": "((()\n", "expectedOutput": "INVALID 2", "isSample": false },
+        { "input": ")(()\n", "expectedOutput": "INVALID 2", "isSample": false },
+        { "input": "()[]{}\n", "expectedOutput": "VALID", "isSample": false },
+        { "input": "]]][[\n", "expectedOutput": "INVALID 5", "isSample": false },
+        { "input": "{[(])}\n", "expectedOutput": "INVALID 4", "isSample": false }
+      ],
+      "starterCode": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.hasNextLine() ? sc.nextLine().trim() : \"\";\n        // Write your solution here\n    }\n}",
+        "python": "import sys\n\ns = sys.stdin.readline().strip()\n# Write your solution here\n",
+        "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    string s;\n    getline(cin, s);\n    // Write your solution here\n    return 0;\n}\n"
+      },
+      "solutions": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.hasNextLine() ? sc.nextLine().trim() : \"\";\n        Deque<Character> stack = new ArrayDeque<>();\n        int unmatched = 0;\n        for (char c : s.toCharArray()) {\n            if (c == '(' || c == '[' || c == '{') {\n                stack.push(c);\n            } else {\n                char need = (c == ')') ? '(' : (c == ']') ? '[' : '{';\n                if (!stack.isEmpty() && stack.peek() == need) {\n                    stack.pop();\n                } else {\n                    unmatched++;\n                }\n            }\n        }\n        int removals = unmatched + stack.size();\n        if (removals == 0) System.out.println(\"VALID\");\n        else System.out.println(\"INVALID \" + removals);\n    }\n}",
+        "python": "import sys\n\ns = sys.stdin.readline().strip()\nmatch = {')': '(', ']': '[', '}': '{'}\nstack = []\nunmatched = 0\nfor c in s:\n    if c in '([{':\n        stack.append(c)\n    else:\n        if stack and stack[-1] == match.get(c):\n            stack.pop()\n        else:\n            unmatched += 1\nremovals = unmatched + len(stack)\nprint('VALID' if removals == 0 else f'INVALID {removals}')\n"
+      },
+      "timeComplexity": "O(N) — single linear scan with stack push/pop.",
+      "spaceComplexity": "O(N) in the worst case when all characters are opening brackets.",
+      "edgeCases": [
+        "Closing bracket before any opening bracket (')(()')",
+        "Crossed nesting ('([)]') leaves unmatched brackets on stack and closing side",
+        "Empty string is balanced ('VALID')"
+      ]
+    }
+  ]
+}

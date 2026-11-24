@@ -1,0 +1,10 @@
+{
+  "name": "HCL GET Prep Arena",
+  "description": "Complete placement practice arena for the HCLTech Graduate Engineer Trainee (GET) campus drive covering Ascend Cognitive, Technical MCQ, Coding Lab, SQL Lab, Versant Speaking, Full Mocks, Concept Diagrams, and Interview Prep.",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

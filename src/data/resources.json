@@ -1,0 +1,258 @@
+[
+  {
+    "id": "res-01",
+    "category": "Official HCLTech",
+    "title": "HCLTech Official Campus Hiring Portal",
+    "url": "https://www.hcltech.com/careers/campus-hiring",
+    "description": "Official HCLTech early-career campus hiring overview describing the Graduate Engineer Trainee (GET) Ascend selection workflow and technical/interview stages.",
+    "tag": "Official"
+  },
+  {
+    "id": "res-02",
+    "category": "Official HCLTech",
+    "title": "HCLTech India Careers & Fresher Openings",
+    "url": "https://www.hcltech.com/careers/careers-in-india",
+    "description": "Official India hiring portal for engineering graduates, off-campus drives, and application tracking.",
+    "tag": "Official"
+  },
+  {
+    "id": "res-03",
+    "category": "Candidate Experiences",
+    "title": "GeeksforGeeks — HCL Interview Experience Archive",
+    "url": "https://www.geeksforgeeks.org/tag/hcl/",
+    "description": "Student-submitted campus and off-campus HCLTech interview transcripts covering Ascend rounds, Java/SQL technical questions, and HR discussions.",
+    "tag": "Community Reported"
+  },
+  {
+    "id": "res-04",
+    "category": "PYQs & Mocks",
+    "title": "PrepInsta — HCLTech Recruitment Process & Syllabus",
+    "url": "https://prepinsta.com/hcl/",
+    "description": "Candidate-compiled breakdown of HCLTech campus assessment sections, topic weights, and frequently reported aptitude and coding questions.",
+    "tag": "PYQ Reference"
+  },
+  {
+    "id": "res-05",
+    "category": "PYQs & Mocks",
+    "title": "IndiaBIX — HCL Placement Papers & Questions",
+    "url": "https://www.indiabix.com/placement-papers/hcl/",
+    "description": "Archived student-contributed HCL placement question sets and technical round memories for pattern calibration.",
+    "tag": "PYQ Reference"
+  },
+  {
+    "id": "res-06",
+    "category": "Coding Platforms",
+    "title": "HackerRank — Problem Solving & Java Tracks",
+    "url": "https://www.hackerrank.com/domains/algorithms",
+    "description": "Real assessment platform frequently used in campus coding tests; ideal for practicing stdin/stdout parsing and timed Java/Python tests.",
+    "tag": "Platform"
+  },
+  {
+    "id": "res-07",
+    "category": "Coding Platforms",
+    "title": "LeetCode — Top Interview 150 & SQL 50",
+    "url": "https://leetcode.com/problemset/",
+    "description": "Structured DSA and SQL practice sets to sharpen array, string, stack, and window-function speed.",
+    "tag": "Platform"
+  },
+  {
+    "id": "res-08",
+    "category": "Aptitude Prep",
+    "title": "IndiaBIX — Quantitative & Logical Aptitude",
+    "url": "https://www.indiabix.com/aptitude/questions-and-answers/",
+    "description": "Classic topic-by-topic quantitative aptitude, data interpretation, and reasoning drills with step-by-step explanations.",
+    "tag": "Free Practice"
+  },
+  {
+    "id": "res-09",
+    "category": "Aptitude Prep",
+    "title": "GeeksforGeeks — Placement Aptitude Practice",
+    "url": "https://www.geeksforgeeks.org/aptitude-questions-and-answers/",
+    "description": "Curated placement aptitude modules covering permutations, probability, time-work-pipes, and verbal ability.",
+    "tag": "Free Practice"
+  },
+  {
+    "id": "res-10",
+    "category": "Aptitude Prep",
+    "title": "PrepInsta — Quantitative Aptitude Guides",
+    "url": "https://prepinsta.com/quantitative-aptitude/",
+    "description": "Shortcuts, formulas, and campus-test difficulty drills across core arithmetic and number systems.",
+    "tag": "Free Practice"
+  },
+  {
+    "id": "res-11",
+    "category": "Aptitude Prep",
+    "title": "Examveda — Verbal & Logical Reasoning Bank",
+    "url": "https://www.examveda.com/",
+    "description": "Large free question bank for syllogisms, seating arrangements, error spotting, and reading comprehension.",
+    "tag": "Free Practice"
+  },
+  {
+    "id": "res-12",
+    "category": "Aptitude Prep",
+    "title": "Khan Academy — Algebra & Foundations",
+    "url": "https://www.khanacademy.org/math/algebra",
+    "description": "Interactive conceptual refreshers on equations, ratios, inequalities, and functions when building speed from fundamentals.",
+    "tag": "Free Course"
+  },
+  {
+    "id": "res-13",
+    "category": "SQL Mastery",
+    "title": "SQLZoo — Interactive Browser SQL Tutorials",
+    "url": "https://sqlzoo.net/wiki/SQL_Tutorial",
+    "description": "Step-by-step live SQL exercises covering JOINs, self-joins, GROUP BY/HAVING, and nested subqueries.",
+    "tag": "Interactive"
+  },
+  {
+    "id": "res-14",
+    "category": "SQL Mastery",
+    "title": "W3Schools — SQL Syntax & Try-It Reference",
+    "url": "https://www.w3schools.com/sql/",
+    "description": "Fast syntax lookup for SQL clauses, NULL handling, CASE expressions, and aggregate functions.",
+    "tag": "Reference"
+  },
+  {
+    "id": "res-15",
+    "category": "SQL Mastery",
+    "title": "Mode Analytics — Intermediate & Advanced SQL Tutorial",
+    "url": "https://mode.com/sql-tutorial/",
+    "description": "Clear visual explanations of window functions (RANK, DENSE_RANK, LAG/LEAD), CTEs, and query performance.",
+    "tag": "Deep Dive"
+  },
+  {
+    "id": "res-16",
+    "category": "SQL Mastery",
+    "title": "PGExercises — PostgreSQL Real Query Challenges",
+    "url": "https://pgexercises.com/",
+    "description": "Challenging graded exercises with schemas, aggregates, date math, and recursive queries.",
+    "tag": "Interactive"
+  },
+  {
+    "id": "res-17",
+    "category": "SQL Mastery",
+    "title": "PostgreSQL Tutorial — Indexing, CTEs & Window Functions",
+    "url": "https://www.postgresqltutorial.com/",
+    "description": "Comprehensive hands-on guides for B-Tree indexes, transactions, COALESCE, and PostgreSQL SQL patterns.",
+    "tag": "Reference"
+  },
+  {
+    "id": "res-18",
+    "category": "Java & OOP",
+    "title": "Dev.java — Official Modern Java Learning Portal",
+    "url": "https://dev.java/learn/",
+    "description": "Official Oracle-maintained learning tracks for modern Java OOP, Streams, Lambdas, Records, and Collections.",
+    "tag": "Official Docs"
+  },
+  {
+    "id": "res-19",
+    "category": "Java & OOP",
+    "title": "Oracle Java SE Tutorials (Collections, JDBC & Concurrency)",
+    "url": "https://docs.oracle.com/javase/tutorial/",
+    "description": "Authoritative tutorials on Java concurrency, JDBC architecture, generics, and exception handling.",
+    "tag": "Official Docs"
+  },
+  {
+    "id": "res-20",
+    "category": "Java & OOP",
+    "title": "GeeksforGeeks — Java Interview & Output Guides",
+    "url": "https://www.geeksforgeeks.org/java/",
+    "description": "Concise articles on Java internals (String pool, HashMap, Garbage Collection, Multithreading) common in MCQs.",
+    "tag": "Free Guide"
+  },
+  {
+    "id": "res-21",
+    "category": "Java & OOP",
+    "title": "W3Schools — Core Java Quick Revision",
+    "url": "https://www.w3schools.com/java/",
+    "description": "Bite-sized examples for syntax, inheritance, interfaces, and collections before timed practice.",
+    "tag": "Quick Revision"
+  },
+  {
+    "id": "res-22",
+    "category": "Java & OOP",
+    "title": "Spring Official Guides — Building REST & Data JPA Services",
+    "url": "https://spring.io/guides",
+    "description": "Official 15-minute hands-on guides for Spring Boot REST APIs, Dependency Injection, and Spring Data JPA.",
+    "tag": "Official Docs"
+  },
+  {
+    "id": "res-23",
+    "category": "OS, DBMS & CN",
+    "title": "OSTEP — Operating Systems: Three Easy Pieces",
+    "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/",
+    "description": "Gold-standard free textbook chapters on CPU scheduling, virtual memory, paging, locks, and concurrency.",
+    "tag": "Free Textbook"
+  },
+  {
+    "id": "res-24",
+    "category": "OS, DBMS & CN",
+    "title": "GeeksforGeeks — Operating Systems Notes",
+    "url": "https://www.geeksforgeeks.org/operating-systems/",
+    "description": "Targeted interview and MCQ revision for deadlocks, Banker's algorithm, semaphores, and page replacement.",
+    "tag": "Free Guide"
+  },
+  {
+    "id": "res-25",
+    "category": "OS, DBMS & CN",
+    "title": "GeeksforGeeks — DBMS & Normalization Notes",
+    "url": "https://www.geeksforgeeks.org/dbms/",
+    "description": "Revision notes on 1NF–BCNF, functional dependencies, ACID isolation levels, and B+ Trees.",
+    "tag": "Free Guide"
+  },
+  {
+    "id": "res-26",
+    "category": "OS, DBMS & CN",
+    "title": "GeeksforGeeks — Computer Networks Revision",
+    "url": "https://www.geeksforgeeks.org/computer-network-tutorials/",
+    "description": "Clear walkthroughs of OSI/TCP-IP layers, CIDR subnetting, TCP flow/congestion control, and DNS/HTTP.",
+    "tag": "Free Guide"
+  },
+  {
+    "id": "res-27",
+    "category": "OS, DBMS & CN",
+    "title": "Beej's Guide to Network Programming",
+    "url": "https://beej.us/guide/bgnet/",
+    "description": "Classic intuitive guide to sockets, TCP vs UDP semantics, ports, and how client-server connections work underneath.",
+    "tag": "Free Book"
+  },
+  {
+    "id": "res-28",
+    "category": "Spoken English (Versant)",
+    "title": "BBC Learning English — Pronunciation Workshop",
+    "url": "https://www.bbc.co.uk/learningenglish/english/features/pronunciation",
+    "description": "Free audio-visual drills targeting consonant clusters, vowel clarity, and syllable stress for automated speech scoring.",
+    "tag": "Audio Drills"
+  },
+  {
+    "id": "res-29",
+    "category": "Spoken English (Versant)",
+    "title": "Cambridge English — Free Listening & Speaking Activities",
+    "url": "https://www.cambridgeenglish.org/learning-english/activities-for-learners/",
+    "description": "Interactive listening comprehension and sentence structure exercises calibrated to B2/C1 proficiency.",
+    "tag": "Free Practice"
+  },
+  {
+    "id": "res-30",
+    "category": "Spoken English (Versant)",
+    "title": "YouGlish — Real-World Word Pronunciation Search",
+    "url": "https://youglish.com/",
+    "description": "Hear how technical and corporate English words are naturally pronounced and stressed in real talks.",
+    "tag": "Pronunciation"
+  },
+  {
+    "id": "res-31",
+    "category": "Spoken English (Versant)",
+    "title": "ELLLO — Natural Spoken English Listening Library",
+    "url": "https://www.elllo.org/",
+    "description": "Thousands of short global-accent listening clips with transcripts for shadowing and repeat-sentence speed.",
+    "tag": "Listening"
+  },
+  {
+    "id": "res-32",
+    "category": "Spoken English (Versant)",
+    "title": "Merriam-Webster — Word & Vocabulary Games",
+    "url": "https://www.merriam-webster.com/games",
+    "description": "Quick daily vocabulary, collocation, and spelling sharpness drills supporting Versant fluency and verbal ability.",
+    "tag": "Vocabulary"
+  }
+]

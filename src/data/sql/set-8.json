@@ -1,0 +1,102 @@
+{
+  "setId": "sql-set-8",
+  "title": "SQL Set 08: IT Project Allocation, Bug Triage & Sprints",
+  "description": "Application-development domain SQL: multi-project developers, sprint bug burndown, JDBC-ready parameterized reporting, and bench detection.",
+  "durationMinutes": 45,
+  "queries": [
+    {
+      "id": "sql-8-q01",
+      "topic": "SQL",
+      "subtopic": "Allocation Sum Check",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "title": "Over-Allocated Engineers (> 100% Bandwidth)",
+      "prompt": "Join `engineers` and `allocations` to return `eng_name` and `total_pct` for engineers whose total `alloc_pct` across active projects exceeds 100. Order by `total_pct` DESC, `eng_name` ASC.",
+      "schemaSql": "CREATE TABLE engineers (eng_id INT PRIMARY KEY, eng_name TEXT); CREATE TABLE allocations (eng_id INT, proj_code TEXT, alloc_pct INT);",
+      "seedSql": "INSERT INTO engineers VALUES (1,'Kunal'),(2,'Tanya'),(3,'Harish'); INSERT INTO allocations VALUES (1,'HCL-API',60),(1,'HCL-UI',60),(2,'HCL-DB',100),(3,'HCL-QA',50),(3,'HCL-ML',75);",
+      "expectedColumns": ["eng_name", "total_pct"],
+      "expectedRows": [
+        ["Harish", 125],
+        ["Kunal", 120]
+      ],
+      "solutionSql": "SELECT e.eng_name, SUM(a.alloc_pct) AS total_pct FROM engineers e JOIN allocations a ON e.eng_id = a.eng_id GROUP BY e.eng_id, e.eng_name HAVING SUM(a.alloc_pct) > 100 ORDER BY total_pct DESC, e.eng_name ASC;",
+      "explanation": "Summing allocations per engineer and filtering `HAVING SUM(a.alloc_pct) > 100` surfaces over-committed developers."
+    },
+    {
+      "id": "sql-8-q02",
+      "topic": "SQL",
+      "subtopic": "Bench Detection (Zero Allocation)",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "title": "Bench Engineers Ready for Project Deployment",
+      "prompt": "Find `eng_id` and `skill` of engineers in `bench_roster` who do NOT appear in `active_pods`, ordered by `eng_id`.",
+      "schemaSql": "CREATE TABLE bench_roster (eng_id INT PRIMARY KEY, skill TEXT); CREATE TABLE active_pods (pod_id INT, eng_id INT);",
+      "seedSql": "INSERT INTO bench_roster VALUES (10,'Java'),(11,'Spring Boot'),(12,'Python'),(13,'SQL'); INSERT INTO active_pods VALUES (1,10),(2,12);",
+      "expectedColumns": ["eng_id", "skill"],
+      "expectedRows": [
+        [11, "Spring Boot"],
+        [13, "SQL"]
+      ],
+      "solutionSql": "SELECT b.eng_id, b.skill FROM bench_roster b WHERE NOT EXISTS (SELECT 1 FROM active_pods p WHERE p.eng_id = b.eng_id) ORDER BY b.eng_id;",
+      "explanation": "`NOT EXISTS` cleanly locates unallocated engineers on the bench."
+    },
+    {
+      "id": "sql-8-q03",
+      "topic": "SQL",
+      "subtopic": "Severity Pivot & Open Count",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "title": "Open Critical & High Bugs per Microservice",
+      "prompt": "For each `service_name` in `bugs` having at least 1 `'OPEN'` bug, return `service_name`, `open_critical`, and `open_high`, ordered by `service_name`.",
+      "schemaSql": "CREATE TABLE bugs (bug_id INT PRIMARY KEY, service_name TEXT, severity TEXT, status TEXT);",
+      "seedSql": "INSERT INTO bugs VALUES (1,'auth-svc','CRITICAL','OPEN'),(2,'auth-svc','HIGH','OPEN'),(3,'auth-svc','CRITICAL','CLOSED'),(4,'pay-svc','HIGH','OPEN'),(5,'pay-svc','HIGH','OPEN'),(6,'mail-svc','LOW','CLOSED');",
+      "expectedColumns": ["service_name", "open_critical", "open_high"],
+      "expectedRows": [
+        ["auth-svc", 1, 1],
+        ["pay-svc", 0, 2]
+      ],
+      "solutionSql": "SELECT service_name, SUM(CASE WHEN severity = 'CRITICAL' THEN 1 ELSE 0 END) AS open_critical, SUM(CASE WHEN severity = 'HIGH' THEN 1 ELSE 0 END) AS open_high FROM bugs WHERE status = 'OPEN' GROUP BY service_name ORDER BY service_name;",
+      "explanation": "Filtering `WHERE status = 'OPEN'` automatically drops `mail-svc` (whose only bug is `CLOSED`)."
+    },
+    {
+      "id": "sql-8-q04",
+      "topic": "SQL",
+      "subtopic": "Salary Band Classification",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "title": "Compensation Band Distribution",
+      "prompt": "Classify `dev_comp` rows into `band`: `'Senior'` (`ctc >= 1200000`), `'Mid'` (`700000 <= ctc < 1200000`), else `'GET'`. Return `band` and `cnt`, ordered by `cnt` DESC, `band` ASC.",
+      "schemaSql": "CREATE TABLE dev_comp (dev_id INT PRIMARY KEY, ctc INT);",
+      "seedSql": "INSERT INTO dev_comp VALUES (1,450000),(2,500000),(3,900000),(4,1200000),(5,1500000),(6,425000);",
+      "expectedColumns": ["band", "cnt"],
+      "expectedRows": [
+        ["GET", 3],
+        ["Senior", 2],
+        ["Mid", 1]
+      ],
+      "solutionSql": "SELECT CASE WHEN ctc >= 1200000 THEN 'Senior' WHEN ctc >= 700000 THEN 'Mid' ELSE 'GET' END AS band, COUNT(*) AS cnt FROM dev_comp GROUP BY band ORDER BY cnt DESC, band ASC;",
+      "explanation": "`CASE WHEN` expressions in `SELECT` can be grouped by alias `band` in SQLite/PostgreSQL."
+    },
+    {
+      "id": "sql-8-q05",
+      "topic": "SQL",
+      "subtopic": "Nth Highest via DENSE_RANK",
+      "difficulty": "hard",
+      "source_tag": "reported",
+      "title": "Top 2 Distinct Story-Point Sprints per Squad",
+      "prompt": "Find `squad`, `sprint_no`, and `points_done` for sprints ranking in the top 2 distinct `points_done` values within each `squad`. Order by `squad` ASC, `points_done` DESC, `sprint_no` ASC.",
+      "schemaSql": "CREATE TABLE velocity (squad TEXT, sprint_no INT, points_done INT);",
+      "seedSql": "INSERT INTO velocity VALUES ('Alpha',1,34),('Alpha',2,42),('Alpha',3,42),('Alpha',4,28),('Beta',1,25),('Beta',2,30),('Beta',3,20);",
+      "expectedColumns": ["squad", "sprint_no", "points_done"],
+      "expectedRows": [
+        ["Alpha", 2, 42],
+        ["Alpha", 3, 42],
+        ["Alpha", 1, 34],
+        ["Beta", 2, 30],
+        ["Beta", 1, 25]
+      ],
+      "solutionSql": "WITH ranked AS (SELECT squad, sprint_no, points_done, DENSE_RANK() OVER (PARTITION BY squad ORDER BY points_done DESC) AS dr FROM velocity) SELECT squad, sprint_no, points_done FROM ranked WHERE dr <= 2 ORDER BY squad ASC, points_done DESC, sprint_no ASC;",
+      "explanation": "`DENSE_RANK()` ensures both tied 42-point sprints share rank 1 and the 34-point sprint gets rank 2."
+    }
+  ]
+}

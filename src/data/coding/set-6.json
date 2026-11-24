@@ -1,0 +1,88 @@
+{
+  "setId": "coding-set-6",
+  "title": "Coding Set 06: Special Numbers & GCD/LCM Reduction",
+  "description": "Reported HCL number-crunching rounds: Armstrong/Strong/Perfect classification and array GCD & LCM.",
+  "durationMinutes": 60,
+  "problems": [
+    {
+      "id": "code-6-p01",
+      "topic": "Number Theory",
+      "subtopic": "Digit & Divisor Classification",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "title": "Classify Armstrong, Strong & Perfect Number",
+      "statement": "Given a positive integer N, check which of the following three properties hold for N: (1) ARMSTRONG: sum of each digit raised to the power of total digits equals N; (2) STRONG: sum of factorials of each digit equals N; (3) PERFECT: sum of proper divisors (< N) equals N. Print matching labels in order (ARMSTRONG, STRONG, PERFECT) separated by a single space, or 'NONE' if none apply.",
+      "inputFormat": "A single positive integer N.",
+      "outputFormat": "Space-separated matching labels or 'NONE'.",
+      "constraints": [
+        "1 <= N <= 10^7"
+      ],
+      "testCases": [
+        { "input": "1\n", "expectedOutput": "ARMSTRONG STRONG", "isSample": true, "note": "1^1 = 1 and 1! = 1; proper divisors of 1 sum to 0 != 1" },
+        { "input": "145\n", "expectedOutput": "STRONG", "isSample": true, "note": "1! + 4! + 5! = 1 + 24 + 120 = 145" },
+        { "input": "153\n", "expectedOutput": "ARMSTRONG", "isSample": false },
+        { "input": "28\n", "expectedOutput": "PERFECT", "isSample": false },
+        { "input": "40585\n", "expectedOutput": "STRONG", "isSample": false },
+        { "input": "9474\n", "expectedOutput": "ARMSTRONG", "isSample": false },
+        { "input": "100\n", "expectedOutput": "NONE", "isSample": false }
+      ],
+      "starterCode": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        long n = sc.nextLong();\n        // Write your solution here\n    }\n}",
+        "python": "import sys\n\nn = int(sys.stdin.readline().strip())\n# Write your solution here\n",
+        "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    long long n; cin >> n;\n    // Write your solution here\n    return 0;\n}\n"
+      },
+      "solutions": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        long n = sc.nextLong();\n        int[] fact = new int[10];\n        fact[0] = 1;\n        for (int i = 1; i <= 9; i++) fact[i] = fact[i - 1] * i;\n        String s = Long.toString(n);\n        int digits = s.length();\n        long arm = 0, strong = 0;\n        for (int i = 0; i < digits; i++) {\n            int d = s.charAt(i) - '0';\n            long p = 1;\n            for (int k = 0; k < digits; k++) p *= d;\n            arm += p;\n            strong += fact[d];\n        }\n        long divSum = n > 1 ? 1 : 0;\n        for (long d = 2; d * d <= n; d++) {\n            if (n % d == 0) {\n                divSum += d;\n                if (d != n / d) divSum += n / d;\n            }\n        }\n        List<String> res = new ArrayList<>();\n        if (arm == n) res.add(\"ARMSTRONG\");\n        if (strong == n) res.add(\"STRONG\");\n        if (divSum == n) res.add(\"PERFECT\");\n        System.out.println(res.isEmpty() ? \"NONE\" : String.join(\" \", res));\n    }\n}",
+        "python": "import sys, math\n\nn = int(sys.stdin.readline().strip())\ns = str(n)\nk = len(s)\narm = sum(int(c) ** k for c in s) == n\nstrong = sum(math.factorial(int(c)) for c in s) == n\ndiv_sum = 1 if n > 1 else 0\nd = 2\nwhile d * d <= n:\n    if n % d == 0:\n        div_sum += d\n        if d != n // d:\n            div_sum += n // d\n    d += 1\nperfect = (div_sum == n)\nout = []\nif arm: out.append('ARMSTRONG')\nif strong: out.append('STRONG')\nif perfect: out.append('PERFECT')\nprint(' '.join(out) if out else 'NONE')\n"
+      },
+      "timeComplexity": "O(sqrt(N) + log10(N)) — divisor scan dominates.",
+      "spaceComplexity": "O(1).",
+      "edgeCases": [
+        "N = 1: Armstrong & Strong, NOT Perfect (proper divisors sum is 0)",
+        "Perfect square divisor `d * d == n`: do not add `d` twice",
+        "Digit 0 in Strong numbers: 0! = 1"
+      ]
+    },
+    {
+      "id": "code-6-p02",
+      "topic": "Number Theory",
+      "subtopic": "Euclidean Algorithm",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "title": "GCD & LCM of an Integer Array",
+      "statement": "Given N positive integers, compute both the Greatest Common Divisor (GCD) and the Least Common Multiple (LCM) of the entire array. Print '<GCD> <LCM>'.",
+      "inputFormat": "Line 1: Integer N.\nLine 2: N space-separated positive integers.",
+      "outputFormat": "Two space-separated integers: GCD and LCM.",
+      "constraints": [
+        "1 <= N <= 10^4",
+        "1 <= A[i] <= 10^5",
+        "Answer LCM fits in 64-bit integer (<= 10^18)"
+      ],
+      "testCases": [
+        { "input": "4\n12 18 24 36\n", "expectedOutput": "6 72", "isSample": true },
+        { "input": "3\n7 11 13\n", "expectedOutput": "1 1001", "isSample": true },
+        { "input": "1\n45\n", "expectedOutput": "45 45", "isSample": false },
+        { "input": "5\n4 6 8 12 16\n", "expectedOutput": "2 48", "isSample": false },
+        { "input": "3\n15 25 35\n", "expectedOutput": "5 525", "isSample": false },
+        { "input": "4\n100 200 300 400\n", "expectedOutput": "100 1200", "isSample": false },
+        { "input": "4\n9 12 15 18\n", "expectedOutput": "3 180", "isSample": false }
+      ],
+      "starterCode": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        // Write your solution here\n    }\n}",
+        "python": "import sys\n\ndata = list(map(int, sys.stdin.read().split()))\nn = data[0]\narr = data[1:1+n]\n# Write your solution here\n",
+        "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n; cin >> n;\n    // Write your solution here\n    return 0;\n}\n"
+      },
+      "solutions": {
+        "java": "import java.util.*;\n\npublic class Main {\n    static long gcd(long a, long b) {\n        while (b != 0) { long t = a % b; a = b; b = t; }\n        return a;\n    }\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        long g = sc.nextLong();\n        long l = g;\n        for (int i = 1; i < n; i++) {\n            long v = sc.nextLong();\n            g = gcd(g, v);\n            l = (l / gcd(l, v)) * v;\n        }\n        System.out.println(g + \" \" + l);\n    }\n}",
+        "python": "import sys, math\n\ndata = list(map(int, sys.stdin.read().split()))\nn = data[0]\narr = data[1:1+n]\ng = arr[0]\nl = arr[0]\nfor v in arr[1:]:\n    g = math.gcd(g, v)\n    l = (l // math.gcd(l, v)) * v\nprint(f'{g} {l}')\n"
+      },
+      "timeComplexity": "O(N * log(max(A))).",
+      "spaceComplexity": "O(1) extra space.",
+      "edgeCases": [
+        "Avoid intermediate overflow by computing `(l / gcd(l, v)) * v` instead of `(l * v) / gcd(l, v)`",
+        "Single-element array (N = 1) -> GCD == LCM == A[0]",
+        "Pairwise coprime primes"
+      ]
+    }
+  ]
+}

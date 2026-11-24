@@ -1,0 +1,383 @@
+{
+  "setId": "tech-set-2",
+  "title": "Technical MCQ Set 02: Collections, SQL Grouping & Deadlocks",
+  "description": "Covers Java generics erasure, ConcurrentHashMap, SQL HAVING vs WHERE, B-Tree indexes, OS Round Robin, TCP windowing, and Spring DI.",
+  "durationMinutes": 35,
+  "questions": [
+    {
+      "id": "tech-2-q01",
+      "topic": "Output Prediction",
+      "subtopic": "Exception Propagation in finally",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "What happens when `run()` is called in the following Java snippet?",
+      "codeSnippet": "static void run() {\n  try {\n    throw new IllegalArgumentException(\"A\");\n  } finally {\n    throw new IllegalStateException(\"B\");\n  }\n}",
+      "options": [
+        "Throws `IllegalArgumentException: A`",
+        "Throws `IllegalStateException: B` (suppressing `IllegalArgumentException`)",
+        "Prints both stack traces sequentially",
+        "Fails to compile because `finally` cannot throw exceptions"
+      ],
+      "correctIndex": 1,
+      "explanation": "When a `finally` block throws an uncaught exception while another exception from `try` is propagating out, the `finally` exception replaces/masks the original exception (unlike `try-with-resources`, which attaches suppressed exceptions)."
+    },
+    {
+      "id": "tech-2-q02",
+      "topic": "Output Prediction",
+      "subtopic": "Post-Increment & Assignment Order",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "What does this Java code print?",
+      "codeSnippet": "int i = 5;\ni = i++ + ++i;\nSystem.out.println(i);",
+      "options": ["10", "11", "12", "13"],
+      "correctIndex": 2,
+      "explanation": "In Java, operands evaluate strictly left-to-right: `i++` evaluates to `5` (then `i` becomes `6`). Next `++i` increments `6` to `7` and evaluates to `7`. Thus `i = 5 + 7 = 12`."
+    },
+    {
+      "id": "tech-2-q03",
+      "topic": "Output Prediction",
+      "subtopic": "Polymorphic Field vs Method Binding",
+      "difficulty": "hard",
+      "source_tag": "reported",
+      "question": "What is the exact output of this Java program?",
+      "codeSnippet": "class Base {\n  int val = 10;\n  int getVal() { return val; }\n}\nclass Sub extends Base {\n  int val = 20;\n  @Override int getVal() { return val; }\n}\npublic class Main {\n  public static void main(String[] args) {\n    Base b = new Sub();\n    System.out.println(b.val + \" \" + b.getVal());\n  }\n}",
+      "options": ["10 10", "10 20", "20 10", "20 20"],
+      "correctIndex": 1,
+      "explanation": "Fields (instance variables) in Java are resolved at compile time based on the reference type (`Base`, so `b.val == 10`), whereas overridden instance methods use dynamic dispatch based on the runtime object (`Sub`, so `b.getVal() == 20`)."
+    },
+    {
+      "id": "tech-2-q04",
+      "topic": "Java",
+      "subtopic": "Java 8 Stream Lazy Evaluation",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "How many lines does the following Java 8 Stream snippet print?",
+      "codeSnippet": "Stream.of(\"a\", \"b\", \"c\")\n  .filter(s -> {\n    System.out.println(\"filtering: \" + s);\n    return true;\n  });",
+      "options": [
+        "3 lines (`filtering: a`, `b`, `c`)",
+        "1 line (`filtering: a`)",
+        "0 lines (nothing is printed)",
+        "Compilation error due to missing `collect`"
+      ],
+      "correctIndex": 2,
+      "explanation": "Intermediate Stream operations like `filter()` and `map()` are completely lazy. Because no terminal operation (`collect`, `forEach`, `count`, etc.) is invoked, the pipeline never executes and nothing is printed."
+    },
+    {
+      "id": "tech-2-q05",
+      "topic": "Java",
+      "subtopic": "ConcurrentHashMap vs SynchronizedMap",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "Which statement accurately differentiates `ConcurrentHashMap` from `Collections.synchronizedMap(new HashMap<>())` in Java 8+?",
+      "options": [
+        "`ConcurrentHashMap` allows `null` keys and `null` values, while `HashMap` does not",
+        "`ConcurrentHashMap` uses fine-grained CAS + per-bin synchronization instead of locking the entire map on every read/write",
+        "`ConcurrentHashMap` throws `ConcurrentModificationException` on concurrent iteration",
+        "`synchronizedMap` outperforms `ConcurrentHashMap` under high multi-threaded read contention"
+      ],
+      "correctIndex": 1,
+      "explanation": "`ConcurrentHashMap` forbids `null` keys/values (to avoid ambiguity in concurrent `get`), uses weakly consistent non-failing iterators, and locks only individual bucket heads (plus lock-free CAS reads), delivering far higher concurrency."
+    },
+    {
+      "id": "tech-2-q06",
+      "topic": "Java",
+      "subtopic": "volatile Keyword Semantics",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "If two threads concurrently execute `count++` 1,000 times each on a `private volatile int count = 0;` field, why can the final value be less than 2,000?",
+      "options": [
+        "`volatile` only prevents instruction reordering on `long` and `double` fields",
+        "`volatile` guarantees visibility across threads, NOT atomicity of the compound read-modify-write `count++` operation",
+        "`volatile` caches the variable inside thread-local registers permanently",
+        "`volatile` throws an unchecked exception on write races"
+      ],
+      "correctIndex": 1,
+      "explanation": "`count++` comprises three steps: read `count`, add 1, write `count`. `volatile` guarantees memory visibility and happens-before ordering, but does not provide mutual exclusion—use `AtomicInteger` or `synchronized`."
+    },
+    {
+      "id": "tech-2-q07",
+      "topic": "OOP",
+      "subtopic": "Serialization & transient Fields",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "When an object implementing `Serializable` is serialized to bytes and deserialized back into memory, what value does a `transient int pin;` field (set to `4821` before serialization) hold after deserialization?",
+      "options": [
+        "`4821`",
+        "`0` (default value of `int`)",
+        "Throws `NotSerializableException`",
+        "`null`"
+      ],
+      "correctIndex": 1,
+      "explanation": "`transient` excludes a field from Java's default serialization stream; on deserialization, constructors are not run and `transient` primitives receive their type defaults (`0` for `int`, `null` for references)."
+    },
+    {
+      "id": "tech-2-q08",
+      "topic": "SQL",
+      "subtopic": "COUNT(*) vs COUNT(column)",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Table `Metrics` has 5 rows where column `latency_ms` holds values `{12, NULL, 18, NULL, 25}`. What does `SELECT COUNT(*), COUNT(latency_ms), COUNT(DISTINCT latency_ms) FROM Metrics;` return?",
+      "options": [
+        "`5, 5, 4`",
+        "`5, 3, 3`",
+        "`3, 3, 3`",
+        "`5, 3, 4`"
+      ],
+      "correctIndex": 1,
+      "explanation": "`COUNT(*)` counts all 5 rows including NULLs; `COUNT(col)` ignores NULLs (returning 3); `COUNT(DISTINCT col)` also ignores NULLs and counts distinct non-null values (3)."
+    },
+    {
+      "id": "tech-2-q09",
+      "topic": "SQL",
+      "subtopic": "WHERE vs HAVING Execution Order",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "What is the logical SQL query execution order across clauses?",
+      "options": [
+        "`SELECT -> FROM -> WHERE -> GROUP BY -> HAVING -> ORDER BY`",
+        "`FROM -> WHERE -> GROUP BY -> HAVING -> SELECT -> ORDER BY`",
+        "`FROM -> GROUP BY -> WHERE -> HAVING -> SELECT -> ORDER BY`",
+        "`FROM -> HAVING -> GROUP BY -> WHERE -> SELECT -> ORDER BY`"
+      ],
+      "correctIndex": 1,
+      "explanation": "SQL evaluates `FROM/JOIN` first, filters individual rows in `WHERE`, aggregates groups in `GROUP BY`, filters groups in `HAVING`, projects expressions in `SELECT`, and finally sorts in `ORDER BY`."
+    },
+    {
+      "id": "tech-2-q10",
+      "topic": "DBMS",
+      "subtopic": "Clustered vs Non-Clustered Index",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Why can a relational table physically have at most ONE clustered index, whereas it can have many non-clustered indexes?",
+      "options": [
+        "SQL syntax reserves only one `INDEX` keyword per table",
+        "A clustered index dictates the physical storage order of the actual table data rows themselves",
+        "Non-clustered indexes cannot be built using B-Trees",
+        "Clustered indexes automatically disable foreign key constraints"
+      ],
+      "correctIndex": 1,
+      "explanation": "Because table data rows can be physically sorted on disk in only one order, a table supports at most one clustered index; non-clustered indexes store separate pointer entries referencing rows."
+    },
+    {
+      "id": "tech-2-q11",
+      "topic": "DBMS",
+      "subtopic": "ACID Atomicity & WAL",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Which mechanism enables a database management system to guarantee both Atomicity (rollback/undo) and Durability (crash recovery/redo) efficiently?",
+      "options": [
+        "Round-Robin CPU scheduling",
+        "Write-Ahead Logging (WAL)",
+        "ARP table caching",
+        "View materialization"
+      ],
+      "correctIndex": 1,
+      "explanation": "Write-Ahead Logging writes undo/redo log records to stable storage before flushing modified data pages, allowing uncommitted changes to be rolled back and committed transactions to be replayed after a crash."
+    },
+    {
+      "id": "tech-2-q12",
+      "topic": "OS",
+      "subtopic": "Round Robin Scheduling Numerical",
+      "difficulty": "hard",
+      "source_tag": "reported",
+      "question": "Three processes all arrive at `t = 0` with burst times: P1 = 5 ms, P2 = 3 ms, P3 = 4 ms. Using Round Robin with time quantum `q = 2 ms` (zero context-switch overhead), what is the completion time of P1?",
+      "options": ["9 ms", "10 ms", "11 ms", "12 ms"],
+      "correctIndex": 3,
+      "explanation": "Ready queue trace (q=2): [0-2] P1 runs (rem 3, requeued behind P3); [2-4] P2 (rem 1); [4-6] P3 (rem 2); [6-8] P1 (rem 1); [8-9] P2 finishes; [9-11] P3 finishes; [11-12] P1 executes its final 1 ms and completes at 12 ms."
+    },
+    {
+      "id": "tech-2-q13",
+      "topic": "OS",
+      "subtopic": "Effective Memory Access Time (TLB)",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "A paging system has a TLB lookup time of 10 ns and main memory access time of 100 ns. If the TLB hit ratio is 90% (and page table lives in main memory, 1-level paging), what is the Effective Access Time (EAT)?",
+      "options": ["110 ns", "120 ns", "130 ns", "140 ns"],
+      "correctIndex": 1,
+      "explanation": "On TLB hit (0.90): 10 ns (TLB) + 100 ns (data) = 110 ns. On TLB miss (0.10): 10 ns (TLB) + 100 ns (page table) + 100 ns (data) = 210 ns. EAT = 0.90*110 + 0.10*210 = 99 + 21 = 120 ns."
+    },
+    {
+      "id": "tech-2-q14",
+      "topic": "OS",
+      "subtopic": "Thrashing & Working Set",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "What characterizes 'thrashing' in a virtual memory operating system?",
+      "options": [
+        "CPU utilization reaches 100% because all threads stay busy executing pure arithmetic",
+        "The OS spends more time paging frames in and out of disk than executing actual process instructions",
+        "Two processes wait indefinitely on a shared binary semaphore",
+        "Network sockets exhaust ephemeral ports due to TIME_WAIT"
+      ],
+      "correctIndex": 1,
+      "explanation": "When the sum of active working sets exceeds physical RAM, processes continuously page-fault and steal frames from one another, collapsing CPU utilization as disk swap activity dominates."
+    },
+    {
+      "id": "tech-2-q15",
+      "topic": "CN",
+      "subtopic": "Stop-and-Wait Channel Utilization",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "A 1 Mbps link has a one-way propagation delay of 10 ms and transmits 1,000-byte frames using Stop-and-Wait ARQ (negligible ACK size and processing time). What is the approximate link utilization?",
+      "options": ["16.7%", "28.6%", "44.4%", "80.0%"],
+      "correctIndex": 1,
+      "explanation": "Transmission time Tt = (1,000 * 8 bits) / 10^6 bps = 8 ms. Round-trip propagation 2*Tp = 20 ms. Utilization = Tt / (Tt + 2*Tp) = 8 / (8 + 20) = 8 / 28 = 28.57% ≈ 28.6%."
+    },
+    {
+      "id": "tech-2-q16",
+      "topic": "CN",
+      "subtopic": "OSI Layer Protocol Mapping",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Which pairing of protocol/device to its primary OSI layer is INCORRECT?",
+      "options": [
+        "ARP -> Data Link / Network boundary (resolving IP to MAC)",
+        "Switch -> Layer 2 (Data Link)",
+        "TLS/SSL -> Layer 3 (Network)",
+        "HTTP -> Layer 7 (Application)"
+      ],
+      "correctIndex": 2,
+      "explanation": "TLS/SSL operates above TCP (Layer 4) to provide encryption/session security (historically mapped to Session/Presentation Layers 5–6), never Layer 3 (Network)."
+    },
+    {
+      "id": "tech-2-q17",
+      "topic": "DSA",
+      "subtopic": "Binary Search Tree Deletion",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "When deleting a node `X` that has BOTH left and right non-null children in a Binary Search Tree (BST), what node replaces `X` to preserve the BST invariant?",
+      "options": [
+        "Either `X`'s left child directly or `X`'s right child directly",
+        "Either the inorder predecessor (max in left subtree) or inorder successor (min in right subtree)",
+        "Always the root of the entire BST",
+        "The deepest leaf in the entire tree regardless of key value"
+      ],
+      "correctIndex": 1,
+      "explanation": "Replacing `X` with its inorder successor (leftmost node in right subtree) or inorder predecessor (rightmost node in left subtree) guarantees all left keys stay smaller and all right keys stay larger."
+    },
+    {
+      "id": "tech-2-q18",
+      "topic": "DSA",
+      "subtopic": "Graph Traversal Applications",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Which algorithm finds the shortest path (minimum edge count) between two vertices in an UNWEIGHTED graph?",
+      "options": [
+        "Depth-First Search (DFS)",
+        "Breadth-First Search (BFS)",
+        "Prim's Algorithm",
+        "Topological Sort"
+      ],
+      "correctIndex": 1,
+      "explanation": "BFS explores vertices in non-decreasing order of edge distance from the source, guaranteeing the shortest unweighted path in O(V + E) time."
+    },
+    {
+      "id": "tech-2-q19",
+      "topic": "SE",
+      "subtopic": "Cyclomatic Complexity",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "A Java method's control-flow graph has 12 nodes (`N = 12`), 15 directed edges (`E = 15`), and 1 connected component (`P = 1`). What is its McCabe Cyclomatic Complexity?",
+      "options": ["3", "4", "5", "6"],
+      "correctIndex": 2,
+      "explanation": "McCabe's formula: V(G) = E - N + 2P = 15 - 12 + 2(1) = 5. This means 5 linearly independent execution paths (minimum unit test cases for branch coverage)."
+    },
+    {
+      "id": "tech-2-q20",
+      "topic": "Java",
+      "subtopic": "Spring Boot Dependency Injection",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Why is Constructor Injection preferred over Field Injection (`@Autowired` on a private field) in Spring Boot services?",
+      "options": [
+        "Field injection fails to compile on Java 17+",
+        "Constructor injection supports immutable `final` dependencies, guarantees non-null initialization, and simplifies plain JUnit unit testing without starting a Spring container",
+        "Constructor injection automatically turns every service into a prototype bean",
+        "Field injection disables Spring Data JPA transaction proxies"
+      ],
+      "correctIndex": 1,
+      "explanation": "Constructor injection makes dependencies explicit, allows `final` immutable fields, detects circular dependencies eagerly at startup, and lets unit tests instantiate the class via `new Service(mockRepo)` without reflection."
+    },
+    {
+      "id": "tech-2-q21",
+      "topic": "Output Prediction",
+      "subtopic": "Optional.orElse vs orElseGet",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "What does the following Java snippet print?",
+      "codeSnippet": "static String fallback() {\n  System.out.print(\"FB \");\n  return \"default\";\n}\npublic static void main(String[] args) {\n  Optional<String> opt = Optional.of(\"HCL\");\n  System.out.print(opt.orElse(fallback()) + \" \");\n  System.out.print(opt.orElseGet(() -> fallback()));\n}",
+      "options": [
+        "HCL HCL",
+        "FB HCL HCL",
+        "FB HCL FB HCL",
+        "HCL FB HCL"
+      ],
+      "correctIndex": 1,
+      "explanation": "`orElse(T)` evaluates its argument eagerly EVEN when the `Optional` is present, so `fallback()` runs once and prints `FB ` before returning `HCL`. `orElseGet(Supplier)` is lazy and does not invoke `fallback()` when `opt` is present."
+    },
+    {
+      "id": "tech-2-q22",
+      "topic": "JDBC",
+      "subtopic": "Transaction Management AutoCommit",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "By default in JDBC, what is `connection.getAutoCommit()` set to, and what is required to execute two `UPDATE` statements atomically as one transaction?",
+      "options": [
+        "`false`; call `connection.commit()` after each query",
+        "`true`; call `connection.setAutoCommit(false)` before the statements, then `commit()` or `rollback()`",
+        "`true`; use `Statement` instead of `PreparedStatement`",
+        "`false`; JDBC automatically batches all updates until `close()`"
+      ],
+      "correctIndex": 1,
+      "explanation": "JDBC connections default to `autoCommit = true`, committing each statement individually. For multi-statement atomicity, set `setAutoCommit(false)`, execute updates, and invoke `commit()` (or `rollback()` inside `catch`)."
+    },
+    {
+      "id": "tech-2-q23",
+      "topic": "DSA",
+      "subtopic": "Recurrence Complexity",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Using the Master Theorem, solve the recurrence `T(n) = 4T(n/2) + n` (with `T(1) = 1`).",
+      "options": [
+        "Theta(n)",
+        "Theta(n log n)",
+        "Theta(n^2)",
+        "Theta(n^2 log n)"
+      ],
+      "correctIndex": 2,
+      "explanation": "Here a = 4, b = 2, f(n) = n. Critical exponent c = log_b(a) = log_2(4) = 2, so n^c = n^2. Since f(n) = O(n^(2 - epsilon)), Case 1 of the Master Theorem yields Theta(n^2)."
+    },
+    {
+      "id": "tech-2-q24",
+      "topic": "CN",
+      "subtopic": "HTTP Status Codes",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "A REST client sends a valid JSON payload with an expired JWT bearer token, and the API gateway rejects it due to missing/expired authentication. Which HTTP status code is semantically accurate?",
+      "options": [
+        "400 Bad Request",
+        "401 Unauthorized",
+        "403 Forbidden",
+        "409 Conflict"
+      ],
+      "correctIndex": 1,
+      "explanation": "`401 Unauthorized` denotes unauthenticated or expired/invalid credentials; `403 Forbidden` denotes an authenticated user lacking permission for the resource."
+    },
+    {
+      "id": "tech-2-q25",
+      "topic": "SQL",
+      "subtopic": "Correlated Subquery vs Window Function",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "In SQL, what is the key difference between `RANK()` and `DENSE_RANK()` when two employees tie for the 2nd highest salary?",
+      "options": [
+        "`RANK()` assigns both rank 2 and the next employee rank 3; `DENSE_RANK()` assigns rank 4",
+        "`RANK()` assigns both rank 2 and skips rank 3 (next is 4); `DENSE_RANK()` assigns both rank 2 and next is 3",
+        "`DENSE_RANK()` requires an explicit `GROUP BY` clause, whereas `RANK()` does not",
+        "`RANK()` ignores NULL values automatically, whereas `DENSE_RANK()` fails on NULLs"
+      ],
+      "correctIndex": 1,
+      "explanation": "On ties `{100, 90, 90, 80}` descending: `RANK()` gives `1, 2, 2, 4` (leaves gaps); `DENSE_RANK()` gives `1, 2, 2, 3` (no gaps); `ROW_NUMBER()` gives `1, 2, 3, 4`."
+    }
+  ]
+}

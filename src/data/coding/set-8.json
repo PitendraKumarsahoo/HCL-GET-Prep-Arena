@@ -1,0 +1,88 @@
+{
+  "setId": "coding-set-8",
+  "title": "Coding Set 08: Frequency Sorting & Run-Length Compression",
+  "description": "Reported string processing problems: sorting characters by descending frequency with ASCII tie-breaking and RLE compression.",
+  "durationMinutes": 60,
+  "problems": [
+    {
+      "id": "code-8-p01",
+      "topic": "Sorting & Hashing",
+      "subtopic": "Custom Frequency Comparator",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "title": "Sort Characters by Frequency",
+      "statement": "Given a string S, rearrange its characters in descending order of their frequency in S. If two characters have the same frequency, the character with the smaller ASCII value must come first.",
+      "inputFormat": "A single line containing non-empty string S.",
+      "outputFormat": "The reordered string.",
+      "constraints": [
+        "1 <= |S| <= 10^5",
+        "Printable non-whitespace ASCII characters"
+      ],
+      "testCases": [
+        { "input": "tree\n", "expectedOutput": "eert", "isSample": true },
+        { "input": "cccaaa\n", "expectedOutput": "aaaccc", "isSample": true, "note": "Equal frequency 3: 'a' < 'c'" },
+        { "input": "Aabb\n", "expectedOutput": "bbAa", "isSample": false },
+        { "input": "hcltech\n", "expectedOutput": "cchhelt", "isSample": false },
+        { "input": "z\n", "expectedOutput": "z", "isSample": false },
+        { "input": "bbAAaa\n", "expectedOutput": "AAaabb", "isSample": false },
+        { "input": "programming\n", "expectedOutput": "ggmmrrainop", "isSample": false }
+      ],
+      "starterCode": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next().trim();\n        // Write your solution here\n    }\n}",
+        "python": "import sys\n\ns = sys.stdin.readline().strip()\n# Write your solution here\n",
+        "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    string s; cin >> s;\n    // Write your solution here\n    return 0;\n}\n"
+      },
+      "solutions": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next().trim();\n        int[] freq = new int[256];\n        for (char c : s.toCharArray()) freq[c]++;\n        List<Character> chars = new ArrayList<>();\n        for (int c = 0; c < 256; c++) if (freq[c] > 0) chars.add((char) c);\n        chars.sort((a, b) -> freq[b] != freq[a] ? Integer.compare(freq[b], freq[a]) : Character.compare(a, b));\n        StringBuilder sb = new StringBuilder(s.length());\n        for (char c : chars) {\n            for (int k = 0; k < freq[c]; k++) sb.append(c);\n        }\n        System.out.println(sb.toString());\n    }\n}",
+        "python": "import sys\nfrom collections import Counter\n\ns = sys.stdin.readline().strip()\ncnt = Counter(s)\nordered = sorted(cnt.items(), key=lambda x: (-x[1], x[0]))\nprint(''.join(ch * f for ch, f in ordered))\n"
+      },
+      "timeComplexity": "O(N + K log K) where K <= 256 (effectively O(N)).",
+      "spaceComplexity": "O(N) for output string.",
+      "edgeCases": [
+        "Tie-breaking between uppercase ('A'=65) and lowercase ('a'=97)",
+        "All characters unique -> sorted purely by ASCII",
+        "Single character string"
+      ]
+    },
+    {
+      "id": "code-8-p02",
+      "topic": "Strings",
+      "subtopic": "Run-Length Encoding",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "title": "String Compression (Run-Length Encoding)",
+      "statement": "Compress a string S by replacing consecutive repeated runs of a character with `<char><count>`. Note: unlike some variants, ALWAYS include the count (even if 1), UNLESS the compressed string is NOT strictly shorter than S—in that case, print the original string S unchanged.",
+      "inputFormat": "A single line containing string S.",
+      "outputFormat": "Compressed string if strictly shorter than S, otherwise original S.",
+      "constraints": [
+        "1 <= |S| <= 10^5",
+        "S contains uppercase/lowercase letters only"
+      ],
+      "testCases": [
+        { "input": "aabcccccaaa\n", "expectedOutput": "a2b1c5a3", "isSample": true },
+        { "input": "abcd\n", "expectedOutput": "abcd", "isSample": true, "note": "a1b1c1d1 has length 8 >= 4" },
+        { "input": "aabbcc\n", "expectedOutput": "aabbcc", "isSample": false, "note": "a2b2c2 has length 6 == 6 (not strictly shorter)" },
+        { "input": "aaaaaaaaaaa\n", "expectedOutput": "a11", "isSample": false },
+        { "input": "x\n", "expectedOutput": "x", "isSample": false },
+        { "input": "AAaaBBBBc\n", "expectedOutput": "A2a2B4c1", "isSample": false },
+        { "input": "WWWWWWWWWWWWBWWWWWWWWWWWWBBB\n", "expectedOutput": "W12B1W12B3", "isSample": false }
+      ],
+      "starterCode": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next().trim();\n        // Write your solution here\n    }\n}",
+        "python": "import sys\n\ns = sys.stdin.readline().strip()\n# Write your solution here\n",
+        "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    string s; cin >> s;\n    // Write your solution here\n    return 0;\n}\n"
+      },
+      "solutions": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next().trim();\n        StringBuilder sb = new StringBuilder();\n        int i = 0;\n        while (i < s.length()) {\n            int j = i;\n            while (j < s.length() && s.charAt(j) == s.charAt(i)) j++;\n            sb.append(s.charAt(i)).append(j - i);\n            i = j;\n        }\n        System.out.println(sb.length() < s.length() ? sb.toString() : s);\n    }\n}",
+        "python": "import sys\n\ns = sys.stdin.readline().strip()\nout = []\ni = 0\nn = len(s)\nwhile i < n:\n    j = i\n    while j < n and s[j] == s[i]:\n        j += 1\n    out.append(f'{s[i]}{j - i}')\n    i = j\ncomp = ''.join(out)\nprint(comp if len(comp) < n else s)\n"
+      },
+      "timeComplexity": "O(N) single two-pointer scan.",
+      "spaceComplexity": "O(N) for `StringBuilder`.",
+      "edgeCases": [
+        "Equal compressed length (`aabbcc` -> len 6 == 6) must keep original",
+        "Multi-digit run counts (`W12`)",
+        "Case sensitivity (`AAaa` are separate runs)"
+      ]
+    }
+  ]
+}

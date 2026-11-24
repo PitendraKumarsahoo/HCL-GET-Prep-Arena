@@ -1,0 +1,268 @@
+[
+  {
+    "id": "ver-01",
+    "part": "Reading Aloud",
+    "prompt": "Please read the following sentence aloud at a steady, natural pace: 'Enterprise cloud migration succeeds only when database schemas, automated regression suites, and rollback runbooks are validated before traffic cutover.'",
+    "rubricChecklist": [
+      "Clear consonant endings on 'succeeds', 'schemas', 'suites', 'validated'.",
+      "Natural pause after the clause 'when database schemas...'.",
+      "Steady 130-150 WPM pace without rushing technical terms.",
+      "Zero filler pauses ('uh', 'um') or self-corrections."
+    ]
+  },
+  {
+    "id": "ver-02",
+    "part": "Reading Aloud",
+    "prompt": "Read clearly with natural intonation: 'Although distributed caching reduces database load dramatically, stale invalidation policies can still surface inconsistent prices to global shoppers.'",
+    "rubricChecklist": [
+      "Clear pronunciation of 'distributed', 'dramatically', 'invalidation', 'inconsistent'.",
+      "Slight rising inflection before the comma after 'dramatically'.",
+      "Consistent volume across the entire sentence without trailing off."
+    ]
+  },
+  {
+    "id": "ver-03",
+    "part": "Reading Aloud",
+    "prompt": "Read aloud: 'During yesterday's architecture review, the backend lead recommended replacing nested REST callbacks with an asynchronous message queue to stabilize peak checkout throughput.'",
+    "rubricChecklist": [
+      "Accurate stress on 'architecture', 'asynchronous', 'throughput'.",
+      "Smooth flow without breaking word chunks unnaturally.",
+      "Crisp diction on 'yesterday's' and 'recommended'."
+    ]
+  },
+  {
+    "id": "ver-04",
+    "part": "Reading Aloud",
+    "prompt": "Read aloud: 'Every graduate engineer joining our delivery center completes four weeks of hands-on Java microservice training alongside security compliance workshops.'",
+    "rubricChecklist": [
+      "Even pacing across multi-syllable words ('graduate', 'microservice', 'compliance').",
+      "No dropped plural endings ('weeks', 'workshops').",
+      "Confident downward pitch at the final period."
+    ]
+  },
+  {
+    "id": "ver-05",
+    "part": "Reading Aloud",
+    "prompt": "Read aloud: 'Whenever latency exceeds two hundred milliseconds on the payment gateway, automated alerts route telemetry snapshots directly to the on-call reliability engineer.'",
+    "rubricChecklist": [
+      "Clear numeric phrasing ('two hundred milliseconds').",
+      "Distinct pronunciation of 'exceeds', 'telemetry', 'reliability'.",
+      "Natural breath pause at the comma."
+    ]
+  },
+  {
+    "id": "ver-06",
+    "part": "Reading Aloud",
+    "prompt": "Read aloud: 'Transparent communication with international stakeholders prevents scope creep and keeps sprint deliverables predictable throughout quarterly releases.'",
+    "rubricChecklist": [
+      "Clear articulation of 'stakeholders', 'predictable', 'quarterly'.",
+      "Balanced rhythm without monotone robotic cadence.",
+      "No stammering on 'sprint deliverables'."
+    ]
+  },
+  {
+    "id": "ver-07",
+    "part": "Repeat Sentence",
+    "prompt": "Listen carefully and repeat word-for-word: 'Please upload the updated SQL migration script before Friday afternoon.'",
+    "modelAnswer": "Please upload the updated SQL migration script before Friday afternoon.",
+    "rubricChecklist": [
+      "Exact word recall without substituting synonyms ('send' instead of 'upload').",
+      "Correct tense and plural accuracy ('updated', 'script').",
+      "Fluency matches original sentence rhythm."
+    ]
+  },
+  {
+    "id": "ver-08",
+    "part": "Repeat Sentence",
+    "prompt": "Listen and repeat word-for-word: 'Our client escalation call has been rescheduled from nine to eleven thirty.'",
+    "modelAnswer": "Our client escalation call has been rescheduled from nine to eleven thirty.",
+    "rubricChecklist": [
+      "Exact time numbers preserved ('nine', 'eleven thirty').",
+      "Exact passive verb form ('has been rescheduled').",
+      "Spoken smoothly within 5 seconds of prompt completion."
+    ]
+  },
+  {
+    "id": "ver-09",
+    "part": "Repeat Sentence",
+    "prompt": "Listen and repeat word-for-word: 'Neither the staging server nor the backup database responded after the patch.'",
+    "modelAnswer": "Neither the staging server nor the backup database responded after the patch.",
+    "rubricChecklist": [
+      "Preserved 'Neither... nor' correlative structure accurately.",
+      "Pronounced past tense '-ed' on 'responded'.",
+      "No omitted articles ('the')."
+    ]
+  },
+  {
+    "id": "ver-10",
+    "part": "Repeat Sentence",
+    "prompt": "Listen and repeat word-for-word: 'Developers should verify unit test coverage locally prior to opening a pull request.'",
+    "modelAnswer": "Developers should verify unit test coverage locally prior to opening a pull request.",
+    "rubricChecklist": [
+      "Exact phrasing preserved ('prior to opening' not 'before opening').",
+      "Plural 'Developers' retained cleanly.",
+      "Confident, unhesitant delivery."
+    ]
+  },
+  {
+    "id": "ver-11",
+    "part": "Repeat Sentence",
+    "prompt": "Listen and repeat word-for-word: 'Quarterly security audits require multi-factor authentication across all production consoles.'",
+    "modelAnswer": "Quarterly security audits require multi-factor authentication across all production consoles.",
+    "rubricChecklist": [
+      "Plural endings retained on 'audits' and 'consoles'.",
+      "Accurate articulation of 'authentication'.",
+      "Zero dropped prepositions ('across all')."
+    ]
+  },
+  {
+    "id": "ver-12",
+    "part": "Repeat Sentence",
+    "prompt": "Listen and repeat word-for-word: 'Although the interface looks clean, response latency increases under heavy traffic.'",
+    "modelAnswer": "Although the interface looks clean, response latency increases under heavy traffic.",
+    "rubricChecklist": [
+      "Subject-verb agreement ('looks', 'increases') preserved accurately.",
+      "Clear contrast stress on 'Although'.",
+      "Smooth flow without mid-sentence restarts."
+    ]
+  },
+  {
+    "id": "ver-13",
+    "part": "Sentence Builds",
+    "prompt": "Listen to the three jumbled word groups and speak one grammatically complete sentence combining all three.",
+    "phrases": ["the deployment pipeline", "after passing automated checks", "promoted the build to staging"],
+    "modelAnswer": "After passing automated checks, the deployment pipeline promoted the build to staging.",
+    "rubricChecklist": [
+      "Used ALL three phrases without dropping or altering core words.",
+      "Correct subject-verb-object grammar and logical time order.",
+      "Spoken cleanly as one cohesive sentence."
+    ]
+  },
+  {
+    "id": "ver-14",
+    "part": "Sentence Builds",
+    "prompt": "Combine these three spoken phrases into a natural, grammatically valid English sentence.",
+    "phrases": ["the new trainee", "documented every API error code", "during her first sprint"],
+    "modelAnswer": "During her first sprint, the new trainee documented every API error code.",
+    "rubricChecklist": [
+      "All three phrases included cleanly.",
+      "Pronoun/article agreement maintained.",
+      "Natural conversational stress and pacing."
+    ]
+  },
+  {
+    "id": "ver-15",
+    "part": "Sentence Builds",
+    "prompt": "Reorder and speak these three phrases as one grammatically sound sentence.",
+    "phrases": ["the QA engineers", "because the staging server", "used stale cache keys", "could not replicate the defect"],
+    "modelAnswer": "Because the staging server used stale cache keys, the QA engineers could not replicate the defect.",
+    "rubricChecklist": [
+      "Reordered cleanly into a cause-and-effect sentence.",
+      "Preserved verb tense and plural nouns.",
+      "No hesitant pauses between joined phrases."
+    ]
+  },
+  {
+    "id": "ver-16",
+    "part": "Sentence Builds",
+    "prompt": "Combine these three spoken fragments into one complete, natural English sentence.",
+    "phrases": ["quarterly client reviews", "help engineering teams align", "on performance priorities"],
+    "modelAnswer": "Quarterly client reviews help engineering teams align on performance priorities.",
+    "rubricChecklist": [
+      "Exact word preservation across all three segments.",
+      "Natural pause-free join between verb and prepositional phrase.",
+      "Clear final consonant on 'priorities'."
+    ]
+  },
+  {
+    "id": "ver-17",
+    "part": "Sentence Builds",
+    "prompt": "Reorder these three spoken word groups into a single accurate English sentence.",
+    "phrases": ["before merging any hotfix", "senior maintainers", "inspect database rollback safety"],
+    "modelAnswer": "Before merging any hotfix, senior maintainers inspect database rollback safety.",
+    "rubricChecklist": [
+      "Included every word group intact.",
+      "Placed subordinate clause naturally at start or end.",
+      "Clear pronunciation of 'maintainers' and 'rollback'."
+    ]
+  },
+  {
+    "id": "ver-18",
+    "part": "Sentence Builds",
+    "prompt": "Speak one grammatically complete sentence formed from these three phrase blocks.",
+    "phrases": ["improved query indexing", "cut dashboard load times", "by nearly sixty percent"],
+    "modelAnswer": "Improved query indexing cut dashboard load times by nearly sixty percent.",
+    "rubricChecklist": [
+      "Subject phrase 'Improved query indexing' placed cleanly first.",
+      "Accurate numeric delivery ('nearly sixty percent').",
+      "No extra filler words inserted."
+    ]
+  },
+  {
+    "id": "ver-19",
+    "part": "Short Answer",
+    "prompt": "Answer concisely in 20–30 seconds: 'When starting a new software module with unfamiliar requirements, do you prefer reading existing documentation first or talking directly with a senior teammate, and why?'",
+    "modelAnswer": "I prefer reading existing documentation and code first for 20 minutes, then talking with a senior teammate. Reading first gives me baseline vocabulary and prevents wasting a colleague's time on answered basics, while targeted follow-up questions clarify undocumented business edge cases much faster.",
+    "rubricChecklist": [
+      "Took a clear stance in the first sentence.",
+      "Gave 1–2 concrete supporting reasons with structured transitions ('First...', 'Second...').",
+      "Maintained steady 20–30 second speaking length without trailing off or rambling.",
+      "Used clear, professional workplace vocabulary."
+    ]
+  },
+  {
+    "id": "ver-20",
+    "part": "Short Answer",
+    "prompt": "Answer concisely in 20–30 seconds: 'Why are automated code reviews and peer reviews both essential before deploying enterprise software?'",
+    "modelAnswer": "Automated checks and human peer reviews catch completely different classes of errors. Automated linters and test suites enforce formatting, syntax, and regression coverage instantaneously, whereas human reviewers evaluate architectural clarity, edge-case business logic, and long-term maintainability. Combining both keeps production releases reliable.",
+    "rubricChecklist": [
+      "Addressed BOTH parts of the question (automated + human peer reviews).",
+      "Clear topic sentence + specific contrast + crisp conclusion.",
+      "Fluent delivery without long silences (>2s)."
+    ]
+  },
+  {
+    "id": "ver-21",
+    "part": "Short Answer",
+    "prompt": "Answer concisely in 20–30 seconds: 'Do you think remote onboarding works better for fresh graduates than in-person office training? Explain your view.'",
+    "modelAnswer": "For fresh graduates, in-person or hybrid onboarding generally works better during the first few months. Being physically near teammates makes quick whiteboard design discussions, informal debugging help, and understanding team norms effortless, whereas pure remote onboarding often isolates newcomers when they hesitate to message seniors repeatedly.",
+    "rubricChecklist": [
+      "Clear opinion stated upfront.",
+      "Supported with concrete workplace examples.",
+      "Polite, balanced tone with accurate verb tenses."
+    ]
+  },
+  {
+    "id": "ver-22",
+    "part": "Short Answer",
+    "prompt": "Answer concisely in 20–30 seconds: 'If you discover a recurring bottleneck in your team's daily workflow, what steps do you take before proposing a change?'",
+    "modelAnswer": "First, I measure the bottleneck objectively by timing how often it happens and which step causes the delay. Second, I verify why the current process exists so I do not break compliance or downstream dependencies. Finally, I bring a small working prototype or checklist to the team so they can test the improvement easily.",
+    "rubricChecklist": [
+      "Used clear step-by-step sequencing ('First...', 'Second...', 'Finally...').",
+      "Grammar and prepositions used accurately throughout.",
+      "Strong, confident vocal projection."
+    ]
+  },
+  {
+    "id": "ver-23",
+    "part": "Short Answer",
+    "prompt": "Answer concisely in 20–30 seconds: 'Would you prefer mastering one backend language deeply or learning several frameworks at a surface level early in your career?'",
+    "modelAnswer": "Early in my career, I prefer mastering one primary ecosystem—such as Java and SQL—deeply before branching out. Deep mastery teaches memory models, concurrency, and debugging mechanics that transfer immediately, whereas hopping across five frameworks superficially leaves an engineer stuck whenever non-trivial production bugs appear.",
+    "rubricChecklist": [
+      "Clear preference backed by engineering logic.",
+      "Smooth articulation of multi-syllable technical terms.",
+      "Zero repetitive filler phrases."
+    ]
+  },
+  {
+    "id": "ver-24",
+    "part": "Short Answer",
+    "prompt": "Answer concisely in 20–30 seconds: 'What makes technical documentation genuinely useful to a new developer joining a project?'",
+    "modelAnswer": "Useful documentation focuses on setup reproducibility, architectural boundaries, and why non-obvious decisions were made rather than repeating what individual lines of code say. A working five-minute local run guide, an entity relationship diagram, and sample API requests save newcomers days of trial and error.",
+    "rubricChecklist": [
+      "Specific, practical examples mentioned clearly.",
+      "Concise 20–30 second pacing.",
+      "Consistent grammatical parallelism."
+    ]
+  }
+]

@@ -1,0 +1,88 @@
+{
+  "setId": "coding-set-9",
+  "title": "Coding Set 09: Missing Number & Matrix Diagonals",
+  "description": "Reported HCL coding rounds: finding the missing and duplicate numbers in 1..N without extra space, and square matrix diagonal difference.",
+  "durationMinutes": 60,
+  "problems": [
+    {
+      "id": "code-9-p01",
+      "topic": "Arrays & Bitwise",
+      "subtopic": "Missing & Repeating Number",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "title": "Missing Number and Duplicate Element in 1..N",
+      "statement": "You are given an integer N and an array of N integers where every integer lies between 1 and N inclusive. Exactly one number in 1..N is missing and one number appears twice. Print '<missing> <duplicate>' in O(N) time and O(1) auxiliary space.",
+      "inputFormat": "Line 1: Integer N.\nLine 2: N space-separated integers.",
+      "outputFormat": "Two space-separated integers: missing followed by duplicate.",
+      "constraints": [
+        "2 <= N <= 10^5",
+        "1 <= A[i] <= N"
+      ],
+      "testCases": [
+        { "input": "5\n3 1 2 5 3\n", "expectedOutput": "4 3", "isSample": true, "note": "4 is missing, 3 repeats" },
+        { "input": "2\n2 2\n", "expectedOutput": "1 2", "isSample": true },
+        { "input": "6\n4 3 6 2 1 1\n", "expectedOutput": "5 1", "isSample": false },
+        { "input": "4\n1 2 4 4\n", "expectedOutput": "3 4", "isSample": false },
+        { "input": "7\n7 5 3 2 1 4 5\n", "expectedOutput": "6 5", "isSample": false },
+        { "input": "3\n1 3 1\n", "expectedOutput": "2 1", "isSample": false },
+        { "input": "5\n5 4 2 1 2\n", "expectedOutput": "3 2", "isSample": false }
+      ],
+      "starterCode": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        long[] a = new long[n];\n        for (int i = 0; i < n; i++) a[i] = sc.nextLong();\n        // Write your solution here\n    }\n}",
+        "python": "import sys\n\ndata = list(map(int, sys.stdin.read().split()))\nn = data[0]\na = data[1:1+n]\n# Write your solution here\n",
+        "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n; cin >> n;\n    vector<long long> a(n);\n    for (int i = 0; i < n; i++) cin >> a[i];\n    // Write your solution here\n    return 0;\n}\n"
+      },
+      "solutions": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        long n = sc.nextLong();\n        long sum = 0, sqSum = 0;\n        for (int i = 0; i < n; i++) {\n            long x = sc.nextLong();\n            sum += x;\n            sqSum += x * x;\n        }\n        long expSum = n * (n + 1) / 2;\n        long expSq = n * (n + 1) * (2 * n + 1) / 6;\n        long diff = expSum - sum; // missing - dup\n        long sqDiff = expSq - sqSum; // missing^2 - dup^2\n        long sumMD = sqDiff / diff; // missing + dup\n        long missing = (diff + sumMD) / 2;\n        long dup = missing - diff;\n        System.out.println(missing + \" \" + dup);\n    }\n}",
+        "python": "import sys\n\ndata = list(map(int, sys.stdin.read().split()))\nn = data[0]\na = data[1:1+n]\ns = sum(a)\nsq = sum(x * x for x in a)\nes = n * (n + 1) // 2\nesq = n * (n + 1) * (2 * n + 1) // 6\ndiff = es - s\nsum_md = (esq - sq) // diff\nmissing = (diff + sum_md) // 2\ndup = missing - diff\nprint(missing, dup)\n"
+      },
+      "timeComplexity": "O(N) single pass.",
+      "spaceComplexity": "O(1) extra space.",
+      "edgeCases": [
+        "Sum of squares up to N=10^5 reaches ~3.3*10^14, so 64-bit `long` (or XOR splitting) is mandatory",
+        "Small N=2 case ('2 2' -> '1 2')",
+        "Duplicate at index 0 or N-1"
+      ]
+    },
+    {
+      "id": "code-9-p02",
+      "topic": "Matrices",
+      "subtopic": "Diagonal Difference",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "title": "Square Matrix Diagonal Absolute Difference",
+      "statement": "Given an N x N square integer matrix M, compute the absolute difference between the sum of its primary diagonal (top-left to bottom-right) and its secondary diagonal (top-right to bottom-left).",
+      "inputFormat": "Line 1: Integer N.\nNext N lines: N space-separated integers per row.",
+      "outputFormat": "A single non-negative integer representing |PrimarySum - SecondarySum|.",
+      "constraints": [
+        "1 <= N <= 500",
+        "-10^9 <= M[i][j] <= 10^9"
+      ],
+      "testCases": [
+        { "input": "3\n11 2 4\n4 5 6\n10 8 -12\n", "expectedOutput": "15", "isSample": true, "note": "|(11+5-12) - (4+5+10)| = |4 - 19| = 15" },
+        { "input": "2\n1 2\n3 4\n", "expectedOutput": "0", "isSample": true, "note": "|(1+4) - (2+3)| = 0" },
+        { "input": "1\n-99\n", "expectedOutput": "0", "isSample": false },
+        { "input": "4\n1 0 0 5\n0 2 6 0\n0 7 3 0\n8 0 0 4\n", "expectedOutput": "16", "isSample": false },
+        { "input": "3\n-1 -2 -3\n-4 -5 -6\n-7 -8 -9\n", "expectedOutput": "0", "isSample": false },
+        { "input": "3\n1000000000 0 -1000000000\n0 0 0\n1000000000 0 1000000000\n", "expectedOutput": "2000000000", "isSample": false },
+        { "input": "4\n2 3 4 5\n1 9 8 7\n6 5 4 3\n2 1 0 -5\n", "expectedOutput": "10", "isSample": false }
+      ],
+      "starterCode": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        // Write your solution here\n    }\n}",
+        "python": "import sys\n\ndata = list(map(int, sys.stdin.read().split()))\nn = data[0]\n# Write your solution here\n",
+        "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n; cin >> n;\n    // Write your solution here\n    return 0;\n}\n"
+      },
+      "solutions": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        long d1 = 0, d2 = 0;\n        for (int i = 0; i < n; i++) {\n            for (int j = 0; j < n; j++) {\n                long val = sc.nextLong();\n                if (i == j) d1 += val;\n                if (i + j == n - 1) d2 += val;\n            }\n        }\n        System.out.println(Math.abs(d1 - d2));\n    }\n}",
+        "python": "import sys\n\ndata = list(map(int, sys.stdin.read().split()))\nn = data[0]\nidx = 1\nd1 = d2 = 0\nfor i in range(n):\n    for j in range(n):\n        v = data[idx]\n        idx += 1\n        if i == j:\n            d1 += v\n        if i + j == n - 1:\n            d2 += v\nprint(abs(d1 - d2))\n"
+      },
+      "timeComplexity": "O(N^2) streaming over matrix cells.",
+      "spaceComplexity": "O(1) — does not even need to store the N x N matrix in memory.",
+      "edgeCases": [
+        "1x1 matrix: same cell belongs to both diagonals -> difference is 0",
+        "Large values require 64-bit `long` to prevent overflow",
+        "Negative matrix entries"
+      ]
+    }
+  ]
+}

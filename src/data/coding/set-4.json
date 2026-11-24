@@ -1,0 +1,89 @@
+{
+  "setId": "coding-set-4",
+  "title": "Coding Set 04: Single-Pass Scans & String Manipulation",
+  "description": "Reported HCL coding tasks: second largest distinct element in O(N) and reversing word order with whitespace normalization.",
+  "durationMinutes": 60,
+  "problems": [
+    {
+      "id": "code-4-p01",
+      "topic": "Arrays",
+      "subtopic": "Order Statistics",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "title": "Second Largest Distinct Element",
+      "statement": "Given an array of N integers (possibly containing duplicates and negative values), find the second largest DISTINCT element in a single O(N) pass without sorting. If no second distinct element exists (e.g., all elements are equal or N < 2), print 'NONE'.",
+      "inputFormat": "Line 1: Integer N.\nLine 2: N space-separated integers.",
+      "outputFormat": "Print the second largest distinct integer, or 'NONE'.",
+      "constraints": [
+        "1 <= N <= 10^5",
+        "-10^9 <= A[i] <= 10^9",
+        "O(N) time and O(1) extra space"
+      ],
+      "testCases": [
+        { "input": "6\n12 35 1 10 34 1\n", "expectedOutput": "34", "isSample": true },
+        { "input": "4\n10 10 10 10\n", "expectedOutput": "NONE", "isSample": true },
+        { "input": "5\n-5 -2 -9 -2 -1\n", "expectedOutput": "-2", "isSample": false },
+        { "input": "1\n99\n", "expectedOutput": "NONE", "isSample": false },
+        { "input": "5\n5 5 4 4 3\n", "expectedOutput": "4", "isSample": false },
+        { "input": "3\n-1000000000 0 1000000000\n", "expectedOutput": "0", "isSample": false },
+        { "input": "4\n2 1 2 2\n", "expectedOutput": "1", "isSample": false }
+      ],
+      "starterCode": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        // Write your solution here\n    }\n}",
+        "python": "import sys\n\ndata = list(map(int, sys.stdin.read().split()))\nn = data[0]\narr = data[1:1+n]\n# Write your solution here\n",
+        "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n; cin >> n;\n    // Write your solution here\n    return 0;\n}\n"
+      },
+      "solutions": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        Long first = null, second = null;\n        for (int i = 0; i < n; i++) {\n            long x = sc.nextLong();\n            if (first == null || x > first) {\n                if (first != null && x != first) second = first;\n                first = x;\n            } else if (x != first && (second == null || x > second)) {\n                second = x;\n            }\n        }\n        System.out.println(second == null ? \"NONE\" : second);\n    }\n}",
+        "python": "import sys\n\ndata = list(map(int, sys.stdin.read().split()))\nn = data[0]\nfirst = second = None\nfor x in data[1:1+n]:\n    if first is None or x > first:\n        if first is not None and x != first:\n            second = first\n        first = x\n    elif x != first and (second is None or x > second):\n        second = x\nprint('NONE' if second is None else second)\n"
+      },
+      "timeComplexity": "O(N) single pass.",
+      "spaceComplexity": "O(1) auxiliary space.",
+      "edgeCases": [
+        "All negative numbers (avoid sentinel 0 or Integer.MIN_VALUE collision)",
+        "Duplicates of the maximum element ('2 1 2 2' -> 1, not 2)",
+        "Array with all identical values -> 'NONE'"
+      ]
+    },
+    {
+      "id": "code-4-p02",
+      "topic": "Strings",
+      "subtopic": "In-Place Word Reversal",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "title": "Reverse Words & Normalize Whitespace",
+      "statement": "Given a sentence string S that may contain leading spaces, trailing spaces, and multiple consecutive spaces between words, reverse the order of the words and join them with a single space.",
+      "inputFormat": "A single line containing string S.",
+      "outputFormat": "The words in reverse order separated by single spaces.",
+      "constraints": [
+        "1 <= |S| <= 10^5",
+        "S contains at least one non-space character"
+      ],
+      "testCases": [
+        { "input": "  hello   hcl  world  \n", "expectedOutput": "world hcl hello", "isSample": true },
+        { "input": "Java Spring SQL\n", "expectedOutput": "SQL Spring Java", "isSample": true },
+        { "input": "singleword\n", "expectedOutput": "singleword", "isSample": false },
+        { "input": "  a   b   c  \n", "expectedOutput": "c b a", "isSample": false },
+        { "input": "one\ttwo   three\n", "expectedOutput": "three two one", "isSample": false },
+        { "input": "A B C D E\n", "expectedOutput": "E D C B A", "isSample": false },
+        { "input": "   get-prep-2026   \n", "expectedOutput": "get-prep-2026", "isSample": false }
+      ],
+      "starterCode": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.nextLine();\n        // Write your solution here\n    }\n}",
+        "python": "import sys\n\ns = sys.stdin.readline()\n# Write your solution here\n",
+        "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    string s; getline(cin, s);\n    // Write your solution here\n    return 0;\n}\n"
+      },
+      "solutions": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.nextLine().trim();\n        String[] parts = s.split(\"\\\\s+\");\n        StringBuilder sb = new StringBuilder();\n        for (int i = parts.length - 1; i >= 0; i--) {\n            sb.append(parts[i]);\n            if (i > 0) sb.append(' ');\n        }\n        System.out.println(sb.toString());\n    }\n}",
+        "python": "import sys\n\ns = sys.stdin.readline()\nprint(' '.join(s.split()[::-1]))\n"
+      },
+      "timeComplexity": "O(N) scanning and building the reversed output.",
+      "spaceComplexity": "O(N) for word tokens / output buffer.",
+      "edgeCases": [
+        "Multiple spaces and tabs between words",
+        "Leading and trailing whitespace",
+        "Single word without spaces"
+      ]
+    }
+  ]
+}

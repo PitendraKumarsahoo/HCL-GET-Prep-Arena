@@ -1,0 +1,104 @@
+{
+  "setId": "sql-set-3",
+  "title": "SQL Set 03: Banking Ledger, Running Totals & Self-Joins",
+  "description": "Window frame running balances, net account transfers, consecutive transaction deltas via LAG, and manager hierarchies.",
+  "durationMinutes": 50,
+  "queries": [
+    {
+      "id": "sql-3-q01",
+      "topic": "SQL",
+      "subtopic": "Window Running Balance",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "title": "Account Running Balance Over Time",
+      "prompt": "Calculate the cumulative `running_balance` for each `acct_id` ordered chronologically by `txn_date` and `txn_id`. Return `acct_id`, `txn_id`, `amount`, and `running_balance`, sorted by `acct_id`, `txn_date`, `txn_id`.",
+      "schemaSql": "CREATE TABLE ledger (txn_id INT PRIMARY KEY, acct_id INT, txn_date TEXT, amount INT);",
+      "seedSql": "INSERT INTO ledger VALUES (1,10,'2025-01-01',1000),(2,10,'2025-01-03',-250),(3,10,'2025-01-05',400),(4,20,'2025-01-02',500),(5,20,'2025-01-04',-600);",
+      "expectedColumns": ["acct_id", "txn_id", "amount", "running_balance"],
+      "expectedRows": [
+        [10, 1, 1000, 1000],
+        [10, 2, -250, 750],
+        [10, 3, 400, 1150],
+        [20, 4, 500, 500],
+        [20, 5, -600, -100]
+      ],
+      "solutionSql": "SELECT acct_id, txn_id, amount, SUM(amount) OVER (PARTITION BY acct_id ORDER BY txn_date, txn_id ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_balance FROM ledger ORDER BY acct_id, txn_date, txn_id;",
+      "explanation": "Explicit `ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW` prevents tie-grouping pitfalls on identical dates."
+    },
+    {
+      "id": "sql-3-q02",
+      "topic": "SQL",
+      "subtopic": "Self-Join Hierarchy",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "title": "Employees Earning More Than Their Manager",
+      "prompt": "Write a self-join on `bank_staff` to find the `emp_name` of employees whose `salary` strictly exceeds their direct manager's `salary`. Order alphabetically.",
+      "schemaSql": "CREATE TABLE bank_staff (emp_id INT PRIMARY KEY, emp_name TEXT, salary INT, manager_id INT);",
+      "seedSql": "INSERT INTO bank_staff VALUES (1,'Rakesh',90000,NULL),(2,'Nisha',95000,1),(3,'Vivek',85000,1),(4,'Shreya',98000,2);",
+      "expectedColumns": ["emp_name"],
+      "expectedRows": [
+        ["Nisha"],
+        ["Shreya"]
+      ],
+      "solutionSql": "SELECT e.emp_name FROM bank_staff e JOIN bank_staff m ON e.manager_id = m.emp_id WHERE e.salary > m.salary ORDER BY e.emp_name;",
+      "explanation": "Self-join matches `e.manager_id = m.emp_id`; inner join naturally drops the top executive whose `manager_id` is NULL."
+    },
+    {
+      "id": "sql-3-q03",
+      "topic": "SQL",
+      "subtopic": "Window LAG",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "title": "Transaction Amount Change vs Previous Deposit",
+      "prompt": "For `CREDIT` rows only in `bank_events`, return `acct_id`, `event_id`, `amount`, and `diff_from_prev` (`amount` minus the previous `CREDIT` amount for that `acct_id`, or NULL for the first credit). Order by `acct_id`, `event_id`.",
+      "schemaSql": "CREATE TABLE bank_events (event_id INT PRIMARY KEY, acct_id INT, kind TEXT, amount INT);",
+      "seedSql": "INSERT INTO bank_events VALUES (1,1,'CREDIT',500),(2,1,'DEBIT',200),(3,1,'CREDIT',800),(4,1,'CREDIT',650),(5,2,'CREDIT',1200);",
+      "expectedColumns": ["acct_id", "event_id", "amount", "diff_from_prev"],
+      "expectedRows": [
+        [1, 1, 500, null],
+        [1, 3, 800, 300],
+        [1, 4, 650, -150],
+        [2, 5, 1200, null]
+      ],
+      "solutionSql": "SELECT acct_id, event_id, amount, amount - LAG(amount) OVER (PARTITION BY acct_id ORDER BY event_id) AS diff_from_prev FROM bank_events WHERE kind = 'CREDIT' ORDER BY acct_id, event_id;",
+      "explanation": "`WHERE kind = 'CREDIT'` runs before window functions (`LAG`), ensuring `DEBIT` events are skipped cleanly."
+    },
+    {
+      "id": "sql-3-q04",
+      "topic": "SQL",
+      "subtopic": "UNION ALL & Aggregation",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "title": "Net Peer-to-Peer Transfer Balance",
+      "prompt": "Compute net balance change per account across all transfers in `transfers` (`to_acct` gains `amt`, `from_acct` loses `amt`). Return `acct_no` and `net_change`, ordered by `net_change` descending, `acct_no` ascending.",
+      "schemaSql": "CREATE TABLE transfers (tx_id INT PRIMARY KEY, from_acct INT, to_acct INT, amt INT);",
+      "seedSql": "INSERT INTO transfers VALUES (1,100,200,300),(2,200,300,150),(3,100,300,100);",
+      "expectedColumns": ["acct_no", "net_change"],
+      "expectedRows": [
+        [300, 250],
+        [200, 150],
+        [100, -400]
+      ],
+      "solutionSql": "SELECT acct_no, SUM(delta) AS net_change FROM (SELECT to_acct AS acct_no, amt AS delta FROM transfers UNION ALL SELECT from_acct AS acct_no, -amt AS delta FROM transfers) t GROUP BY acct_no ORDER BY net_change DESC, acct_no ASC;",
+      "explanation": "`UNION ALL` splits each double-entry transfer into one credit row and one debit row before summing by `acct_no`."
+    },
+    {
+      "id": "sql-3-q05",
+      "topic": "SQL",
+      "subtopic": "HAVING & DISTINCT",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "title": "Accounts Using Multiple Payment Channels",
+      "prompt": "Find `acct_id` values in `channel_logs` that performed transactions across at least 3 distinct channels, ordered by `acct_id` ascending.",
+      "schemaSql": "CREATE TABLE channel_logs (log_id INT PRIMARY KEY, acct_id INT, channel TEXT);",
+      "seedSql": "INSERT INTO channel_logs VALUES (1,11,'UPI'),(2,11,'UPI'),(3,11,'NEFT'),(4,11,'CARD'),(5,12,'UPI'),(6,12,'NEFT'),(7,13,'IMPS'),(8,13,'UPI'),(9,13,'RTGS');",
+      "expectedColumns": ["acct_id"],
+      "expectedRows": [
+        [11],
+        [13]
+      ],
+      "solutionSql": "SELECT acct_id FROM channel_logs GROUP BY acct_id HAVING COUNT(DISTINCT channel) >= 3 ORDER BY acct_id;",
+      "explanation": "`COUNT(DISTINCT channel)` prevents repeated uses of `'UPI'` from inflating the channel count."
+    }
+  ]
+}

@@ -1,0 +1,402 @@
+{
+  "setId": "tech-set-1",
+  "title": "Technical MCQ Set 01: Java Internals, JDBC & Core CS",
+  "description": "Tests static/instance init order, String pool, Integer cache, JDBC lifecycle, SQL NULL traps, OS SRTF scheduling, and CIDR subnetting.",
+  "durationMinutes": 35,
+  "questions": [
+    {
+      "id": "tech-1-q01",
+      "topic": "Output Prediction",
+      "subtopic": "Static & Instance Initialization Order",
+      "difficulty": "hard",
+      "source_tag": "reported",
+      "question": "What is printed when `new Child()` is executed in the following Java program?",
+      "codeSnippet": "class Parent {\n  static { System.out.print(\"P1 \"); }\n  { System.out.print(\"P2 \"); }\n  Parent() { System.out.print(\"P3 \"); }\n}\nclass Child extends Parent {\n  static { System.out.print(\"C1 \"); }\n  { System.out.print(\"C2 \"); }\n  Child() { System.out.print(\"C3 \"); }\n  public static void main(String[] args) {\n    new Child();\n  }\n}",
+      "options": [
+        "P1 C1 P2 P3 C2 C3",
+        "P1 P2 P3 C1 C2 C3",
+        "C1 P1 P2 C2 P3 C3",
+        "P1 C1 P2 C2 P3 C3"
+      ],
+      "correctIndex": 0,
+      "explanation": "JVM loads classes top-down first: Parent static block (P1), then Child static block (C1). Next, object construction runs Parent's instance initializer (P2) then Parent constructor (P3), followed by Child's instance initializer (C2) then Child constructor (C3)."
+    },
+    {
+      "id": "tech-1-q02",
+      "topic": "Output Prediction",
+      "subtopic": "String Pool & intern()",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "What is the exact output of the following Java snippet?",
+      "codeSnippet": "String a = \"hcl\" + \"get\";\nString b = new String(\"hclget\");\nString c = b.intern();\nString prefix = \"hcl\";\nString d = prefix + \"get\";\nSystem.out.println((a == c) + \" \" + (a == d) + \" \" + (b == c));",
+      "options": [
+        "true true false",
+        "true false false",
+        "false false true",
+        "true false true"
+      ],
+      "correctIndex": 1,
+      "explanation": "`a` is a compile-time constant expression so it points to the String pool literal `\"hclget\"`. `b` creates a heap object (`b != a`), while `b.intern()` returns the pooled literal (`a == c` is true, `b == c` is false). `d` concatenates a non-final variable at runtime, allocating a new String on the heap (`a == d` is false). Output: `true false false`."
+    },
+    {
+      "id": "tech-1-q03",
+      "topic": "Output Prediction",
+      "subtopic": "Integer Cache (-128 to 127)",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "What does the following Java code print?",
+      "codeSnippet": "Integer x = 127, y = 127;\nInteger p = 128, q = 128;\nSystem.out.println((x == y) + \":\" + (p == q) + \":\" + p.equals(q));",
+      "options": [
+        "true:true:true",
+        "false:false:true",
+        "true:false:true",
+        "true:false:false"
+      ],
+      "correctIndex": 2,
+      "explanation": "`Integer.valueOf(int)` caches boxed `Integer` objects for values in [-128, 127]. Thus `x == y` compares the same cached reference (`true`), whereas `128` allocates two distinct `Integer` instances on the heap (`p == q` is `false`), while `p.equals(q)` compares numeric value (`true`)."
+    },
+    {
+      "id": "tech-1-q04",
+      "topic": "Output Prediction",
+      "subtopic": "try-finally Return Override",
+      "difficulty": "hard",
+      "source_tag": "reported",
+      "question": "What value does `compute()` return when invoked?",
+      "codeSnippet": "static int compute() {\n  try {\n    int x = 10 / 0;\n    return 1;\n  } catch (ArithmeticException e) {\n    return 2;\n  } finally {\n    return 3;\n  }\n}",
+      "options": [
+        "1",
+        "2",
+        "3",
+        "Throws ArithmeticException at runtime"
+      ],
+      "correctIndex": 2,
+      "explanation": "The `finally` block always executes before the method returns to the caller. Because `finally` itself executes `return 3;`, it overrides the pending `return 2;` from the `catch` block and returns `3`."
+    },
+    {
+      "id": "tech-1-q05",
+      "topic": "Java",
+      "subtopic": "Overloading Resolution with null",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "Given overloaded methods `void log(Object o)` and `void log(String s)` in the same class, what happens on calling `log(null)`?",
+      "options": [
+        "Compilation error due to ambiguous method call",
+        "Calls `log(Object)` at runtime",
+        "Calls `log(String)` because String is more specific than Object",
+        "Throws NullPointerException before entering either method"
+      ],
+      "correctIndex": 2,
+      "explanation": "Java's compile-time overload resolution picks the most specific applicable type. Since `String` is a subclass of `Object`, `log(String)` is strictly more specific and is selected without ambiguity. (Ambiguity only occurs between sibling types like `String` and `Integer`.)"
+    },
+    {
+      "id": "tech-1-q06",
+      "topic": "Java",
+      "subtopic": "equals() & hashCode() Contract",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "A `User` class overrides `equals(Object)` based on `userId`, but forgets to override `hashCode()`. What happens when two distinct `User` instances with the same `userId` are inserted as keys into a `HashMap`?",
+      "options": [
+        "The second `put` overwrites the first entry cleanly",
+        "A `ClassCastException` is thrown during `put`",
+        "Both instances are stored as separate entries because `Object.hashCode()` returns distinct identity hashes",
+        "The `HashMap` refuses the second insertion and returns `null`"
+      ],
+      "correctIndex": 2,
+      "explanation": "`HashMap` inspects `hashCode()` first to pick a bucket. Using default `Object.hashCode()`, two distinct instances almost always map to different buckets, violating the contract and creating duplicate logical keys."
+    },
+    {
+      "id": "tech-1-q07",
+      "topic": "Java",
+      "subtopic": "HashMap Treeification Internals",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "In Java 8+, when a single `HashMap` bucket exceeds `TREEIFY_THRESHOLD` (8) nodes, under what additional condition does it convert the linked list into a balanced Red-Black tree rather than simply resizing the table?",
+      "options": [
+        "Load factor must exceed 1.0",
+        "Total table bucket capacity must be at least `MIN_TREEIFY_CAPACITY` (64)",
+        "Keys must implement `Serializable`",
+        "The map must be wrapped in `Collections.synchronizedMap`"
+      ],
+      "correctIndex": 1,
+      "explanation": "If bucket count is below `MIN_TREEIFY_CAPACITY` (64), Java `HashMap.treeifyBin()` resizes (doubles) the table instead of converting the bucket to a Red-Black tree."
+    },
+    {
+      "id": "tech-1-q08",
+      "topic": "OOP",
+      "subtopic": "Method Overriding & Exception Rules",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "In Java, a superclass method declares `void process() throws IOException`. Which overriding signature in a subclass is VALID?",
+      "options": [
+        "`void process() throws Exception`",
+        "`void process() throws SQLException`",
+        "`void process() throws FileNotFoundException, RuntimeException`",
+        "`private void process() throws IOException`"
+      ],
+      "correctIndex": 2,
+      "explanation": "An overriding method cannot broaden checked exceptions (rejecting `Exception` and unrelated `SQLException`) and cannot reduce visibility (rejecting `private`). Returning/throwing a narrower checked exception (`FileNotFoundException` extends `IOException`) plus any unchecked `RuntimeException` is valid."
+    },
+    {
+      "id": "tech-1-q09",
+      "topic": "OOP",
+      "subtopic": "Interface Diamond Conflict",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Class `ServiceImpl` implements two interfaces `Alpha` and `Beta`, both defining an identical `default String tag()` method. What is required for `ServiceImpl` to compile?",
+      "options": [
+        "Nothing; Java automatically picks the first listed interface",
+        "`ServiceImpl` must override `tag()` (optionally delegating via `Alpha.super.tag()`)",
+        "Mark `ServiceImpl` as `final`",
+        "Declare both interfaces as `abstract`"
+      ],
+      "correctIndex": 1,
+      "explanation": "Java forbids silent ambiguity between two unrelated default implementations; the implementing class must explicitly override `tag()` and may invoke `Alpha.super.tag()` or `Beta.super.tag()`."
+    },
+    {
+      "id": "tech-1-q10",
+      "topic": "JDBC",
+      "subtopic": "Connection Lifecycle Sequence",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Which sequence represents the standard order of JDBC steps to execute a parameterized `SELECT` query in Java?",
+      "options": [
+        "DriverManager.getConnection -> PreparedStatement -> setParameters -> executeQuery -> ResultSet.next()",
+        "PreparedStatement -> DriverManager.getConnection -> ResultSet -> executeUpdate",
+        "ResultSet -> Connection -> Statement -> executeQuery",
+        "DriverManager.registerDriver -> executeQuery -> Connection -> PreparedStatement"
+      ],
+      "correctIndex": 0,
+      "explanation": "Modern JDBC (4.0+ auto-loads drivers via SPI, or via `Class.forName`) obtains a `Connection` from `DriverManager.getConnection()`, creates a `PreparedStatement`, binds parameters (`setInt`/`setString`), calls `executeQuery()` to get a `ResultSet`, and iterates with `rs.next()`."
+    },
+    {
+      "id": "tech-1-q11",
+      "topic": "JDBC",
+      "subtopic": "PreparedStatement vs Statement",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "Why does `PreparedStatement` prevent SQL injection attacks that defeat `Statement`?",
+      "options": [
+        "It automatically encrypts all database tables using AES-256",
+        "It pre-compiles the SQL skeleton and sends bound values separately as literal parameters rather than executable SQL syntax",
+        "It strips all single quotes and spaces from user strings before execution",
+        "It executes queries exclusively inside browser localStorage"
+      ],
+      "correctIndex": 1,
+      "explanation": "A `PreparedStatement` sends the parameterized SQL AST (`SELECT ... WHERE id = ?`) separately from parameter values, so malicious SQL characters inside bound parameters are treated strictly as data literals, not query commands."
+    },
+    {
+      "id": "tech-1-q12",
+      "topic": "SQL",
+      "subtopic": "NOT IN with NULL Trap",
+      "difficulty": "hard",
+      "source_tag": "reported",
+      "question": "Table `Dept(id)` has rows `(10), (20)`. Table `Emp(id, dept_id)` has rows `(1, 10), (2, NULL)`. What does `SELECT id FROM Dept WHERE id NOT IN (SELECT dept_id FROM Emp)` return?",
+      "options": [
+        "`20`",
+        "`10` and `20`",
+        "Empty result set (0 rows)",
+        "SQL runtime error"
+      ],
+      "correctIndex": 2,
+      "explanation": "In SQL three-valued logic, `20 NOT IN (10, NULL)` evaluates to `20 <> 10 AND 20 <> NULL`, which yields `TRUE AND UNKNOWN` = `UNKNOWN`. Since `WHERE` drops `UNKNOWN` rows, `NOT IN` returns 0 rows whenever the subquery contains any `NULL`! Use `NOT EXISTS` instead."
+    },
+    {
+      "id": "tech-1-q13",
+      "topic": "SQL",
+      "subtopic": "LEFT JOIN Filter Placement",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "You want ALL departments from `Dept` along with count of active employees (`status = 'ACTIVE'`) in each, including departments with 0 active employees. Which query is CORRECT?",
+      "options": [
+        "`SELECT d.name, COUNT(e.id) FROM Dept d LEFT JOIN Emp e ON d.id = e.dept_id WHERE e.status = 'ACTIVE' GROUP BY d.name`",
+        "`SELECT d.name, COUNT(e.id) FROM Dept d LEFT JOIN Emp e ON d.id = e.dept_id AND e.status = 'ACTIVE' GROUP BY d.name`",
+        "`SELECT d.name, COUNT(*) FROM Dept d LEFT JOIN Emp e ON d.id = e.dept_id AND e.status = 'ACTIVE' GROUP BY d.name`",
+        "`SELECT d.name, COUNT(e.id) FROM Dept d INNER JOIN Emp e ON d.id = e.dept_id AND e.status = 'ACTIVE' GROUP BY d.name`"
+      ],
+      "correctIndex": 1,
+      "explanation": "Placing `e.status = 'ACTIVE'` in `WHERE` turns the `LEFT JOIN` into an `INNER JOIN` (dropping NULL-padded departments). Placing it in `ON` preserves unmatched departments, and `COUNT(e.id)` (unlike `COUNT(*)`) returns `0` for unmatched NULL rows."
+    },
+    {
+      "id": "tech-1-q14",
+      "topic": "DBMS",
+      "subtopic": "BCNF vs 3NF",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "A relation `R(A, B, C)` has candidate keys `{AB}` and `{AC}`, and functional dependencies `AB -> C` and `C -> B`. Which highest normal form does `R` satisfy?",
+      "options": [
+        "1NF only",
+        "2NF only",
+        "3NF (but NOT BCNF)",
+        "BCNF"
+      ],
+      "correctIndex": 2,
+      "explanation": "For `C -> B`, `B` is a prime attribute (part of candidate key `AB`), so 3NF is satisfied. However, `C` is NOT a superkey of `R`, violating BCNF."
+    },
+    {
+      "id": "tech-1-q15",
+      "topic": "DBMS",
+      "subtopic": "Isolation Phenomena",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Transaction T1 runs `SELECT COUNT(*) FROM Orders WHERE amt > 500` twice. Between the two reads, T2 inserts a new order with `amt = 900` and commits, causing T1's second count to increase by 1. What is this anomaly called?",
+      "options": [
+        "Dirty Read",
+        "Non-Repeatable Read",
+        "Phantom Read",
+        "Lost Update"
+      ],
+      "correctIndex": 2,
+      "explanation": "When a re-executed range predicate query sees newly inserted (or deleted) rows committed by another transaction, it is a Phantom Read (prevented by `SERIALIZABLE` or range-key locks)."
+    },
+    {
+      "id": "tech-1-q16",
+      "topic": "OS",
+      "subtopic": "SRTF CPU Scheduling Numerical",
+      "difficulty": "hard",
+      "source_tag": "reported",
+      "question": "Four processes arrive with (Arrival, Burst): P1(0, 7), P2(2, 4), P3(4, 1), P4(5, 4). Under preemptive Shortest Remaining Time First (SRTF), what is the average waiting time?",
+      "options": ["2.5 ms", "3.0 ms", "3.5 ms", "4.0 ms"],
+      "correctIndex": 1,
+      "explanation": "Gantt: [0-2] P1 (rem 5); at t=2 P2(4)<P1(5) -> [2-4] P2 (rem 2); at t=4 P3(1) shortest -> [4-5] P3 finishes (CT=5); at t=5 P2(2) < P4(4) < P1(5) -> [5-7] P2 finishes (CT=7); [7-11] P4 finishes (CT=11); [11-16] P1 finishes (CT=16). Turnaround = CT - AT: P1=16, P2=5, P3=1, P4=6. Waiting = TAT - BT: P1=9, P2=1, P3=0, P4=2. Average WT = (9+1+0+2)/4 = 12/4 = 3.0 ms."
+    },
+    {
+      "id": "tech-1-q17",
+      "topic": "OS",
+      "subtopic": "Banker's Deadlock Safety",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "A system has 12 instances of resource R shared by 3 processes: P1(Max 10, Alloc 5), P2(Max 4, Alloc 2), P3(Max 9, Alloc 2). Currently Available R = 3. Is the current state safe, and which safe sequence exists?",
+      "options": [
+        "Safe: <P2, P1, P3>",
+        "Safe: <P2, P3, P1>",
+        "Safe: <P1, P2, P3>",
+        "Unsafe (deadlock possible)"
+      ],
+      "correctIndex": 0,
+      "explanation": "Needs: P1 = 5, P2 = 2, P3 = 7. Available = 3 >= P2(2), so run P2 -> Available becomes 3 + 2 = 5. Now 5 >= P1(5), so run P1 -> Available becomes 5 + 5 = 10. Finally 10 >= P3(7), run P3. Safe sequence: <P2, P1, P3>."
+    },
+    {
+      "id": "tech-1-q18",
+      "topic": "OS",
+      "subtopic": "Page Replacement & Belady's Anomaly",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Which page replacement policy can suffer from Belady's Anomaly (increasing physical frames causes MORE page faults)?",
+      "options": [
+        "LRU (Least Recently Used)",
+        "Optimal (Belady's MIN)",
+        "FIFO (First-In First-Out)",
+        "Most Frequently Used (with stack property)"
+      ],
+      "correctIndex": 2,
+      "explanation": "FIFO is not a stack algorithm, so adding frames can paradoxically increase page faults (Belady's Anomaly). Stack algorithms like LRU and Optimal are immune."
+    },
+    {
+      "id": "tech-1-q19",
+      "topic": "CN",
+      "subtopic": "CIDR Subnetting Numerical",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "For the IPv4 subnet `192.168.12.64/26`, how many usable host IP addresses exist and what is the directed broadcast address?",
+      "options": [
+        "62 usable hosts; broadcast `192.168.12.127`",
+        "64 usable hosts; broadcast `192.168.12.127`",
+        "62 usable hosts; broadcast `192.168.12.128`",
+        "30 usable hosts; broadcast `192.168.12.95`"
+      ],
+      "correctIndex": 0,
+      "explanation": "Prefix `/26` leaves 32 - 26 = 6 host bits => block size = 2^6 = 64 addresses (`192.168.12.64` to `192.168.12.127`). Subtracting network (`.64`) and broadcast (`.127`) yields 64 - 2 = 62 usable host IPs."
+    },
+    {
+      "id": "tech-1-q20",
+      "topic": "CN",
+      "subtopic": "TCP 3-Way Handshake & TIME_WAIT",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Why does the side initiating a TCP connection teardown stay in the `TIME_WAIT` state for `2 * MSL` (Maximum Segment Lifetime) after sending the final `ACK`?",
+      "options": [
+        "To wait for DNS TTL expiration before reopening a browser tab",
+        "To ensure the peer received the final ACK (retransmitting if lost) and allow delayed duplicate packets to expire from the network",
+        "To force the OS kernel to flush disk buffers before closing the socket",
+        "To negotiate a new TLS session key for the next HTTP request"
+      ],
+      "correctIndex": 1,
+      "explanation": "`2 * MSL` serves two critical functions: (1) if the final ACK is lost and the peer resends FIN, the initiator can resend ACK; (2) any wandering duplicate segments from the closed incarnation expire before a new socket reuses the same 4-tuple."
+    },
+    {
+      "id": "tech-1-q21",
+      "topic": "DSA",
+      "subtopic": "Heap Construction Complexity",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "What is the tight worst-case time complexity of building a binary max-heap from an unsorted array of N elements using Floyd's bottom-up `heapify` algorithm?",
+      "options": [
+        "O(log N)",
+        "O(N)",
+        "O(N log N)",
+        "O(N^2)"
+      ],
+      "correctIndex": 1,
+      "explanation": "Although each sift-down can take up to O(log N), half the nodes are leaves (0 work), a quarter sift at most 1 level, etc. Summing h * N / 2^(h+1) converges to O(N)."
+    },
+    {
+      "id": "tech-1-q22",
+      "topic": "DSA",
+      "subtopic": "QuickSort Worst Case & Pivot Choice",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "When does standard deterministic QuickSort (always picking the first element as pivot) degrade to `O(N^2)` time?",
+      "options": [
+        "Only when N is a prime number",
+        "When the input array is already sorted or reverse-sorted",
+        "When all elements are distinct powers of 2",
+        "Whenever the recursion stack is converted to iteration"
+      ],
+      "correctIndex": 1,
+      "explanation": "Picking the first element on an already sorted or reverse-sorted array produces completely unbalanced partitions of sizes 0 and N-1 every step, yielding N*(N-1)/2 comparisons = O(N^2)."
+    },
+    {
+      "id": "tech-1-q23",
+      "topic": "Java",
+      "subtopic": "Concurrency & Fail-Fast Iterators",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "What happens if you iterate over a standard `ArrayList` using a for-each loop and call `list.remove(item)` directly inside the loop?",
+      "options": [
+        "The element is removed silently and iteration continues normally",
+        "It throws `ConcurrentModificationException` on the next `Iterator.next()` call",
+        "It compiles only if the list is declared `volatile`",
+        "It shifts remaining elements without updating `modCount`"
+      ],
+      "correctIndex": 1,
+      "explanation": "`ArrayList`'s iterator is fail-fast: it compares `expectedModCount` against the list's `modCount` and immediately throws `ConcurrentModificationException` if structurally modified outside `iterator.remove()`."
+    },
+    {
+      "id": "tech-1-q24",
+      "topic": "SE",
+      "subtopic": "REST HTTP Method Idempotency",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "According to HTTP semantics, which statement about safety and idempotency is TRUE?",
+      "options": [
+        "`POST` is idempotent, whereas `PUT` is not",
+        "`PUT` and `DELETE` are idempotent, whereas `POST` is neither safe nor idempotent",
+        "`GET` is idempotent only when it carries a JSON request body",
+        "`PATCH` is guaranteed to be both safe and idempotent in all APIs"
+      ],
+      "correctIndex": 1,
+      "explanation": "Repeating identical `PUT` (full resource replacement) or `DELETE` requests leaves server state identical to a single request (idempotent), whereas repeating `POST` typically creates multiple new resources."
+    },
+    {
+      "id": "tech-1-q25",
+      "topic": "OS",
+      "subtopic": "fork() Process Creation Tree",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "A C program on Linux executes `fork(); fork(); fork();` sequentially without any conditionals. Including the original parent, how many total processes exist after the third `fork()`?",
+      "options": ["4", "6", "8", "9"],
+      "correctIndex": 2,
+      "explanation": "Each `fork()` doubles the number of active processes. Starting from 1 process: after 1st fork = 2, after 2nd = 4, after 3rd = 2^3 = 8 total processes (7 new children)."
+    }
+  ]
+}

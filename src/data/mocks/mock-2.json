@@ -1,0 +1,1244 @@
+{
+  "mockId": "mock-2",
+  "title": "Full Mock 02: HCLTech Ascend Simulation — Cloud, SQL & Systems",
+  "description": "Complete 75-item timed simulation (37 Cognitive + 36 Technical MCQ + 2 Coding) crafted exclusively from unseen questions.",
+  "durationMinutes": 90,
+  "aptitudeQuestions": [
+    {
+      "id": "mock2-apt-01",
+      "section": "quant",
+      "topic": "Number System",
+      "subtopic": "Factorial Prime Powers",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "What is the highest power of 6 that divides 120! without leaving a remainder?",
+      "options": ["56", "58", "60", "116"],
+      "correctIndex": 1,
+      "explanation": "Since 6 = 2 * 3 and powers of 3 are scarcer than powers of 2 in factorials, apply Legendre's formula for p = 3: floor(120/3) + floor(120/9) + floor(120/27) + floor(120/81) = 40 + 13 + 4 + 1 = 58.",
+      "shortcut": "For composite k = a*b, only compute the exponent of the larger prime factor (3)."
+    },
+    {
+      "id": "mock2-apt-02",
+      "section": "quant",
+      "topic": "Work & Wages",
+      "subtopic": "Proportional Work Split",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "A, B, and C can finish a backend migration independently in 12, 15, and 30 days respectively. A and B start working together for 4 days, after which A leaves and C joins B until completion. Out of a total contract payout of Rs. 15,000, what is B's share?",
+      "options": ["Rs. 6,000", "Rs. 7,500", "Rs. 8,000", "Rs. 9,000"],
+      "correctIndex": 2,
+      "explanation": "Total work = LCM(12, 15, 30) = 60 units. Daily rates: A=5, B=4, C=2. First 4 days (A+B): 4*(5+4) = 36 units. Remaining = 24 units; B+C rate = 4+2 = 6 units/day -> takes 24/6 = 4 more days. Total days B worked = 4 + 4 = 8 days, completing 8*4 = 32 units. B's wage = (32/60) * 15000 = Rs. 8,000.",
+      "shortcut": "B worked all 8 days at 4 units/day = 32 out of 60 units -> (8/15)*15000 = 8,000."
+    },
+    {
+      "id": "mock2-apt-03",
+      "section": "quant",
+      "topic": "Trains",
+      "subtopic": "Platform & Opposite Train",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Express Train A, 180 meters long, travels at 72 km/h. It crosses a railway platform in 25 seconds and crosses Train B (approaching from the opposite direction at 54 km/h) completely in 10 seconds. Find the sum of the lengths of the platform and Train B.",
+      "options": ["450 m", "490 m", "520 m", "550 m"],
+      "correctIndex": 1,
+      "explanation": "Speed of A = 72 * 5/18 = 20 m/s; Speed of B = 54 * 5/18 = 15 m/s. Platform length = (20 * 25) - 180 = 500 - 180 = 320 m. Relative speed opposite = 20 + 15 = 35 m/s. Length of B = (35 * 10) - 180 = 350 - 180 = 170 m. Combined length = 320 + 170 = 490 m.",
+      "shortcut": "Total distance covered in both events minus 2 * len(A) = 500 + 350 - 360 = 490 m."
+    },
+    {
+      "id": "mock2-apt-04",
+      "section": "quant",
+      "topic": "Ratio & Proportion",
+      "subtopic": "Coin Denomination Mixture",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "A cash register holds Rs. 5, Rs. 2, and Rs. 1 coins in the count ratio 3 : 5 : 7, adding up to Rs. 320 in value. How many Rs. 2 coins are in the register?",
+      "options": ["30", "40", "50", "70"],
+      "correctIndex": 2,
+      "explanation": "Let counts be 3k, 5k, 7k. Total value = 5(3k) + 2(5k) + 1(7k) = (15 + 10 + 7)k = 32k = 320 => k = 10. Rs. 2 coins = 5 * 10 = 50.",
+      "shortcut": "Value per ratio bundle = 15+10+7 = Rs. 32 -> 10 bundles -> 50 two-rupee coins."
+    },
+    {
+      "id": "mock2-apt-05",
+      "section": "quant",
+      "topic": "Ages",
+      "subtopic": "Past & Future Age Ratios",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Six years ago, a father's age was five times his son's age. Four years from now, the father's age will be three times his son's age. What is the sum of their present ages?",
+      "options": ["64 years", "68 years", "72 years", "76 years"],
+      "correctIndex": 2,
+      "explanation": "F - 6 = 5(S - 6) => F = 5S - 24. F + 4 = 3(S + 4) => F = 3S + 8. Equating: 5S - 24 = 3S + 8 => 2S = 32 => S = 16, so F = 56. Sum = 56 + 16 = 72 years.",
+      "shortcut": "Ratio shift across 10 years: 5:1 (diff 4) vs 3:1 (diff 2 -> scale to 6:2, diff 4). Gap 1 unit = 10 yrs => 6 yrs ago ages were 50 & 10 -> present 56 + 16 = 72."
+    },
+    {
+      "id": "mock2-apt-06",
+      "section": "quant",
+      "topic": "Averages",
+      "subtopic": "Replacement & Headcount Change",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "The average monthly salary of 20 developers is Rs. 45,000. When 1 senior architect earning Rs. 95,000 retires and 2 freshers join, the team average drops to Rs. 42,500. What is the average monthly salary of the 2 newly joined freshers?",
+      "options": ["Rs. 41,250", "Rs. 42,500", "Rs. 43,750", "Rs. 45,000"],
+      "correctIndex": 2,
+      "explanation": "Initial total = 20 * 45,000 = 9,00,000. After architect leaves: 9,00,000 - 95,000 = 8,05,000 (for 19 people). New headcount = 21; new total = 21 * 42,500 = 8,92,500. Combined salary of 2 freshers = 8,92,500 - 8,05,000 = 87,500 => average = 43,750.",
+      "shortcut": "2 freshers bring 2*42500 = 85,000 PLUS cover the -2500 drop across 19 existing staff (19*2500 = 47,500) MINUS the 95,000 architect? Wait: 85,000 - (95,000 - 42,500? Use deviation from new avg 42,500: sum_diff = -52,500 from architect? No, 19*(+2500) = +47,500 net shift, so 2 freshers sum = 85,000 - 47,500? Wait: check 19*45000? Architect had 95,000, remaining 19 had 805,000 = 19*42,368.42! Yes: 8,92,500 - 8,05,000 = 87,500 -> 43,750."
+    },
+    {
+      "id": "mock2-apt-07",
+      "section": "quant",
+      "topic": "Geometry & Mensuration",
+      "subtopic": "Intersecting Paths Area",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "A rectangular campus lawn measuring 60 m by 40 m has two perpendicular paved walkways of uniform width 4 m running right through the center parallel to its length and breadth. Find the total area of the paved walkways.",
+      "options": ["368 sq m", "384 sq m", "400 sq m", "416 sq m"],
+      "correctIndex": 1,
+      "explanation": "Area = (60 * 4) + (40 * 4) - (4 * 4) = 240 + 160 - 16 = 384 sq m (subtracting the overlapping 4m x 4m central square once).",
+      "shortcut": "Crossroads area = w(L + B - w) = 4(60 + 40 - 4) = 4 * 96 = 384."
+    },
+    {
+      "id": "mock2-apt-08",
+      "section": "quant",
+      "topic": "Logarithms",
+      "subtopic": "Change of Base Identity",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "If log_2(x) + log_4(x) + log_8(x) = 11, what is the value of x?",
+      "options": ["32", "64", "128", "256"],
+      "correctIndex": 1,
+      "explanation": "Convert to base 2: log_4(x) = (1/2)log_2(x) and log_8(x) = (1/3)log_2(x). Thus (1 + 1/2 + 1/3) log_2(x) = 11 => (11/6) log_2(x) = 11 => log_2(x) = 6 => x = 2^6 = 64.",
+      "shortcut": "Coefficient sum = 1 + 0.5 + 1/3 = 11/6 -> log_2(x) = 6 -> 64."
+    },
+    {
+      "id": "mock2-apt-09",
+      "section": "quant",
+      "topic": "Data Interpretation",
+      "subtopic": "Cloud Region Telemetry",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "passage": "Cloud Region Report (Q9–Q11): Monthly traffic & cost across 4 AWS regions. US-East: 40M requests, 12,000 errors, P99 = 140 ms, cost $16,000. EU-West: 25M requests, 5,000 errors, P99 = 110 ms, cost $12,500. AP-South: 30M requests, 15,000 errors, P99 = 165 ms, cost $9,000. AP-East: 15M requests, 3,000 errors, P99 = 95 ms, cost $6,000.",
+      "question": "Which cloud region recorded the LOWEST error rate (errors per million requests)?",
+      "options": ["US-East", "EU-West and AP-East (tied)", "AP-South", "EU-West alone"],
+      "correctIndex": 1,
+      "explanation": "US-East: 12000/40 = 300/M; EU-West: 5000/25 = 200/M; AP-South: 15000/30 = 500/M; AP-East: 3000/15 = 200/M. Both EU-West and AP-East tie at 200 errors per million requests.",
+      "shortcut": "Compute errors per 1M directly: 12000/40=300, 5000/25=200, 15000/30=500, 3000/15=200."
+    },
+    {
+      "id": "mock2-apt-10",
+      "section": "quant",
+      "topic": "Data Interpretation",
+      "subtopic": "Unit Request Cost",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "passage": "Cloud Region Report (Q9–Q11): Monthly traffic & cost across 4 AWS regions. US-East: 40M requests, 12,000 errors, P99 = 140 ms, cost $16,000. EU-West: 25M requests, 5,000 errors, P99 = 110 ms, cost $12,500. AP-South: 30M requests, 15,000 errors, P99 = 165 ms, cost $9,000. AP-East: 15M requests, 3,000 errors, P99 = 95 ms, cost $6,000.",
+      "question": "What is the overall blended infrastructure cost per million requests across all four regions combined?",
+      "options": ["$380.45", "$395.45", "$410.20", "$425.00"],
+      "correctIndex": 1,
+      "explanation": "Total cost = 16,000 + 12,500 + 9,000 + 6,000 = $43,500. Total traffic = 40 + 25 + 30 + 15 = 110M requests. Blended cost = 43,500 / 110 = 4,350 / 11 ≈ $395.45 per million requests.",
+      "shortcut": "4350 / 11 = 395 remainder 5 -> $395.45."
+    },
+    {
+      "id": "mock2-apt-11",
+      "section": "quant",
+      "topic": "Data Interpretation",
+      "subtopic": "Traffic-Weighted P99",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "passage": "Cloud Region Report (Q9–Q11): Monthly traffic & cost across 4 AWS regions. US-East: 40M requests, 12,000 errors, P99 = 140 ms, cost $16,000. EU-West: 25M requests, 5,000 errors, P99 = 110 ms, cost $12,500. AP-South: 30M requests, 15,000 errors, P99 = 165 ms, cost $9,000. AP-East: 15M requests, 3,000 errors, P99 = 95 ms, cost $6,000.",
+      "question": "Compute the traffic-weighted mean P99 latency (in ms) across all four regions.",
+      "options": ["127.5 ms", "131.8 ms", "133.9 ms", "138.2 ms"],
+      "correctIndex": 2,
+      "explanation": "Weighted sum = 40(140) + 25(110) + 30(165) + 15(95) = 5600 + 2750 + 4950 + 1425 = 14,725. Total weight = 110. Weighted mean = 14,725 / 110 = 133.86 ms ≈ 133.9 ms.",
+      "shortcut": "Divide all weights by 5 -> (8*140 + 5*110 + 6*165 + 3*95) / 22 = (1120+550+990+285)/22 = 2945/22 ≈ 133.86."
+    },
+    {
+      "id": "mock2-apt-12",
+      "section": "quant",
+      "topic": "Permutations & Combinations",
+      "subtopic": "Vowels Together with Repeats",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "How many distinct permutations of the word `ENGINEERING` keep all the vowels together in one contiguous block?",
+      "options": ["2,100", "4,200", "8,400", "12,600"],
+      "correctIndex": 1,
+      "explanation": "`ENGINEERING` has 11 letters: 5 vowels (E, E, E, I, I) and 6 consonants (N, N, N, G, G, R). Treating the 5 vowels as 1 super-block gives 7 items with N repeated 3 times and G repeated 2 times: 7!/(3!2!) = 420. Internal permutations of the 5 vowels (3 E's, 2 I's): 5!/(3!2!) = 10. Total = 420 * 10 = 4,200.",
+      "shortcut": "[7!/(3!2!)] * [5!/(3!2!)] = 420 * 10 = 4200."
+    },
+    {
+      "id": "mock2-apt-13",
+      "section": "quant",
+      "topic": "Probability",
+      "subtopic": "Complement Rule Without Replacement",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "A tray contains 12 microchips, of which 4 are defective and 8 are functional. If 3 chips are selected at random without replacement, what is the probability that AT LEAST ONE selected chip is defective?",
+      "options": ["14/55", "39/55", "41/55", "43/55"],
+      "correctIndex": 2,
+      "explanation": "Complement P(0 defective) = C(8,3) / C(12,3) = 56 / 220 = 14 / 55. Therefore P(at least 1 defective) = 1 - 14/55 = 41/55.",
+      "shortcut": "1 - (8*7*6)/(12*11*10) = 1 - 14/55 = 41/55."
+    },
+    {
+      "id": "mock2-apt-14",
+      "section": "reasoning",
+      "topic": "Seating Arrangement",
+      "subtopic": "Circular Facing Center",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "Eight people A, B, C, D, E, F, G, H sit around a circular table facing the center. B sits third to the left of A. D sits directly opposite B. F sits immediately between A and C (so A, F, C occupy three adjacent seats). E is an immediate neighbor of neither B nor C, and sits second to the left of H. Who sits directly opposite G?",
+      "options": ["A", "C", "E", "F"],
+      "correctIndex": 3,
+      "explanation": "Index seats 0..7 clockwise (facing center, so left moves +1 clockwise). Put A=0 -> B=3 (3rd left). Opposite B(3) is D=7. For F to sit immediately between A(0) and C, C must be at 2 (F=1) since seat 7 is already occupied by D. Remaining seats are {4, 5, 6} for E, G, H. E cannot neighbor C(2) or B(3), eliminating 4 -> E is in {5, 6}. Testing E = H + 2: only H=4, E=6 fits unoccupied seats, leaving G=5. Opposite G(5) is seat 1 = F.",
+      "shortcut": "Fix A=0, B=3, D=7, forcing C=2 and F=1; then E cannot take seat 4 (next to B) and E = H + 2 uniquely forces H=4, E=6, G=5 -> opposite G(5) is F(1)."
+    },
+    {
+      "id": "mock2-apt-15",
+      "section": "reasoning",
+      "topic": "Blood Relations",
+      "subtopic": "Coded Expression",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "If 'X @ Y' means X is the mother of Y; 'X # Y' means X is the husband of Y; 'X $ Y' means X is the sister of Y; and 'X % Y' means X is the son of Y, how is P related to T in the expression `P % Q @ R $ S # T`?",
+      "options": [
+        "Brother-in-law",
+        "Brother",
+        "Nephew",
+        "Cousin"
+      ],
+      "correctIndex": 0,
+      "explanation": "`P % Q` -> P is Q's son. `Q @ R` -> Q is R's mother (so P and R are siblings, P is male). `R $ S` -> R is S's sister (so P, R, S are siblings). `S # T` -> S is T's husband (so T is S's wife). Thus P is the brother of T's husband = T's brother-in-law.",
+      "shortcut": "Chain genders & generations: P(+1 male) child of Q; R,S siblings of P; S marries T => P is T's brother-in-law."
+    },
+    {
+      "id": "mock2-apt-16",
+      "section": "reasoning",
+      "topic": "Ranking & Order",
+      "subtopic": "Overlapping Queue Positions",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "In a single row of campus interviewees facing North, Arjun sits 18th from the left end and Meera sits 15th from the right end. If exactly 4 candidates sit between them and Meera sits somewhere to the left of Arjun, how many candidates are in the row?",
+      "options": ["27", "29", "31", "37"],
+      "correctIndex": 0,
+      "explanation": "Because Meera sits to the left of Arjun while being counted from the right, their spans overlap: Total = (Left rank + Right rank) - (Between + 2) = 18 + 15 - (4 + 2) = 33 - 6 = 27.",
+      "shortcut": "Overlap total = L + R - between - 2 = 18 + 15 - 4 - 2 = 27."
+    },
+    {
+      "id": "mock2-apt-17",
+      "section": "reasoning",
+      "topic": "Syllogisms",
+      "subtopic": "Reverse Negation & Possibility",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Statements: (1) All firewalls are proxies. (2) Some proxies are load-balancers. (3) No load-balancer is stateless.\nConclusions:\nI. Some proxies are not stateless.\nII. All firewalls being stateless is a possibility.",
+      "options": [
+        "Only I follows",
+        "Only II follows",
+        "Both I and II follow",
+        "Neither I nor II follows"
+      ],
+      "correctIndex": 2,
+      "explanation": "Since some proxies are load-balancers and no load-balancer is stateless, those shared proxies cannot be stateless (Conclusion I follows). Firewalls sit inside proxies with no direct prohibition against overlapping stateless outside load-balancers, so all firewalls being stateless is a valid possibility (Conclusion II follows).",
+      "shortcut": "Proxies ∩ LBs ∉ Stateless => I true; no constraint links Firewalls & Stateless => II possible."
+    },
+    {
+      "id": "mock2-apt-18",
+      "section": "reasoning",
+      "topic": "Data Sufficiency",
+      "subtopic": "Integer Parity",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Is the integer K odd?\nStatement I: 3K + 5 is an even integer.\nStatement II: K^2 + 3K is divisible by 2.",
+      "options": [
+        "Statement I alone is sufficient",
+        "Statement II alone is sufficient",
+        "Both together are required",
+        "Either statement independently is sufficient"
+      ],
+      "correctIndex": 0,
+      "explanation": "Statement I: 3K + 5 is even => 3K must be odd (since odd + odd = even) => K MUST be odd (sufficient!). Statement II: K^2 + 3K = K(K + 3). Notice if K is even, K(K+3) is even; if K is odd, K+3 is even so K(K+3) is ALSO even! Thus II holds for every integer K and determines nothing.",
+      "shortcut": "K(K+3) has opposite parity factors, so it is always even for all integers K."
+    },
+    {
+      "id": "mock2-apt-19",
+      "section": "reasoning",
+      "topic": "Number Series",
+      "subtopic": "Linear Recurrence Outlier",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Spot the single number that violates the rule of the sequence: 3, 5, 11, 29, 83, 245, 730",
+      "options": ["11", "83", "245", "730"],
+      "correctIndex": 3,
+      "explanation": "Each term follows `next = 3 * prev - 4`: 3*3-4=5, 5*3-4=11, 11*3-4=29, 29*3-4=83, 83*3-4=245, 245*3-4 = 731 (not 730).",
+      "shortcut": "Differences triple each step: +2, +6, +18, +54, +162, +486 => 245 + 486 = 731."
+    },
+    {
+      "id": "mock2-apt-20",
+      "section": "reasoning",
+      "topic": "Analogy",
+      "subtopic": "Progressive Alphabet Shifts",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Select the letter cluster related to `MICRO` in the same way `DNRYI` is related to `CLOUD`:\n`CLOUD : DNRYI :: MICRO : ?`",
+      "options": ["NKFVT", "NKEVR", "NKFWT", "NJEVT"],
+      "correctIndex": 0,
+      "explanation": "Each letter shifts forward progressively by +1, +2, +3, +4, +5: C(+1)=D, L(+2)=N, O(+3)=R, U(+4)=Y, D(+5)=I. Applying +1, +2, +3, +4, +5 to `MICRO`: M(+1)=N, I(+2)=K, C(+3)=F, R(+4)=V, O(+5)=T => `NKFVT`.",
+      "shortcut": "Progressive +1, +2, +3, +4, +5 shift across the 5 letters."
+    },
+    {
+      "id": "mock2-apt-21",
+      "section": "reasoning",
+      "topic": "Venn Diagrams",
+      "subtopic": "Three-Set Inclusion-Exclusion",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "In a campus survey of 150 graduates, 90 know Java, 75 know Python, and 35 know Go. Further, 30 know both Java and Python, 20 know both Python and Go, 25 know both Java and Go, and 10 know all three languages. How many graduates know NONE of these three languages?",
+      "options": ["10", "15", "20", "25"],
+      "correctIndex": 1,
+      "explanation": "By inclusion-exclusion: |J ∪ P ∪ G| = 90 + 75 + 35 - 30 - 20 - 25 + 10 = 200 - 75 + 10 = 135. Graduates knowing none = 150 - 135 = 15.",
+      "shortcut": "|A∪B∪C| = Singles - Pairs + Triple = 200 - 75 + 10 = 135; 150 - 135 = 15."
+    },
+    {
+      "id": "mock2-apt-22",
+      "section": "reasoning",
+      "topic": "Logical Inequalities",
+      "subtopic": "Coded Comparison Chain",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Given relationship chain: `P >= Q > R = S <= T < U`.\nEvaluate Conclusions:\nI. `P > S`\nII. `U > R`\nWhich conclusion(s) definitely hold?",
+      "options": ["Only I", "Only II", "Both I and II", "Neither I nor II"],
+      "correctIndex": 2,
+      "explanation": "From `P >= Q > R = S`, strict `>` dominates `>=` and `=`, proving `P > S` (I is true). From `R = S <= T < U`, strict `<` gives `R < U` i.e. `U > R` (II is true).",
+      "shortcut": "All symbols point cleanly in the same direction for both pairs with at least one strict `>`/`<`."
+    },
+    {
+      "id": "mock2-apt-23",
+      "section": "reasoning",
+      "topic": "Cubes & Dice",
+      "subtopic": "Painted Cube Dissection",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "A solid wooden cube painted blue on all six outer faces is sliced evenly into 64 identical smaller unit cubes. How many of these smaller cubes have EXACTLY TWO faces painted blue?",
+      "options": ["16", "24", "32", "8"],
+      "correctIndex": 1,
+      "explanation": "64 = 4^3, so side n = 4. Unit cubes with exactly 2 painted faces lie exclusively along the 12 edges (excluding the 8 corners): 12 * (n - 2) = 12 * (4 - 2) = 24.",
+      "shortcut": "Formula for 2-face painted cubes: 12 * (n - 2) where n = cbrt(64) = 4."
+    },
+    {
+      "id": "mock2-apt-24",
+      "section": "reasoning",
+      "topic": "Critical Reasoning",
+      "subtopic": "Strengthen the Argument",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "An SRE team argues that adding distributed correlation IDs across HTTP headers cut their Mean Time to Resolution (MTTR) by half. Which finding would MOST strongly reinforce their claim?",
+      "options": [
+        "Most incidents occurred on Monday mornings during traffic surges.",
+        "Teams using the exact same microservice framework without correlation IDs saw zero MTTR improvement over the same six-month window.",
+        "The SRE team hired two junior monitoring analysts at the end of the quarter.",
+        "HTTP header payloads increased by 48 bytes per request."
+      ],
+      "correctIndex": 1,
+      "explanation": "A matched control group lacking the intervention (correlation IDs) showing zero improvement rules out external seasonal or tooling trends.",
+      "shortcut": "Look for a controlled comparison isolating the proposed cause."
+    },
+    {
+      "id": "mock2-apt-25",
+      "section": "reasoning",
+      "topic": "Statements & Courses of Action",
+      "subtopic": "Incident Policy Decision",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Statement: Internal telemetry revealed that an exposed staging API endpoint leaked 2,000 test customer emails over the weekend.\nCourses of Action:\nI. Immediately revoke the staging endpoint's public ingress rule and rotate any shared API credentials.\nII. Permanently delete all staging environments and ban developers from testing APIs.\nWhich action(s) logically follow?",
+      "options": ["Only I", "Only II", "Both I and II", "Neither I nor II"],
+      "correctIndex": 0,
+      "explanation": "Course I directly stops the exposure and prevents credential misuse. Course II is an extreme, counterproductive overreaction.",
+      "shortcut": "Effective course of action is proportional, practical, and directly mitigates risk."
+    },
+    {
+      "id": "mock2-apt-26",
+      "section": "verbal",
+      "topic": "Reading Comprehension",
+      "subtopic": "Core Concept",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "passage": "Traditional perimeter-based enterprise security operated like a medieval castle: formidable firewalls guarded external gateways, while traffic inside the corporate LAN enjoyed implicit trust. Yet hybrid cloud workloads and lateral-movement malware exposed that model's fragility—once an attacker phished a single employee laptop, internal east-west traffic traversed unencrypted subnets freely. Zero-Trust Architecture (ZTA) replaces implicit network location trust with continuous per-request verification. Every service-to-service call must present short-lived cryptographic identity (such as SPIFFE/mTLS certificates), undergo fine-grained authorization checks against device posture and least-privilege policies, and remain isolated within micro-segmented network boundaries so a single compromised node cannot pivot across the fleet.",
+      "question": "Why did traditional perimeter-based security prove inadequate against modern breaches according to the passage?",
+      "options": [
+        "External firewalls could not inspect HTTPS packets at wire speed.",
+        "Implicit trust on the internal network allowed compromised endpoints to move laterally with minimal friction.",
+        "Employees refused to connect through corporate VPN gateways.",
+        "Cryptographic certificates expired too quickly inside legacy LANs."
+      ],
+      "correctIndex": 1,
+      "explanation": "The passage notes that once a single laptop was phished, 'internal east-west traffic traversed unencrypted subnets freely' due to implicit internal trust.",
+      "shortcut": "Match 'lateral-movement malware' + 'implicit trust' inside the corporate LAN."
+    },
+    {
+      "id": "mock2-apt-27",
+      "section": "verbal",
+      "topic": "Reading Comprehension",
+      "subtopic": "Detail Verification",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "passage": "Traditional perimeter-based enterprise security operated like a medieval castle: formidable firewalls guarded external gateways, while traffic inside the corporate LAN enjoyed implicit trust. Yet hybrid cloud workloads and lateral-movement malware exposed that model's fragility—once an attacker phished a single employee laptop, internal east-west traffic traversed unencrypted subnets freely. Zero-Trust Architecture (ZTA) replaces implicit network location trust with continuous per-request verification. Every service-to-service call must present short-lived cryptographic identity (such as SPIFFE/mTLS certificates), undergo fine-grained authorization checks against device posture and least-privilege policies, and remain isolated within micro-segmented network boundaries so a single compromised node cannot pivot across the fleet.",
+      "question": "Under Zero-Trust Architecture, authorization for an internal service call depends on:",
+      "options": [
+        "Whether the request originated from an internal corporate IP range",
+        "Short-lived cryptographic identity, device posture, and least-privilege policy verification",
+        "One-time login authentication performed at the start of the workweek",
+        "Disabling mutual TLS between trusted backend databases"
+      ],
+      "correctIndex": 1,
+      "explanation": "ZTA requires short-lived cryptographic identity (mTLS) plus checks against device posture and least-privilege policies on every request.",
+      "shortcut": "Direct read from the final sentence."
+    },
+    {
+      "id": "mock2-apt-28",
+      "section": "verbal",
+      "topic": "Reading Comprehension",
+      "subtopic": "Analogy Purpose",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "passage": "Traditional perimeter-based enterprise security operated like a medieval castle: formidable firewalls guarded external gateways, while traffic inside the corporate LAN enjoyed implicit trust. Yet hybrid cloud workloads and lateral-movement malware exposed that model's fragility—once an attacker phished a single employee laptop, internal east-west traffic traversed unencrypted subnets freely. Zero-Trust Architecture (ZTA) replaces implicit network location trust with continuous per-request verification. Every service-to-service call must present short-lived cryptographic identity (such as SPIFFE/mTLS certificates), undergo fine-grained authorization checks against device posture and least-privilege policies, and remain isolated within micro-segmented network boundaries so a single compromised node cannot pivot across the fleet.",
+      "question": "The author compares perimeter security to a 'medieval castle' primarily to highlight:",
+      "options": [
+        "The outdated hardware lifespan of legacy enterprise routers",
+        "The sharp contrast between heavy outer defenses and unguarded internal movement",
+        "The high financial cost of maintaining firewall rules",
+        "The superiority of physical data center locks over cloud security"
+      ],
+      "correctIndex": 1,
+      "explanation": "A medieval castle has thick outer walls ('formidable firewalls') yet soft, undefended interiors ('implicit trust' inside the LAN).",
+      "shortcut": "Castle = hard shell, soft interior."
+    },
+    {
+      "id": "mock2-apt-29",
+      "section": "verbal",
+      "topic": "Reading Comprehension",
+      "subtopic": "Inference",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "passage": "Traditional perimeter-based enterprise security operated like a medieval castle: formidable firewalls guarded external gateways, while traffic inside the corporate LAN enjoyed implicit trust. Yet hybrid cloud workloads and lateral-movement malware exposed that model's fragility—once an attacker phished a single employee laptop, internal east-west traffic traversed unencrypted subnets freely. Zero-Trust Architecture (ZTA) replaces implicit network location trust with continuous per-request verification. Every service-to-service call must present short-lived cryptographic identity (such as SPIFFE/mTLS certificates), undergo fine-grained authorization checks against device posture and least-privilege policies, and remain isolated within micro-segmented network boundaries so a single compromised node cannot pivot across the fleet.",
+      "question": "What does 'micro-segmented network boundaries' achieve in the event a single service container is compromised?",
+      "options": [
+        "It prevents the initial phishing email from ever arriving.",
+        "It limits the blast radius by blocking the compromised node from pivoting to unrelated workloads.",
+        "It automatically patches the container image without redeployment.",
+        "It replaces cryptographic identity checks with static IP whitelists."
+      ],
+      "correctIndex": 1,
+      "explanation": "The passage notes micro-segmentation ensures 'a single compromised node cannot pivot across the fleet'—containment / blast-radius reduction.",
+      "shortcut": "'Cannot pivot across the fleet' = blast radius containment."
+    },
+    {
+      "id": "mock2-apt-30",
+      "section": "verbal",
+      "topic": "Error Spotting",
+      "subtopic": "Countable Quantifiers (Fewer vs Less)",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Identify the segment containing a grammatical error:\n'Although the refactored pipeline triggered (A) / less memory allocation spikes during peak load, (B) / its cold-start latency remained (C) / noticeably higher than expected. (D)'",
+      "options": ["Segment A", "Segment B", "Segment C", "Segment D"],
+      "correctIndex": 1,
+      "explanation": "`spikes` is a plural countable noun, requiring `fewer` instead of `less` ('fewer memory allocation spikes').",
+      "shortcut": "Countable plural noun -> fewer; uncountable mass noun -> less."
+    },
+    {
+      "id": "mock2-apt-31",
+      "section": "verbal",
+      "topic": "Error Spotting",
+      "subtopic": "Relative Pronoun Case (Who vs Whom)",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Identify the segment containing a grammatical error:\n'The client committee interviewed three finalists, (A) / one of who had previously (B) / architected an ultra-low-latency (C) / payments clearing engine in Java. (D)'",
+      "options": ["Segment A", "Segment B", "Segment C", "Segment D"],
+      "correctIndex": 1,
+      "explanation": "As the object of the preposition `of`, the objective pronoun `whom` is required: `one of whom`.",
+      "shortcut": "After a preposition (`of`, `to`, `by`), always use `whom`."
+    },
+    {
+      "id": "mock2-apt-32",
+      "section": "verbal",
+      "topic": "Error Spotting",
+      "subtopic": "Prepositional Collocation",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Identify the segment containing a grammatical error:\n'Despite of the exhaustive load tests (A) / executed prior to Diwali sales, (B) / an unindexed foreign-key column (C) / throttled checkout throughput. (D)'",
+      "options": ["Segment A", "Segment B", "Segment C", "Segment D"],
+      "correctIndex": 0,
+      "explanation": "`Despite` never takes `of`. Write either `Despite the exhaustive load tests` or `In spite of the exhaustive load tests`.",
+      "shortcut": "Never write 'Despite of' (either 'Despite' or 'In spite of')."
+    },
+    {
+      "id": "mock2-apt-33",
+      "section": "verbal",
+      "topic": "Sentence Correction",
+      "subtopic": "Idiom (Between...And / From...To)",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Choose the grammatically accurate replacement for the bracketed text:\nThe maintenance window is scheduled [between 02:00 UTC to 04:30 UTC] on Sunday morning.",
+      "options": [
+        "between 02:00 UTC and 04:30 UTC",
+        "between 02:00 UTC until 04:30 UTC",
+        "from 02:00 UTC and 04:30 UTC",
+        "within 02:00 UTC to 04:30 UTC"
+      ],
+      "correctIndex": 0,
+      "explanation": "`between X and Y` is the standard idiom (`from X to Y` is the alternative; mixing `between...to` is ungrammatical).",
+      "shortcut": "between ... and / from ... to."
+    },
+    {
+      "id": "mock2-apt-34",
+      "section": "verbal",
+      "topic": "Sentence Correction",
+      "subtopic": "Comparative Ellipsis",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "Select the most precise replacement for the bracketed portion:\nThe p99 response time of our new Go gateway is significantly lower [than our legacy monolithic Java proxy].",
+      "options": [
+        "than our legacy monolithic Java proxy",
+        "than that of our legacy monolithic Java proxy",
+        "compared to our legacy monolithic Java proxy",
+        "as that of our legacy monolithic Java proxy"
+      ],
+      "correctIndex": 1,
+      "explanation": "Apples-to-apples comparison: compare `p99 response time` against `that (the p99 response time) of our legacy monolithic Java proxy`, not directly against the proxy itself.",
+      "shortcut": "Singular noun comparison requires `than that of ...`."
+    },
+    {
+      "id": "mock2-apt-35",
+      "section": "verbal",
+      "topic": "Sentence Improvement",
+      "subtopic": "Prefer Idiom",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Select the grammatically best option:\nExperienced backend developers generally prefer deterministic constructor injection _______ opaque field reflection.",
+      "options": ["than", "over", "to", "against"],
+      "correctIndex": 2,
+      "explanation": "The standard formal prepositional idiom for comparing two noun phrases with `prefer` is `prefer X to Y`.",
+      "shortcut": "prefer [noun] to [noun]."
+    },
+    {
+      "id": "mock2-apt-36",
+      "section": "verbal",
+      "topic": "Para Jumbles",
+      "subtopic": "5-Sentence Coherence",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "Arrange P, Q, R, S, T into a logical paragraph:\nP: To eliminate those pauses without sacrificing throughput, modern collectors like ZGC perform object relocation concurrently with application threads.\nQ: Stop-the-world garbage collection pauses once plagued latency-sensitive Java trading platforms.\nR: Consequently, tail latencies stayed tightly bounded under a millisecond even on multi-terabyte heaps.\nS: During a full compaction cycle, every mutator thread froze while the runtime swept and compacted fragmented heap regions.\nT: By inserting lightweight load barriers around pointer dereferences, ZGC ensures application threads always observe relocated object addresses safely.",
+      "options": ["Q S P T R", "Q P S T R", "S Q P T R", "Q S T P R"],
+      "correctIndex": 0,
+      "explanation": "Q introduces the problem ('Stop-the-world pauses'). S details what happened during those pauses ('During a full compaction cycle...'). P introduces the solution ('To eliminate those pauses... ZGC'). T explains the mechanism ('load barriers'), and R concludes with the measured outcome ('Consequently, tail latencies...').",
+      "shortcut": "Q (pauses) -> S (compaction froze threads) -> P (To eliminate those pauses -> ZGC) -> T (mechanism) -> R (outcome)."
+    },
+    {
+      "id": "mock2-apt-37",
+      "section": "verbal",
+      "topic": "Para Jumbles",
+      "subtopic": "5-Sentence Coherence",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Arrange P, Q, R, S, T into a logical paragraph:\nP: Edge computing mitigates this bottleneck by executing lightweight inference directly on factory gateways near the sensors.\nQ: High-frequency industrial cameras generate gigabytes of raw telemetry per minute on automated assembly lines.\nR: Only compact anomaly alerts and aggregated summaries then travel upstream to central cloud data lakes.\nS: Streaming every uncompressed video frame across WAN links to a distant cloud region quickly saturates plant bandwidth and inflates round-trip delay.\nT: That local filtering slashes backhaul costs while enabling sub-20ms defect rejection on the conveyor belt.",
+      "options": ["Q P S R T", "Q S P R T", "S Q P T R", "Q S R P T"],
+      "correctIndex": 1,
+      "explanation": "Q sets the context (cameras generating huge telemetry). S presents the WAN bottleneck ('this bottleneck' in P refers directly back to S!). P introduces edge computing, R describes what still travels to the cloud ('Only compact anomaly alerts...'), and T concludes with the benefits of 'That local filtering'.",
+      "shortcut": "Q (raw data) -> S (WAN bottleneck) -> P ('this bottleneck' -> edge) -> R -> T."
+    }
+  ],
+  "technicalQuestions": [
+    {
+      "id": "mock2-tech-01",
+      "topic": "Output Prediction",
+      "subtopic": "PriorityQueue Iteration vs Poll",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "What is printed by the following Java `PriorityQueue` snippet?",
+      "codeSnippet": "PriorityQueue<Integer> pq = new PriorityQueue<>();\npq.add(30); pq.add(10); pq.add(20); pq.add(5);\nSystem.out.print(pq.peek() + \" \");\nwhile (!pq.isEmpty()) System.out.print(pq.poll() + \" \");",
+      "options": [
+        "30 30 20 10 5",
+        "5 5 10 20 30",
+        "5 30 10 20 5",
+        "10 5 10 20 30"
+      ],
+      "correctIndex": 1,
+      "explanation": "Java's `PriorityQueue` defaults to a natural-order min-heap. `peek()` inspects the minimum (`5`), and repeated `poll()` extracts elements in sorted ascending order: `5 10 20 30`.",
+      "shortcut": "Default PriorityQueue = min-heap; poll() yields sorted ascending order."
+    },
+    {
+      "id": "mock2-tech-02",
+      "topic": "Output Prediction",
+      "subtopic": "StringBuilder Capacity Growth",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "What does this Java `StringBuilder` snippet print?",
+      "codeSnippet": "StringBuilder sb = new StringBuilder();\nSystem.out.print(sb.capacity() + \" \");\nsb.append(\"12345678901234567\"); // 17 chars\nSystem.out.print(sb.capacity());",
+      "options": [
+        "0 17",
+        "16 32",
+        "16 34",
+        "16 17"
+      ],
+      "correctIndex": 2,
+      "explanation": "Default `new StringBuilder()` allocates a 16-char buffer (`capacity() == 16`). Appending 17 characters exceeds 16, triggering capacity expansion `newCapacity = (oldCapacity * 2) + 2 = (16 * 2) + 2 = 34`.",
+      "shortcut": "StringBuilder initial capacity = 16; growth formula = (old * 2) + 2."
+    },
+    {
+      "id": "mock2-tech-03",
+      "topic": "Output Prediction",
+      "subtopic": "Map.merge Frequency Counter",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "What is the output of this Java 8 `Map.merge` snippet?",
+      "codeSnippet": "Map<String, Integer> map = new HashMap<>();\nfor (String k : new String[]{\"a\", \"b\", \"a\", \"a\"}) {\n    map.merge(k, 1, (oldVal, newVal) -> oldVal + newVal == 3 ? null : oldVal + newVal);\n}\nSystem.out.println(map);",
+      "options": [
+        "{a=3, b=1}",
+        "{b=1}",
+        "{a=null, b=1}",
+        "Throws NullPointerException"
+      ],
+      "correctIndex": 1,
+      "explanation": "In `Map.merge`, when the remapping function returns `null`, the key is REMOVED from the map! On the 3rd `\"a\"`, `2 + 1 == 3` returns `null`, deleting key `\"a\"` and leaving `{b=1}`.",
+      "shortcut": "Returning null from Map.merge() / compute() deletes the entry."
+    },
+    {
+      "id": "mock2-tech-04",
+      "topic": "Output Prediction",
+      "subtopic": "Switch Expression vs Fall-Through",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "What does this Java 17 arrow `switch` expression return when `code = 2`?",
+      "codeSnippet": "int code = 2;\nString res = switch (code) {\n    case 1 -> \"ONE\";\n    case 2, 3 -> { String t = \"TWO_\"; yield t + code; }\n    default -> \"OTHER\";\n};\nSystem.out.println(res);",
+      "options": [
+        "TWO_2",
+        "TWO_2OTHER",
+        "Compilation error: yield missing semicolon or break needed",
+        "OTHER"
+      ],
+      "correctIndex": 0,
+      "explanation": "Arrow labels (`->`) in Java 14+ switch expressions do NOT fall through, and block arms return a value via `yield`. Thus `res` evaluates cleanly to `\"TWO_2\"`.",
+      "shortcut": "Arrow switch cases have no fall-through; blocks inside switch expressions use `yield`."
+    },
+    {
+      "id": "mock2-tech-05",
+      "topic": "Output Prediction",
+      "subtopic": "Java Record Immutability & Compact Constructor",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "What does the following Java 17 `record` snippet output?",
+      "codeSnippet": "record User(String name, List<String> roles) {\n    User { roles = List.copyOf(roles); }\n}\nList<String> src = new ArrayList<>(List.of(\"DEV\"));\nUser u = new User(\"Riya\", src);\nsrc.add(\"ADMIN\");\nSystem.out.println(u.roles());",
+      "options": [
+        "[DEV, ADMIN]",
+        "[DEV]",
+        "Throws UnsupportedOperationException on src.add",
+        "Compilation error in compact constructor"
+      ],
+      "correctIndex": 1,
+      "explanation": "The compact constructor assigns `roles = List.copyOf(roles)` before setting the record field, creating a defensive unmodifiable snapshot. Mutating `src` afterward does NOT mutate `u.roles()`, which prints `[DEV]`.",
+      "shortcut": "List.copyOf(src) makes a defensive immutable copy decoupled from src."
+    },
+    {
+      "id": "mock2-tech-06",
+      "topic": "Java",
+      "subtopic": "volatile vs AtomicInteger",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "Ten threads each execute `counter++` 1,000 times on `private volatile int counter = 0;` without synchronization. Why is the final value frequently less than 10,000?",
+      "options": [
+        "`volatile` disables CPU L1 caching completely causing lost writes",
+        "`volatile` guarantees visibility across threads, NOT atomicity—`counter++` is a compound read-modify-write operation",
+        "`volatile` only works on `long` and `double` primitives",
+        "The JVM silently drops increments from non-daemon threads"
+      ],
+      "correctIndex": 1,
+      "explanation": "`counter++` compiles to read -> increment -> write; two threads can read the same `volatile` value and overwrite each other. Use `AtomicInteger` (CAS) or `synchronized` for compound atomicity.",
+      "shortcut": "volatile = visibility + ordering, NOT atomicity."
+    },
+    {
+      "id": "mock2-tech-07",
+      "topic": "Java",
+      "subtopic": "ClassLoader Parent Delegation",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "If a developer creates a custom class named `java.lang.String` on the application classpath and tries to load it via the Application ClassLoader, what prevents it from replacing the JDK's `java.lang.String`?",
+      "options": [
+        "The Garbage Collector evicts duplicate class definitions",
+        "The Parent Delegation Model forwards loading upward first, so the Bootstrap ClassLoader always loads the core JDK `java.lang.String` (and `java.*` packages are prohibited in user loaders)",
+        "JIT inlining strips custom package prefixes",
+        "The `final` keyword on `String` stops bytecode compilation"
+      ],
+      "correctIndex": 1,
+      "explanation": "JVM ClassLoaders delegate upward (`Application -> Platform -> Bootstrap`) before attempting local lookup, preventing core JDK classes from being spoofed.",
+      "shortcut": "Parent delegation protects core java.* classes via Bootstrap ClassLoader."
+    },
+    {
+      "id": "mock2-tech-08",
+      "topic": "Java",
+      "subtopic": "Spring Boot @Transactional Proxy Self-Invocation",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "In a Spring Boot `@Service`, public method `outer()` (non-transactional) directly calls `this.inner()`, where `inner()` is annotated with `@Transactional(propagation = Propagation.REQUIRES_NEW)`. Why does no new database transaction start for `inner()`?",
+      "options": [
+        "`REQUIRES_NEW` only works on controller methods",
+        "Spring AOP uses dynamic proxies; internal `this.inner()` bypasses the proxy wrapper and invokes the raw target object directly",
+        "Spring Boot disables transactions on void methods",
+        "`@Service` classes are prototype-scoped by default"
+      ],
+      "correctIndex": 1,
+      "explanation": "Spring AOP intercepts only external calls crossing the proxy boundary. Self-invocation (`this.method()`) bypasses the AOP proxy completely.",
+      "shortcut": "AOP proxy self-invocation trap: external bean call required for @Transactional/@Async/@Cacheable."
+    },
+    {
+      "id": "mock2-tech-09",
+      "topic": "Java",
+      "subtopic": "Spring @Primary vs @Qualifier",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Two beans implement `PaymentGateway`: `StripeGateway` (annotated `@Primary`) and `RazorpayGateway` (named `\"razorpay\"`). A service constructor specifies `@Qualifier(\"razorpay\") PaymentGateway gw`. Which bean does Spring inject?",
+      "options": [
+        "`StripeGateway`, because `@Primary` overrides `@Qualifier`",
+        "`RazorpayGateway`, because explicit `@Qualifier` takes precedence over `@Primary`",
+        "Spring fails startup with `NoUniqueBeanDefinitionException`",
+        "Spring injects a dynamic proxy delegating to both"
+      ],
+      "correctIndex": 1,
+      "explanation": "`@Primary` sets the default candidate when no qualifier is given, whereas an explicit `@Qualifier` always wins over `@Primary`.",
+      "shortcut": "@Qualifier (explicit) > @Primary (default fallback)."
+    },
+    {
+      "id": "mock2-tech-10",
+      "topic": "Java",
+      "subtopic": "CompletableFuture Composition",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Which `CompletableFuture` method flattens an asynchronous transformation `Function<T, CompletableFuture<U>>` instead of returning a nested `CompletableFuture<CompletableFuture<U>>`?",
+      "options": [
+        "`thenApply()`",
+        "`thenCompose()`",
+        "`thenAccept()`",
+        "`whenComplete()`"
+      ],
+      "correctIndex": 1,
+      "explanation": "`thenApply` behaves like `Stream.map` (synchronous transform), whereas `thenCompose` behaves like `Stream.flatMap`, flattening dependent async futures.",
+      "shortcut": "thenApply = map; thenCompose = flatMap."
+    },
+    {
+      "id": "mock2-tech-11",
+      "topic": "OOP",
+      "subtopic": "Composition Over Inheritance",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Why does the 'Favor Composition over Inheritance' principle warn against subclassing concrete utility classes like `Properties extends Hashtable` in Java?",
+      "options": [
+        "Inheritance forbids adding new methods in the child class",
+        "Inheritance exposes inherited public mutators (`Hashtable.put`) that bypass subclass invariants and tightly couples child classes to parent implementation changes",
+        "Composition runs 10x faster at the CPU instruction level",
+        "Java interfaces cannot declare constants"
+      ],
+      "correctIndex": 1,
+      "explanation": "Concrete inheritance leaks base-class methods (like `Hashtable.put(Object, Object)` bypassing `Properties.setProperty(String, String)`) and creates fragile base-class coupling.",
+      "shortcut": "Inheritance exposes parent internals/mutators; composition wraps a private dependency cleanly."
+    },
+    {
+      "id": "mock2-tech-12",
+      "topic": "OOP",
+      "subtopic": "Dependency Inversion Principle",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "According to the Dependency Inversion Principle (the 'D' in SOLID), how should a high-level `OrderService` interact with a low-level `PostgresOrderRepository`?",
+      "options": [
+        "`OrderService` should instantiate `new PostgresOrderRepository()` directly inside its constructor",
+        "Both `OrderService` and `PostgresOrderRepository` should depend on an `OrderRepository` abstraction owned by the domain layer",
+        "`PostgresOrderRepository` should inherit from `OrderService`",
+        "`OrderService` should execute raw JDBC strings directly to eliminate layers"
+      ],
+      "correctIndex": 1,
+      "explanation": "DIP dictates that high-level policy modules must not depend on concrete low-level details; both should depend on abstractions (interfaces).",
+      "shortcut": "High-level + Low-level -> both depend on Abstractions."
+    },
+    {
+      "id": "mock2-tech-13",
+      "topic": "OOP",
+      "subtopic": "Immutability Class Design",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "To make a standard Java class strictly immutable (like `String`), which step is ESSENTIAL when the class holds a mutable field like `java.util.Date birthDate`?",
+      "options": [
+        "Mark `birthDate` as `protected final`",
+        "Perform defensive copying (`new Date(birthDate.getTime())`) in both the constructor and the getter method",
+        "Make the class `abstract`",
+        "Declare `birthDate` as `transient`"
+      ],
+      "correctIndex": 1,
+      "explanation": "Marking a reference `final` only locks the pointer, NOT the `Date` object's internal `setTime()` state! You must defensively copy on both ingress (constructor) and egress (getter).",
+      "shortcut": "final reference != immutable target object -> defensive copy on constructor + getter."
+    },
+    {
+      "id": "mock2-tech-14",
+      "topic": "JDBC",
+      "subtopic": "Retrieving Auto-Increment Primary Keys",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "When inserting a parent record in JDBC and immediately needing its database-generated auto-increment ID for child inserts, which JDBC API call retrieves it in one round-trip?",
+      "options": [
+        "`conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)` followed by `ps.getGeneratedKeys()`",
+        "`ps.executeQuery(\"SELECT MAX(id) FROM parent\")` on a separate unisolated connection",
+        "`stmt.getFetchSize()`",
+        "`conn.getMetaData().getPrimaryKeys(...)`"
+      ],
+      "correctIndex": 0,
+      "explanation": "Passing `Statement.RETURN_GENERATED_KEYS` when preparing the statement allows `ps.getGeneratedKeys()` to return a `ResultSet` holding the newly generated primary key(s) safely.",
+      "shortcut": "RETURN_GENERATED_KEYS + getGeneratedKeys() avoids race-prone MAX(id) queries."
+    },
+    {
+      "id": "mock2-tech-15",
+      "topic": "JDBC",
+      "subtopic": "Connection Pool & Close Semantics",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "In a Spring Boot application using HikariCP connection pooling, what actually happens when your `try-with-resources` block executes `connection.close()`?",
+      "options": [
+        "The underlying TCP socket to the database server is immediately terminated",
+        "HikariCP's proxy intercepts `close()`, resets session state, and returns the physical connection back to the pool for reuse",
+        "All uncommitted transactions are automatically committed",
+        "The `DataSource` bean is destroyed"
+      ],
+      "correctIndex": 1,
+      "explanation": "Pooled `Connection` wrappers override `close()` to return the connection to the pool rather than closing the physical TCP socket.",
+      "shortcut": "Pooled connection.close() = return to pool (and must still be called in try-with-resources to avoid leaks!)."
+    },
+    {
+      "id": "mock2-tech-16",
+      "topic": "SQL",
+      "subtopic": "Division-by-Zero Protection with NULLIF",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Which SQL expression safely evaluates `revenue / units` without throwing a division-by-zero error when `units = 0`, returning `0` instead?",
+      "options": [
+        "`COALESCE(revenue / units, 0)`",
+        "`COALESCE(revenue / NULLIF(units, 0), 0)`",
+        "`ISNULL(revenue, 0) / units`",
+        "`revenue / COALESCE(units, 0)`"
+      ],
+      "correctIndex": 1,
+      "explanation": "`NULLIF(units, 0)` turns `0` into `NULL`; `revenue / NULL` evaluates to `NULL` (no exception), and outer `COALESCE(..., 0)` converts that `NULL` to `0`.",
+      "shortcut": "NULLIF(divisor, 0) converts 0 -> NULL before division."
+    },
+    {
+      "id": "mock2-tech-17",
+      "topic": "SQL",
+      "subtopic": "UNION vs UNION ALL",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Why is `UNION ALL` significantly faster than `UNION` on large tables when you already know the two `SELECT` branches are disjoint?",
+      "options": [
+        "`UNION ALL` uses indexes automatically whereas `UNION` disables all indexes",
+        "`UNION` performs an expensive global sort or hash pass to deduplicate rows across the combined result, whereas `UNION ALL` streams rows directly",
+        "`UNION ALL` runs queries on GPU cores",
+        "`UNION` locks the source tables in exclusive mode"
+      ],
+      "correctIndex": 1,
+      "explanation": "`UNION` implies `DISTINCT` across the combined output, forcing a sort/hash deduplication pass; `UNION ALL` simply appends streams.",
+      "shortcut": "UNION = append + deduplicate; UNION ALL = fast raw append."
+    },
+    {
+      "id": "mock2-tech-18",
+      "topic": "SQL",
+      "subtopic": "COUNT(*) vs COUNT(col) with NULLs",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Table `Logs` has 5 rows where column `err_msg` has values `('timeout', NULL, '500', NULL, 'timeout')`. What do `COUNT(*)`, `COUNT(err_msg)`, and `COUNT(DISTINCT err_msg)` return respectively?",
+      "options": [
+        "5, 5, 3",
+        "5, 3, 2",
+        "3, 3, 2",
+        "5, 3, 3"
+      ],
+      "correctIndex": 1,
+      "explanation": "`COUNT(*)` counts all 5 rows; `COUNT(err_msg)` ignores NULLs -> 3; `COUNT(DISTINCT err_msg)` counts distinct non-NULL values (`'timeout'`, `'500'`) -> 2.",
+      "shortcut": "COUNT(col) skips NULLs; COUNT(*) counts every row."
+    },
+    {
+      "id": "mock2-tech-19",
+      "topic": "DBMS",
+      "subtopic": "BCNF vs 3NF Dependency Preservation",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "Which statement accurately compares Third Normal Form (3NF) and Boyce-Codd Normal Form (BCNF)?",
+      "options": [
+        "Every relation in 3NF is automatically in BCNF.",
+        "Every binary (two-attribute) relation is guaranteed to be in BCNF, and while BCNF is always lossless-join achievable, it is not always dependency-preserving (unlike 3NF).",
+        "3NF allows partial functional dependencies on composite keys.",
+        "BCNF forbids multi-valued dependencies (4NF)."
+      ],
+      "correctIndex": 1,
+      "explanation": "BCNF guarantees lossless decomposition but can occasionally break dependency preservation (when overlapping candidate keys exist), whereas 3NF guarantees both lossless-join and dependency preservation. Every 2-attribute relation is trivially in BCNF.",
+      "shortcut": "3NF: always lossless + dependency-preserving; BCNF: always lossless, not always dependency-preserving."
+    },
+    {
+      "id": "mock2-tech-20",
+      "topic": "DBMS",
+      "subtopic": "Write-Ahead Logging (WAL)",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "What two strict ordering rules does the Write-Ahead Logging (WAL) protocol enforce to guarantee database Atomicity and Durability across power crashes?",
+      "options": [
+        "Index pages must be rebuilt before reading any heap row.",
+        "The undo log record must reach disk before dirty data pages are flushed (STEAL), and all redo log records must be forced to disk before a transaction's COMMIT returns (FORCE-log / NO-FORCE data).",
+        "Checkpoints must wipe all committed records from the transaction log.",
+        "Dirty pages can never leave the buffer pool until a transaction commits."
+      ],
+      "correctIndex": 1,
+      "explanation": "WAL requires logging before modifying disk pages (so dirty uncommitted pages flushed early can be UNDOne) and flushing commit/redo logs before reporting COMMIT success (so committed changes in RAM can be REDOne after a crash).",
+      "shortcut": "WAL: Log record to stable storage BEFORE dirty page flush & BEFORE commit ACK."
+    },
+    {
+      "id": "mock2-tech-21",
+      "topic": "DBMS",
+      "subtopic": "Covering Index Optimization",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Why does creating `INDEX idx_dept_sal ON emp(dept_id, salary)` enable an 'Index-Only Scan' for `SELECT SUM(salary) FROM emp WHERE dept_id = 10;`?",
+      "options": [
+        "Because `SUM()` bypasses B+ tree traversal",
+        "Every column referenced in both the `WHERE` and `SELECT` clauses resides inside the index leaf entries, eliminating random heap-table lookups",
+        "Composite indexes automatically materialize `SUM()` results",
+        "The optimizer drops the primary key table"
+      ],
+      "correctIndex": 1,
+      "explanation": "When an index contains all columns needed by a query (a covering index), the engine satisfies the query directly from index pages (subject to visibility-map checks in MVCC) without touching table heap pages.",
+      "shortcut": "Covering index satisfies WHERE + SELECT directly from index leaves."
+    },
+    {
+      "id": "mock2-tech-22",
+      "topic": "OS",
+      "subtopic": "TLB Effective Access Time",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "A paging system uses a single-level page table in RAM. TLB lookup takes 20 ns, RAM access takes 100 ns, and the TLB hit ratio is 90%. What is the Effective Access Time (EAT) for a memory read?",
+      "options": [
+        "120 ns",
+        "130 ns",
+        "140 ns",
+        "210 ns"
+      ],
+      "correctIndex": 1,
+      "explanation": "On a TLB hit (90%): 20 ns (TLB) + 100 ns (RAM data) = 120 ns. On a TLB miss (10%): 20 ns (TLB) + 100 ns (page table in RAM) + 100 ns (RAM data) = 220 ns. EAT = 0.9*(120) + 0.1*(220) = 108 + 22 = 130 ns.",
+      "shortcut": "EAT = TLB + RAM + (1 - hitRate)*RAM = 20 + 100 + 0.1*100 = 130 ns."
+    },
+    {
+      "id": "mock2-tech-23",
+      "topic": "OS",
+      "subtopic": "Priority Inversion & Inheritance",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "Low-priority Task L holds mutex M needed by High-priority Task H, while Medium-priority Task M_cpu continuously preempts L and runs indefinitely. What is this pathology called, and how does an RTOS resolve it?",
+      "options": [
+        "Starvation; resolved by switching to FIFO scheduling",
+        "Unbounded Priority Inversion; resolved via Priority Inheritance Protocol (temporarily boosting L to H's priority while L holds M)",
+        "Convoy Effect; resolved by lowering time quantum",
+        "Thrashing; resolved by adding swap space"
+      ],
+      "correctIndex": 1,
+      "explanation": "Medium-priority tasks indirectly starve High-priority Task H because L cannot release the mutex. Priority Inheritance temporarily elevates L's priority to H's so L completes its critical section and releases M.",
+      "shortcut": "Medium preempts Low blocking High = Priority Inversion -> fix with Priority Inheritance."
+    },
+    {
+      "id": "mock2-tech-24",
+      "topic": "OS",
+      "subtopic": "Virtual Memory Page Table Sizing",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "A 32-bit virtual address space uses 4 KB (`4096`-byte) pages, and each page table entry (PTE) occupies 4 bytes. What is the maximum memory required for a single process's full flat single-level page table?",
+      "options": [
+        "1 MB",
+        "4 MB",
+        "8 MB",
+        "16 MB"
+      ],
+      "correctIndex": 1,
+      "explanation": "Page offset = log2(4096) = 12 bits. Remaining VPN bits = 32 - 12 = 20 bits => 2^20 = 1M page table entries. Size = 2^20 * 4 bytes = 4 MB per process.",
+      "shortcut": "Entries = 2^(32 - 12) = 1M; 1M * 4B = 4 MB."
+    },
+    {
+      "id": "mock2-tech-25",
+      "topic": "OS",
+      "subtopic": "Kernel vs User-Level Threads",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "What is the primary disadvantage of a pure Many-to-One (user-level threads mapped to a single kernel thread) threading library on a multi-core CPU?",
+      "options": [
+        "Context switching between user threads requires a full kernel trap",
+        "A single blocking system call by one user thread blocks the entire process, and threads cannot execute in parallel across multiple CPU cores",
+        "User threads cannot share heap memory",
+        "Thread creation takes longer than `fork()`"
+      ],
+      "correctIndex": 1,
+      "explanation": "Because the OS kernel sees only one kernel-schedulable entity in Many-to-One, any blocking syscall stalls all user threads and multi-core parallelism is impossible.",
+      "shortcut": "Many-to-One: fast user switch, but one blocking syscall freezes all & zero multi-core parallelism."
+    },
+    {
+      "id": "mock2-tech-26",
+      "topic": "CN",
+      "subtopic": "IPv4 Packet Fragmentation Math",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "An IPv4 datagram of total size 4020 bytes (20-byte IP header + 4000-byte payload) must traverse a link with MTU = 1500 bytes. What is the payload size and Fragment Offset (in 8-byte units) of the SECOND fragment?",
+      "options": [
+        "1480 bytes payload, offset = 185",
+        "1480 bytes payload, offset = 1480",
+        "1472 bytes payload, offset = 184",
+        "1040 bytes payload, offset = 370"
+      ],
+      "correctIndex": 0,
+      "explanation": "Max payload per fragment = MTU - 20 = 1480 bytes (already divisible by 8: 1480 / 8 = 185). Fragment 1 carries bytes 0..1479 (1480B, offset=0, MF=1). Fragment 2 carries bytes 1480..2959 (1480B, offset = 1480/8 = 185, MF=1). Fragment 3 carries remaining 1040B (offset=370, MF=0).",
+      "shortcut": "Payload = floor((MTU-20)/8)*8 = 1480; 2nd fragment offset = 1480 / 8 = 185."
+    },
+    {
+      "id": "mock2-tech-27",
+      "topic": "CN",
+      "subtopic": "TLS 1.3 vs TLS 1.2 Handshake",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "How did TLS 1.3 cut connection setup latency compared to TLS 1.2 while also strengthening security?",
+      "options": [
+        "By switching from TCP to raw ICMP",
+        "By dropping legacy RSA key exchange (enforcing ephemeral ECDHE forward secrecy) and sending client key shares in the initial ClientHello for a 1-RTT handshake",
+        "By removing server certificate verification",
+        "By encrypting only HTTP headers and leaving bodies plaintext"
+      ],
+      "correctIndex": 1,
+      "explanation": "TLS 1.3 eliminates RSA static key transport and sends speculative DH key shares right in `ClientHello`, completing full authenticated encrypted setup in 1 round trip (or 0-RTT resumption).",
+      "shortcut": "TLS 1.3 = mandatory forward secrecy + 1-RTT handshake."
+    },
+    {
+      "id": "mock2-tech-28",
+      "topic": "CN",
+      "subtopic": "DNS Iterative vs Recursive Resolution",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "When your laptop queries your ISP's DNS resolver for `api.example.com`, what type of query does your laptop typically send to the ISP resolver vs what the ISP resolver sends to Root/TLD nameservers?",
+      "options": [
+        "Iterative from laptop; Recursive to Root",
+        "Recursive from laptop to ISP resolver; Iterative from ISP resolver to Root/TLD/Authoritative servers",
+        "Both strictly Iterative",
+        "Broadcast ARP followed by Recursive"
+      ],
+      "correctIndex": 1,
+      "explanation": "Stub resolvers (laptops) send recursive queries asking the local resolver to return the final answer; the resolver then performs iterative referrals down Root -> TLD -> Authoritative nameservers.",
+      "shortcut": "Client -> Resolver = Recursive; Resolver -> Root/TLD = Iterative."
+    },
+    {
+      "id": "mock2-tech-29",
+      "topic": "CN",
+      "subtopic": "TCP TIME_WAIT State",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Why does the host performing an active TCP close remain in the `TIME_WAIT` state for `2 * MSL` (Maximum Segment Lifetime) after sending the final ACK?",
+      "options": [
+        "To let the peer flush HTTP cookies to disk",
+        "To ensure delayed duplicate packets from the old connection expire in the network and to reliably retransmit the final ACK if it was lost",
+        "To wait for DHCP lease renewal",
+        "To keep the TLS session key alive permanently"
+      ],
+      "correctIndex": 1,
+      "explanation": "`2*MSL` guarantees: (1) if the final ACK is lost and the passive closer resends `FIN`, the active closer can ACK it; (2) stray old packets vanish before the same 4-tuple port pair is reused.",
+      "shortcut": "TIME_WAIT (2*MSL) prevents stray-packet corruption & handles lost final ACK."
+    },
+    {
+      "id": "mock2-tech-30",
+      "topic": "DSA",
+      "subtopic": "Kadane's Algorithm Negative Array Trap",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "On an integer array `[-8, -3, -6, -2, -5, -4]` where a non-empty contiguous subarray is required, what must standard Kadane's algorithm return?",
+      "options": ["0", "-2", "-3", "-28"],
+      "correctIndex": 1,
+      "explanation": "Initializing `best = a[0]` and updating `cur = max(a[i], cur + a[i]); best = max(best, cur)` yields the single-element subarray `[-2]` = `-2` (a common bug initializes `best = 0` and wrongly returns `0`).",
+      "shortcut": "Non-empty max subarray on all-negatives = largest (least negative) element = -2."
+    },
+    {
+      "id": "mock2-tech-31",
+      "topic": "DSA",
+      "subtopic": "Disjoint Set Union Optimization",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Combining Union by Rank (or Size) with Path Compression in a Disjoint Set Union (DSU) data structure gives what amortized time complexity per `find`/`union` operation over M operations on N elements?",
+      "options": [
+        "O(log N)",
+        "O(alpha(N)) — inverse Ackermann function, practically <= 5",
+        "O(sqrt(N))",
+        "O(N)"
+      ],
+      "correctIndex": 1,
+      "explanation": "Tarjan proved that pairing Union by Rank/Size with Path Compression achieves `O(alpha(N))` amortized time per operation.",
+      "shortcut": "DSU with both heuristics = O(alpha(N)) ≈ O(1) practically."
+    },
+    {
+      "id": "mock2-tech-32",
+      "topic": "DSA",
+      "subtopic": "BFS vs DFS Shortest Path",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Which traversal guarantees finding the minimum-hop (fewest-edges) path from source `S` to target `T` in an unweighted graph?",
+      "options": [
+        "Depth-First Search (DFS)",
+        "Breadth-First Search (BFS)",
+        "Topological Post-Order",
+        "Randomized Walk"
+      ],
+      "correctIndex": 1,
+      "explanation": "BFS explores vertices strictly in non-decreasing order of edge distance from `S`, so the first time `T` is reached, the path length is minimal.",
+      "shortcut": "Unweighted shortest path = BFS; Weighted non-negative = Dijkstra."
+    },
+    {
+      "id": "mock2-tech-33",
+      "topic": "DSA",
+      "subtopic": "Red-Black Tree vs AVL Trade-off",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Why did Java's `TreeMap` and `HashMap` (bucket treeification) choose Red-Black trees over strictly balanced AVL trees?",
+      "options": [
+        "AVL trees cannot store duplicate keys whereas Red-Black trees can",
+        "Red-Black trees enforce looser height bounds (`<= 2 log2(N+1)`), requiring fewer rotations (at most 2 on insert, 3 on delete) under heavy mutation",
+        "Red-Black trees use O(1) memory per node",
+        "AVL trees have O(N) search time"
+      ],
+      "correctIndex": 1,
+      "explanation": "AVL trees maintain tighter balance (`~1.44 log N`) yielding slightly faster reads, whereas Red-Black trees require `O(1)` rotations on inserts/deletes (`<= 2` / `<= 3`), making them faster for write-heavy maps.",
+      "shortcut": "AVL = read-heavy (tighter balance); Red-Black = balanced read/write (fewer rotations)."
+    },
+    {
+      "id": "mock2-tech-34",
+      "topic": "SE",
+      "subtopic": "Blue-Green vs Canary Deployment",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "How does a Canary release strategy differ operationally from a Blue-Green deployment?",
+      "options": [
+        "Blue-Green compiles code on developer laptops while Canary skips testing",
+        "Blue-Green switches 100% of production traffic instantaneously between two identical environments; Canary incrementally shifts a small percentage (e.g., 5% -> 25% -> 100%) while monitoring error/latency metrics",
+        "Canary requires shutting down the database during rollout",
+        "Blue-Green is exclusively for mobile apps"
+      ],
+      "correctIndex": 1,
+      "explanation": "Blue-Green maintains two full environments with instant router cutover (fast rollback), whereas Canary exposes a progressive slice of live traffic to limit blast radius while validating telemetry.",
+      "shortcut": "Blue-Green = 0->100% instant cutover; Canary = gradual % ramp."
+    },
+    {
+      "id": "mock2-tech-35",
+      "topic": "SE",
+      "subtopic": "Spiral SDLC Model",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Which SDLC process model explicitly incorporates iterative Risk Analysis and prototyping at the start of every cycle, making it well-suited for large, high-risk systems?",
+      "options": [
+        "Waterfall Model",
+        "Spiral Model (Boehm)",
+        "Big Bang Model",
+        "V-Model"
+      ],
+      "correctIndex": 1,
+      "explanation": "Barry Boehm's Spiral Model cycles through Objective setting -> Risk evaluation & prototyping -> Engineering -> Planning.",
+      "shortcut": "Risk-driven iterative model = Spiral Model."
+    },
+    {
+      "id": "mock2-tech-36",
+      "topic": "SE",
+      "subtopic": "REST Idempotency",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "In RESTful HTTP API design, which pair of methods are BOTH defined by RFC 9110 as safe AND idempotent, versus idempotent ONLY (not safe)?",
+      "options": [
+        "POST & PUT are safe; DELETE is not idempotent",
+        "GET & HEAD are safe and idempotent; PUT & DELETE are idempotent (assuming target state semantics) but not safe",
+        "PATCH & POST are idempotent; GET is not",
+        "PUT is safe; GET is non-idempotent"
+      ],
+      "correctIndex": 1,
+      "explanation": "Safe methods (`GET`, `HEAD`, `OPTIONS`) do not mutate server state and are naturally idempotent. `PUT` (replace state) and `DELETE` (ensure absence) mutate state (not safe) yet produce the same final state when repeated (idempotent), whereas `POST` is neither.",
+      "shortcut": "Safe+Idempotent: GET/HEAD; Mutating+Idempotent: PUT/DELETE; Non-idempotent: POST."
+    }
+  ],
+  "codingProblems": [
+    {
+      "id": "mock2-c01",
+      "topic": "Two Pointers",
+      "subtopic": "Elevation Water Trapping",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "title": "Trapping Rain Water Between Elevation Bars",
+      "statement": "Given N non-negative integers representing an elevation map where the width of each bar is 1, compute the total units of rainwater that can be trapped after raining.",
+      "inputFormat": "Line 1: Integer N.\nLine 2: N space-separated non-negative integers H[0..N-1].",
+      "outputFormat": "A single 64-bit integer denoting total trapped rainwater.",
+      "constraints": [
+        "1 <= N <= 10^5",
+        "0 <= H[i] <= 10^9",
+        "Target complexity: O(N) time, O(1) extra space"
+      ],
+      "testCases": [
+        { "input": "12\n0 1 0 2 1 0 1 3 2 1 2 1\n", "expectedOutput": "6", "isSample": true },
+        { "input": "6\n4 2 0 3 2 5\n", "expectedOutput": "9", "isSample": true },
+        { "input": "5\n3 0 2 0 4\n", "expectedOutput": "7", "isSample": false },
+        { "input": "5\n1 2 3 4 5\n", "expectedOutput": "0", "isSample": false },
+        { "input": "5\n5 4 3 2 1\n", "expectedOutput": "0", "isSample": false },
+        { "input": "3\n2 2 2\n", "expectedOutput": "0", "isSample": false },
+        { "input": "3\n5 1 5\n", "expectedOutput": "4", "isSample": false }
+      ],
+      "starterCode": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        long[] h = new long[n];\n        for (int i = 0; i < n; i++) h[i] = sc.nextLong();\n        // Write your solution here\n    }\n}",
+        "python": "import sys\n\ndata = list(map(int, sys.stdin.read().split()))\nn = data[0]\nh = data[1:1+n]\n# Write your solution here\n",
+        "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n; cin >> n;\n    // Write your solution here\n    return 0;\n}\n"
+      },
+      "solutions": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        long[] h = new long[n];\n        for (int i = 0; i < n; i++) h[i] = sc.nextLong();\n        int l = 0, r = n - 1;\n        long leftMax = 0, rightMax = 0, water = 0;\n        while (l < r) {\n            if (h[l] < h[r]) {\n                leftMax = Math.max(leftMax, h[l]);\n                water += leftMax - h[l];\n                l++;\n            } else {\n                rightMax = Math.max(rightMax, h[r]);\n                water += rightMax - h[r];\n                r--;\n            }\n        }\n        System.out.println(water);\n    }\n}",
+        "python": "import sys\n\ndata = list(map(int, sys.stdin.read().split()))\nn = data[0]\nh = data[1:1+n]\nl, r = 0, n - 1\nlm = rm = ans = 0\nwhile l < r:\n    if h[l] < h[r]:\n        lm = max(lm, h[l])\n        ans += lm - h[l]\n        l += 1\n    else:\n        rm = max(rm, h[r])\n        ans += rm - h[r]\n        r -= 1\nprint(ans)\n"
+      },
+      "timeComplexity": "O(N) two-pointer inward scan.",
+      "spaceComplexity": "O(1) extra space beyond input array.",
+      "edgeCases": [
+        "Strictly increasing or decreasing elevations trap 0 units",
+        "Flat equal bars trap 0 units",
+        "Large bar heights (10^9) require 64-bit `long` accumulator"
+      ]
+    },
+    {
+      "id": "mock2-c02",
+      "topic": "Binary Search",
+      "subtopic": "Rotated Sorted Array",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "title": "Search Target in Rotated Sorted Array",
+      "statement": "An array of N distinct integers sorted in strictly ascending order was rotated at an unknown pivot index. Given this rotated array A and a target integer X, return the 0-based index of X if present, or -1 if absent, in O(log N) time.",
+      "inputFormat": "Line 1: Two integers N and X.\nLine 2: N space-separated distinct integers A[0..N-1].",
+      "outputFormat": "0-based index of X, or -1 if not found.",
+      "constraints": [
+        "1 <= N <= 10^5",
+        "-10^9 <= A[i], X <= 10^9",
+        "All elements in A are distinct"
+      ],
+      "testCases": [
+        { "input": "7 0\n4 5 6 7 0 1 2\n", "expectedOutput": "4", "isSample": true },
+        { "input": "7 3\n4 5 6 7 0 1 2\n", "expectedOutput": "-1", "isSample": true },
+        { "input": "1 5\n5\n", "expectedOutput": "0", "isSample": false },
+        { "input": "1 0\n5\n", "expectedOutput": "-1", "isSample": false },
+        { "input": "5 1\n1 2 3 4 5\n", "expectedOutput": "0", "isSample": false },
+        { "input": "6 6\n5 6 1 2 3 4\n", "expectedOutput": "1", "isSample": false },
+        { "input": "6 -5\n2 4 6 -10 -5 0\n", "expectedOutput": "4", "isSample": false }
+      ],
+      "starterCode": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        long target = sc.nextLong();\n        long[] a = new long[n];\n        for (int i = 0; i < n; i++) a[i] = sc.nextLong();\n        // Write your solution here\n    }\n}",
+        "python": "import sys\n\ndata = list(map(int, sys.stdin.read().split()))\nn, target = data[0], data[1]\na = data[2:2+n]\n# Write your solution here\n",
+        "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n; long long target; cin >> n >> target;\n    // Write your solution here\n    return 0;\n}\n"
+      },
+      "solutions": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        long target = sc.nextLong();\n        long[] a = new long[n];\n        for (int i = 0; i < n; i++) a[i] = sc.nextLong();\n        int lo = 0, hi = n - 1, ans = -1;\n        while (lo <= hi) {\n            int mid = lo + (hi - lo) / 2;\n            if (a[mid] == target) { ans = mid; break; }\n            if (a[lo] <= a[mid]) {\n                if (a[lo] <= target && target < a[mid]) hi = mid - 1;\n                else lo = mid + 1;\n            } else {\n                if (a[mid] < target && target <= a[hi]) lo = mid + 1;\n                else hi = mid - 1;\n            }\n        }\n        System.out.println(ans);\n    }\n}",
+        "python": "import sys\n\ndata = list(map(int, sys.stdin.read().split()))\nn, target = data[0], data[1]\na = data[2:2+n]\nlo, hi = 0, n - 1\nans = -1\nwhile lo <= hi:\n    mid = (lo + hi) // 2\n    if a[mid] == target:\n        ans = mid\n        break\n    if a[lo] <= a[mid]:\n        if a[lo] <= target < a[mid]:\n            hi = mid - 1\n        else:\n            lo = mid + 1\n    else:\n        if a[mid] < target <= a[hi]:\n            lo = mid + 1\n        else:\n            hi = mid - 1\nprint(ans)\n"
+      },
+      "timeComplexity": "O(log N) — at least one half (`[lo..mid]` or `[mid..hi]`) is guaranteed sorted.",
+      "spaceComplexity": "O(1) extra space.",
+      "edgeCases": [
+        "Two-element slice where `lo == mid`: `a[lo] <= a[mid]` (`<=` instead of `<`) is crucial!",
+        "Unrotated sorted array (`1 2 3 4 5`)",
+        "Target not present -> `-1`"
+      ]
+    }
+  ]
+}

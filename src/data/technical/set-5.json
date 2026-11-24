@@ -1,0 +1,401 @@
+{
+  "setId": "tech-set-5",
+  "title": "Technical MCQ Set 05: Async Java, Unix Inodes & MVCC",
+  "description": "Tests CompletableFuture, WeakHashMap, Unix inode capacity numericals, MVCC, UNION vs UNION ALL, Trie complexity, and HTTP/2.",
+  "durationMinutes": 35,
+  "questions": [
+    {
+      "id": "tech-5-q01",
+      "topic": "Output Prediction",
+      "subtopic": "Regex Reluctant vs Greedy Quantifier",
+      "difficulty": "hard",
+      "source_tag": "reported",
+      "question": "What does the following Java regex snippet print?",
+      "codeSnippet": "Matcher m = Pattern.compile(\"<a>.*?</a>\").matcher(\"<a>one</a><b>mid</b><a>two</a>\");\nif (m.find()) {\n  System.out.println(m.group());\n}",
+      "options": [
+        "<a>one</a><b>mid</b><a>two</a>",
+        "<a>one</a>",
+        "<a>two</a>",
+        "Empty string"
+      ],
+      "correctIndex": 1,
+      "explanation": "`.*?` is a reluctant (non-greedy) quantifier, so it stops at the FIRST closing `</a>`, matching `<a>one</a>`. A greedy `.*` would match across the entire string to the final `</a>`."
+    },
+    {
+      "id": "tech-5-q02",
+      "topic": "Output Prediction",
+      "subtopic": "Static Field Initialization Order",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "What does this Java class print when `main` executes?",
+      "codeSnippet": "class InitOrder {\n  static int a = b + 1;\n  static int b = 10;\n  public static void main(String[] args) {\n    System.out.println(a + \":\" + b);\n  }\n}",
+      "options": [
+        "11:10",
+        "1:10",
+        "Compilation error: illegal forward reference",
+        "0:10"
+      ],
+      "correctIndex": 2,
+      "explanation": "Java forbids referencing a static field by simple name before its textual declaration in an initializer (`a = b + 1` before `b` is declared), causing a compile-time `illegal forward reference` error (unless accessed via `InitOrder.b`)."
+    },
+    {
+      "id": "tech-5-q03",
+      "topic": "Output Prediction",
+      "subtopic": "Covariant Return Types",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "Which statement describes the behavior of the following Java inheritance code?",
+      "codeSnippet": "class Animal {}\nclass Dog extends Animal {}\nclass Shelter {\n  Animal adopt() { return new Animal(); }\n}\nclass DogShelter extends Shelter {\n  @Override Dog adopt() { return new Dog(); }\n}",
+      "options": [
+        "Compilation error: return type `Dog` is incompatible with `Animal`",
+        "Compiles cleanly because `Dog` is a covariant return type (subtype of `Animal`)",
+        "Compiles only if `adopt()` is marked `static`",
+        "Throws `ClassCastException` at runtime"
+      ],
+      "correctIndex": 1,
+      "explanation": "Since Java 5, an overriding method may return a subtype (covariant return type) of the superclass method's reference return type."
+    },
+    {
+      "id": "tech-5-q04",
+      "topic": "Java",
+      "subtopic": "CompletableFuture thenApply vs thenCompose",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "You have `CompletableFuture<User> fetchUser(id)` and `CompletableFuture<List<Order>> fetchOrders(User u)`. Which method chains them into a flat `CompletableFuture<List<Order>>`?",
+      "options": [
+        "`fetchUser(id).thenApply(u -> fetchOrders(u))`",
+        "`fetchUser(id).thenCompose(u -> fetchOrders(u))`",
+        "`fetchUser(id).thenAccept(u -> fetchOrders(u))`",
+        "`fetchUser(id).join(fetchOrders)`"
+      ],
+      "correctIndex": 1,
+      "explanation": "`thenApply` would wrap the result into nested `CompletableFuture<CompletableFuture<List<Order>>>`, whereas `thenCompose` flattens dependent asynchronous stages (like `flatMap`)."
+    },
+    {
+      "id": "tech-5-q05",
+      "topic": "Java",
+      "subtopic": "WeakHashMap Garbage Collection",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "How does `WeakHashMap<K, V>` differ from `HashMap<K, V>` regarding garbage collection?",
+      "options": [
+        "Values are wrapped in weak references while keys stay strong",
+        "Entries are automatically eligible for eviction once their key has no other strong references anywhere in the JVM",
+        "It prevents garbage collection from ever running on keys",
+        "It stores all entries off-heap in native memory"
+      ],
+      "correctIndex": 1,
+      "explanation": "`WeakHashMap` wraps each key in a `WeakReference`. Once the application drops all strong references to a key, GC reclaims the key and `WeakHashMap` clears the stale entry via its `ReferenceQueue`."
+    },
+    {
+      "id": "tech-5-q06",
+      "topic": "OOP",
+      "subtopic": "Shallow vs Deep Copy",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "If class `Invoice` implements `Cloneable`, calls `super.clone()`, and holds a mutable `List<LineItem> items`, what happens when a caller mutates `clonedInvoice.items.add(...)`?",
+      "options": [
+        "Only `clonedInvoice` sees the new item",
+        "Both the original `Invoice` and `clonedInvoice` see the added item because `super.clone()` copies only the `items` reference (shallow copy)",
+        "JVM throws `CloneNotSupportedException` during `add()`",
+        "Java automatically performs a deep copy of all `Collection` fields"
+      ],
+      "correctIndex": 1,
+      "explanation": "`Object.clone()` performs a field-by-field shallow copy; mutable reference fields point to the exact same heap object unless explicitly deep-copied inside `clone()`."
+    },
+    {
+      "id": "tech-5-q07",
+      "topic": "SQL",
+      "subtopic": "UNION vs UNION ALL",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Why is `UNION ALL` typically significantly faster than `UNION` when combining two large query results that are already known to be disjoint?",
+      "options": [
+        "`UNION ALL` skips column type checking",
+        "`UNION ALL` appends rows directly without performing an expensive sort/hash deduplication pass to eliminate duplicates",
+        "`UNION ALL` runs only on read replicas",
+        "`UNION` locks both source tables exclusively"
+      ],
+      "correctIndex": 1,
+      "explanation": "`UNION` removes duplicate rows across the combined set (requiring sorting or hashing), whereas `UNION ALL` streams all rows straight through in O(N) without deduplication."
+    },
+    {
+      "id": "tech-5-q08",
+      "topic": "SQL",
+      "subtopic": "GROUP BY with HAVING Aggregate Filter",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "Which query correctly finds departments whose average salary exceeds 70,000, considering only employees hired after 2022?",
+      "options": [
+        "`SELECT dept_id FROM Emp WHERE AVG(salary) > 70000 AND hire_year > 2022 GROUP BY dept_id`",
+        "`SELECT dept_id FROM Emp WHERE hire_year > 2022 GROUP BY dept_id HAVING AVG(salary) > 70000`",
+        "`SELECT dept_id FROM Emp GROUP BY dept_id HAVING hire_year > 2022 AND AVG(salary) > 70000`",
+        "`SELECT dept_id FROM Emp HAVING AVG(salary) > 70000 WHERE hire_year > 2022`"
+      ],
+      "correctIndex": 1,
+      "explanation": "Row-level conditions (`hire_year > 2022`) belong in `WHERE` before grouping; aggregate conditions (`AVG(salary) > 70000`) belong in `HAVING` after `GROUP BY`."
+    },
+    {
+      "id": "tech-5-q09",
+      "topic": "DBMS",
+      "subtopic": "Second Normal Form (2NF)",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "A table `Enrollment(student_id, course_id, grade, course_title)` has primary key `(student_id, course_id)`, and `course_id -> course_title`. Which normal form is violated?",
+      "options": [
+        "1NF",
+        "2NF (partial functional dependency on part of a composite key)",
+        "Only BCNF (3NF is satisfied)",
+        "4NF only"
+      ],
+      "correctIndex": 1,
+      "explanation": "Non-prime attribute `course_title` depends on only a proper subset (`course_id`) of the composite candidate key `(student_id, course_id)`—a partial dependency violating 2NF."
+    },
+    {
+      "id": "tech-5-q10",
+      "topic": "DBMS",
+      "subtopic": "MVCC Snapshot Isolation",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "How does Multi-Version Concurrency Control (MVCC) in PostgreSQL allow `SELECT` queries to run concurrently with `UPDATE` transactions without blocking each other?",
+      "options": [
+        "By locking the entire database file for 10 ms slices",
+        "By keeping older row tuple versions tagged with transaction IDs so readers view a consistent snapshot without acquiring read locks",
+        "By disabling ACID isolation for all `SELECT` queries",
+        "By duplicating the whole table in RAM on every `SELECT`"
+      ],
+      "correctIndex": 1,
+      "explanation": "MVCC retains prior tuple versions so writers never block readers and readers never block writers; each transaction sees row versions valid as of its snapshot transaction ID."
+    },
+    {
+      "id": "tech-5-q11",
+      "topic": "OS",
+      "subtopic": "Unix Inode File Size Numerical",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "A Unix-like filesystem uses 4 KB disk blocks and 4-byte block pointers. An inode has 10 direct pointers, 1 single-indirect pointer, and 1 double-indirect pointer. Approximately what is the maximum file size supported?",
+      "options": [
+        "~4 MB",
+        "~4 GB",
+        "~64 MB",
+        "~16 GB"
+      ],
+      "correctIndex": 1,
+      "explanation": "Pointers per block = 4096 / 4 = 1024. Direct = 10 * 4 KB = 40 KB. Single indirect = 1024 * 4 KB = 4 MB. Double indirect = 1024 * 1024 * 4 KB = 4,194,304 KB = 4 GB. Total ≈ 4 GB + 4 MB + 40 KB (~4 GB)."
+    },
+    {
+      "id": "tech-5-q12",
+      "topic": "OS",
+      "subtopic": "Deadlock vs Starvation",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Which distinction between Deadlock and Starvation is accurate?",
+      "options": [
+        "In deadlock, processes are blocked permanently waiting for each other; in starvation, a runnable process is perpetually denied CPU/resources due to scheduling bias (e.g., strict priority)",
+        "Starvation can only occur on single-core CPUs, while deadlock requires 4+ cores",
+        "Deadlock is solved by aging, whereas starvation requires killing all OS threads",
+        "They are identical terms for memory leaks"
+      ],
+      "correctIndex": 0,
+      "explanation": "Deadlocked processes cannot progress under any schedule without intervention (mutual circular wait), whereas a starving process is ready to run but continuously bypassed (fixed via priority aging)."
+    },
+    {
+      "id": "tech-5-q13",
+      "topic": "OS",
+      "subtopic": "Dining Philosophers Asymmetric Solution",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "In the classic Dining Philosophers problem with 5 philosophers, making Philosophers 0–3 pick up their LEFT fork first while Philosopher 4 picks up their RIGHT fork first prevents deadlock because it breaks:",
+      "options": [
+        "Mutual Exclusion",
+        "Hold and Wait",
+        "Circular Wait",
+        "Context Switching"
+      ],
+      "correctIndex": 2,
+      "explanation": "Reversing fork acquisition order for one philosopher assigns a global fork hierarchy, making a circular wait cycle impossible."
+    },
+    {
+      "id": "tech-5-q14",
+      "topic": "CN",
+      "subtopic": "HTTP/2 Multiplexing vs HTTP/1.1",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "How does HTTP/2 eliminate application-layer HTTP Head-of-Line (HoL) blocking compared to HTTP/1.1 pipelining?",
+      "options": [
+        "By running over UDP instead of TCP",
+        "By multiplexing independent bidirectional binary streams (frames) concurrently over a single TCP connection",
+        "By disabling TLS encryption on static assets",
+        "By opening 100 separate TCP connections per webpage"
+      ],
+      "correctIndex": 1,
+      "explanation": "HTTP/2 splits requests/responses into tagged binary frames across concurrent streams over one TCP connection, so one slow response no longer stalls other HTTP responses (though TCP packet-loss HoL still remains until HTTP/3 QUIC)."
+    },
+    {
+      "id": "tech-5-q15",
+      "topic": "CN",
+      "subtopic": "TCP Initial RTT & Handshake Latency",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "With a 30 ms round-trip time (RTT) between client and server (ignoring TLS and transmission time), how long after the client sends `SYN` does the client receive the first HTTP response byte if the HTTP `GET` is sent immediately after the 3-way handshake?",
+      "options": ["30 ms", "60 ms", "90 ms", "120 ms"],
+      "correctIndex": 1,
+      "explanation": "1 RTT (30 ms) for `SYN` -> `SYN-ACK`; client then sends `ACK` pipelined with HTTP `GET`, and receives the first HTTP response byte 1 RTT later => 2 * 30 = 60 ms."
+    },
+    {
+      "id": "tech-5-q16",
+      "topic": "DSA",
+      "subtopic": "Trie Search Complexity",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "What is the worst-case time complexity to search for a string of length `L` inside a Trie storing `N` dictionary words over a constant alphabet size (e.g., 26 lowercase letters)?",
+      "options": ["O(N)", "O(L log N)", "O(L)", "O(N * L)"],
+      "correctIndex": 2,
+      "explanation": "A Trie walks at most `L` characters down from the root using O(1) array indexing per character, independent of the total number of stored words `N`."
+    },
+    {
+      "id": "tech-5-q17",
+      "topic": "DSA",
+      "subtopic": "Kadane's Algorithm Edge Case",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "In standard non-empty Maximum Subarray Sum (Kadane's algorithm), if an array contains ALL negative numbers (e.g., `[-8, -3, -6, -2, -5]`), what must the algorithm return?",
+      "options": [
+        "`0`",
+        "`-2` (the least negative single-element subarray)",
+        "`-24` (sum of all elements)",
+        "`Integer.MIN_VALUE`"
+      ],
+      "correctIndex": 1,
+      "explanation": "If initialized properly (`cur = arr[0]`, `best = arr[0]`, updating `cur = max(arr[i], cur + arr[i])`), Kadane's handles all-negative arrays and returns the largest single element `-2` rather than erroneously clamping to `0`."
+    },
+    {
+      "id": "tech-5-q18",
+      "topic": "JDBC",
+      "subtopic": "CallableStatement Stored Procedures",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Which JDBC interface is specifically designed to invoke database stored procedures with `IN`, `OUT`, and `INOUT` parameters?",
+      "options": [
+        "`Statement`",
+        "`PreparedStatement`",
+        "`CallableStatement`",
+        "`DatabaseMetaData`"
+      ],
+      "correctIndex": 2,
+      "explanation": "`CallableStatement` (created via `conn.prepareCall(\"{call proc_name(?, ?)}\")`) supports `registerOutParameter()` for stored procedure `OUT`/`INOUT` values."
+    },
+    {
+      "id": "tech-5-q19",
+      "topic": "Java",
+      "subtopic": "@RestController vs @Controller",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "In Spring MVC / Spring Boot, `@RestController` is a convenience stereotype annotation combining which two annotations?",
+      "options": [
+        "`@Service` and `@RequestMapping`",
+        "`@Controller` and `@ResponseBody`",
+        "`@Component` and `@Transactional`",
+        "`@Repository` and `@JsonIgnore`"
+      ],
+      "correctIndex": 1,
+      "explanation": "`@RestController` combines `@Controller` and `@ResponseBody`, instructing Spring to serialize return values directly to the HTTP response body (e.g., JSON via Jackson) instead of resolving HTML view names."
+    },
+    {
+      "id": "tech-5-q20",
+      "topic": "SE",
+      "subtopic": "Agile Scrum Artifacts & Burndown",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "In Scrum, what does a Sprint Burndown Chart plot over the days of a sprint?",
+      "options": [
+        "Total lines of code committed per developer",
+        "Remaining estimated work (story points or hours) vs days remaining in the sprint",
+        "Cumulative production uptime across AWS regions",
+        "Salary cost per software engineer"
+      ],
+      "correctIndex": 1,
+      "explanation": "A Sprint Burndown Chart tracks remaining sprint backlog effort (y-axis) across sprint days (x-axis) against an ideal diagonal pace line."
+    },
+    {
+      "id": "tech-5-q21",
+      "topic": "Output Prediction",
+      "subtopic": "Java String Concatenation Precedence",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "What does `System.out.println(10 + 20 + \"HCL\" + 10 + 20);` output?",
+      "options": [
+        "30HCL30",
+        "1020HCL1020",
+        "30HCL1020",
+        "Compilation error"
+      ],
+      "correctIndex": 2,
+      "explanation": "`+` is left-associative: `10 + 20` performs integer addition (`30`), then `30 + \"HCL\"` yields String `\"30HCL\"`, after which `+ 10` and `+ 20` perform String concatenation => `30HCL1020`."
+    },
+    {
+      "id": "tech-5-q22",
+      "topic": "SQL",
+      "subtopic": "ORDER BY with UNION",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Where must `ORDER BY` be placed when sorting the combined output of two `SELECT` statements joined by `UNION`?",
+      "options": [
+        "At the end of the FIRST `SELECT` only",
+        "Once at the very end of the LAST `SELECT`, referencing column names/aliases from the first `SELECT`",
+        "Inside both `SELECT` statements using `GROUP BY`",
+        "`ORDER BY` is illegal with `UNION`"
+      ],
+      "correctIndex": 1,
+      "explanation": "Standard SQL permits a single final `ORDER BY` after the last query in a `UNION` to sort the combined result set (column aliases come from the first `SELECT`)."
+    },
+    {
+      "id": "tech-5-q23",
+      "topic": "DSA",
+      "subtopic": "Space Complexity of Merge Sort vs Quick Sort",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Comparing standard array-based Merge Sort and in-place Quick Sort on `N` elements, what is their auxiliary space complexity?",
+      "options": [
+        "Merge Sort: `O(1)`, Quick Sort: `O(N)`",
+        "Merge Sort: `O(N)` auxiliary buffer, Quick Sort: `O(log N)` average recursion stack (`O(N)` worst-case)",
+        "Both use `O(1)` auxiliary space",
+        "Both always use `O(N log N)` auxiliary space"
+      ],
+      "correctIndex": 1,
+      "explanation": "Standard Merge Sort allocates an `O(N)` temporary array for merging, whereas in-place Quick Sort requires only `O(log N)` call-stack space on balanced partitions (`O(N)` worst-case)."
+    },
+    {
+      "id": "tech-5-q24",
+      "topic": "OS",
+      "subtopic": "Spinlock vs Blocking Mutex",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "When is a Spinlock preferable to a sleeping/blocking Mutex?",
+      "options": [
+        "On a single-core CPU for holding a lock during slow disk I/O",
+        "On a multi-core CPU when the lock is held for an extremely short duration (shorter than two context switches)",
+        "Whenever threads want to yield CPU time to background applications",
+        "In Java Swing UI event-dispatch threads waiting for user clicks"
+      ],
+      "correctIndex": 1,
+      "explanation": "Spinlocks busy-wait without triggering an OS context switch; on multi-core systems for tiny critical sections (nanoseconds), spinning is cheaper than sleeping + waking a thread, whereas on a single core spinning wastes the entire time slice."
+    },
+    {
+      "id": "tech-5-q25",
+      "topic": "CN",
+      "subtopic": "SMTP vs IMAP vs POP3",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Which protocol is used for SENDING/relaying outbound email between mail servers, and which is used for multi-device synchronized folder retrieval?",
+      "options": [
+        "IMAP for sending; SMTP for retrieval",
+        "SMTP for sending/relaying; IMAP for synchronized server-side folder retrieval",
+        "POP3 for sending; DNS MX for folder sync",
+        "HTTP POST for server-to-server relay; SNMP for retrieval"
+      ],
+      "correctIndex": 1,
+      "explanation": "SMTP pushes/relays outbound mail between clients and mail servers, while IMAP keeps mail and folder state synchronized on the server across multiple client devices."
+    }
+  ]
+}

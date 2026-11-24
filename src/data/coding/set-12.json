@@ -1,0 +1,89 @@
+{
+  "setId": "coding-set-12",
+  "title": "Coding Set 12: Intervals & Monotonic Deque",
+  "description": "Harder PYQ-style placement problems: merging overlapping intervals and O(N) sliding window maximum.",
+  "durationMinutes": 90,
+  "problems": [
+    {
+      "id": "code-12-p01",
+      "topic": "Sorting & Intervals",
+      "subtopic": "Merge Intervals",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "title": "Merge Overlapping Time Intervals",
+      "statement": "Given N closed intervals [start_i, end_i], merge all overlapping or touching intervals (e.g., [1, 4] and [4, 5] merge into [1, 5]) and print the resulting disjoint intervals sorted by start time.",
+      "inputFormat": "Line 1: Integer N.\nNext N lines: Two integers start_i and end_i.",
+      "outputFormat": "Line 1: Count K of merged intervals.\nNext K lines: Each merged interval as `start end`.",
+      "constraints": [
+        "1 <= N <= 10^5",
+        "-10^9 <= start_i <= end_i <= 10^9"
+      ],
+      "testCases": [
+        { "input": "4\n1 3\n2 6\n8 10\n15 18\n", "expectedOutput": "3\n1 6\n8 10\n15 18", "isSample": true },
+        { "input": "2\n1 4\n4 5\n", "expectedOutput": "1\n1 5", "isSample": true },
+        { "input": "3\n6 8\n1 9\n2 4\n", "expectedOutput": "1\n1 9", "isSample": false },
+        { "input": "1\n-5 5\n", "expectedOutput": "1\n-5 5", "isSample": false },
+        { "input": "4\n10 12\n1 2\n5 7\n3 4\n", "expectedOutput": "4\n1 2\n3 4\n5 7\n10 12", "isSample": false },
+        { "input": "5\n1 10\n2 3\n4 5\n6 7\n8 9\n", "expectedOutput": "1\n1 10", "isSample": false },
+        { "input": "3\n-10 -5\n-6 0\n0 3\n", "expectedOutput": "1\n-10 3", "isSample": false }
+      ],
+      "starterCode": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        long[][] intervals = new long[n][2];\n        for (int i = 0; i < n; i++) { intervals[i][0] = sc.nextLong(); intervals[i][1] = sc.nextLong(); }\n        // Write your solution here\n    }\n}",
+        "python": "import sys\n\ndata = list(map(int, sys.stdin.read().split()))\nn = data[0]\nintervals = [(data[1 + 2*i], data[2 + 2*i]) for i in range(n)]\n# Write your solution here\n",
+        "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n; cin >> n;\n    // Write your solution here\n    return 0;\n}\n"
+      },
+      "solutions": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        long[][] iv = new long[n][2];\n        for (int i = 0; i < n; i++) { iv[i][0] = sc.nextLong(); iv[i][1] = sc.nextLong(); }\n        Arrays.sort(iv, (a, b) -> a[0] != b[0] ? Long.compare(a[0], b[0]) : Long.compare(a[1], b[1]));\n        List<long[]> merged = new ArrayList<>();\n        for (long[] cur : iv) {\n            if (merged.isEmpty() || merged.get(merged.size() - 1)[1] < cur[0]) {\n                merged.add(new long[]{cur[0], cur[1]});\n            } else {\n                merged.get(merged.size() - 1)[1] = Math.max(merged.get(merged.size() - 1)[1], cur[1]);\n            }\n        }\n        StringBuilder sb = new StringBuilder();\n        sb.append(merged.size()).append('\\n');\n        for (long[] m : merged) sb.append(m[0]).append(' ').append(m[1]).append('\\n');\n        System.out.print(sb.toString());\n    }\n}",
+        "python": "import sys\n\ndata = list(map(int, sys.stdin.read().split()))\nn = data[0]\niv = sorted((data[1 + 2*i], data[2 + 2*i]) for i in range(n))\nmerged = []\nfor s, e in iv:\n    if not merged or merged[-1][1] < s:\n        merged.append([s, e])\n    else:\n        if e > merged[-1][1]:\n            merged[-1][1] = e\nprint(len(merged))\nfor s, e in merged:\n    print(s, e)\n"
+      },
+      "timeComplexity": "O(N log N) dominated by sorting intervals by start.",
+      "spaceComplexity": "O(N) for merged output.",
+      "edgeCases": [
+        "Interval completely nested inside an earlier wider interval ('[1, 10]' followed by '[2, 3]')",
+        "Touching endpoints (`end == next_start`) merge into one interval",
+        "Unsorted negative interval bounds"
+      ]
+    },
+    {
+      "id": "code-12-p02",
+      "topic": "Deque & Sliding Window",
+      "subtopic": "Monotonic Queue",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "title": "Sliding Window Maximum",
+      "statement": "Given an integer array A of length N and a window size K (1 <= K <= N), find the maximum element in every contiguous subarray of size K as the window slides from left to right by 1 position.",
+      "inputFormat": "Line 1: Two integers N and K.\nLine 2: N space-separated integers A[0..N-1].",
+      "outputFormat": "N - K + 1 space-separated integers representing each window's maximum.",
+      "constraints": [
+        "1 <= K <= N <= 10^5",
+        "-10^9 <= A[i] <= 10^9",
+        "Target complexity: O(N)"
+      ],
+      "testCases": [
+        { "input": "8 3\n1 3 -1 -3 5 3 6 7\n", "expectedOutput": "3 3 5 5 6 7", "isSample": true },
+        { "input": "5 1\n9 11 8 5 7\n", "expectedOutput": "9 11 8 5 7", "isSample": true },
+        { "input": "4 4\n-5 -2 -9 -3\n", "expectedOutput": "-2", "isSample": false },
+        { "input": "6 2\n10 9 8 7 6 5\n", "expectedOutput": "10 9 8 7 6", "isSample": false },
+        { "input": "5 3\n1 2 3 4 5\n", "expectedOutput": "3 4 5", "isSample": false },
+        { "input": "6 3\n4 4 4 4 4 4\n", "expectedOutput": "4 4 4 4", "isSample": false },
+        { "input": "7 4\n-10 20 -5 15 0 30 -2\n", "expectedOutput": "20 20 30 30", "isSample": false }
+      ],
+      "starterCode": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt(), k = sc.nextInt();\n        long[] a = new long[n];\n        for (int i = 0; i < n; i++) a[i] = sc.nextLong();\n        // Write your solution here\n    }\n}",
+        "python": "import sys\n\ndata = list(map(int, sys.stdin.read().split()))\nn, k = data[0], data[1]\na = data[2:2+n]\n# Write your solution here\n",
+        "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n, k; cin >> n >> k;\n    // Write your solution here\n    return 0;\n}\n"
+      },
+      "solutions": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt(), k = sc.nextInt();\n        long[] a = new long[n];\n        for (int i = 0; i < n; i++) a[i] = sc.nextLong();\n        Deque<Integer> dq = new ArrayDeque<>();\n        StringBuilder sb = new StringBuilder();\n        for (int i = 0; i < n; i++) {\n            while (!dq.isEmpty() && dq.peekFirst() <= i - k) dq.pollFirst();\n            while (!dq.isEmpty() && a[dq.peekLast()] <= a[i]) dq.pollLast();\n            dq.offerLast(i);\n            if (i >= k - 1) {\n                if (i > k - 1) sb.append(' ');\n                sb.append(a[dq.peekFirst()]);\n            }\n        }\n        System.out.println(sb.toString());\n    }\n}",
+        "python": "import sys\nfrom collections import deque\n\ndata = list(map(int, sys.stdin.read().split()))\nn, k = data[0], data[1]\na = data[2:2+n]\ndq = deque()\nout = []\nfor i, v in enumerate(a):\n    while dq and dq[0] <= i - k:\n        dq.popleft()\n    while dq and a[dq[-1]] <= v:\n        dq.pop()\n    dq.append(i)\n    if i >= k - 1:\n        out.append(str(a[dq[0]]))\nprint(' '.join(out))\n"
+      },
+      "timeComplexity": "O(N) — every index enters and leaves the deque at most once.",
+      "spaceComplexity": "O(K) for the monotonic deque of indices.",
+      "edgeCases": [
+        "K = 1 outputs the array itself; K = N outputs single global max",
+        "Strictly decreasing array keeps K elements in deque until evicted from front",
+        "All negative numbers require not initializing max to 0"
+      ]
+    }
+  ]
+}

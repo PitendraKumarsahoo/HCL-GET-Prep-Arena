@@ -1,0 +1,402 @@
+{
+  "setId": "tech-set-6",
+  "title": "Technical MCQ Set 06: Design Patterns, B-Trees & Scheduling",
+  "description": "Covers Java enums/ThreadLocal/LRU LinkedHashMap, SQL duplicate detection, B-Tree height numerical, SJF scheduling, CIDR supernetting, and MST.",
+  "durationMinutes": 35,
+  "questions": [
+    {
+      "id": "tech-6-q01",
+      "topic": "Output Prediction",
+      "subtopic": "finally vs System.exit(0)",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "What does the following Java snippet output?",
+      "codeSnippet": "try {\n  System.out.print(\"A \");\n  System.exit(0);\n} finally {\n  System.out.print(\"B \");\n}",
+      "options": [
+        "A B",
+        "A",
+        "B",
+        "Compilation error"
+      ],
+      "correctIndex": 1,
+      "explanation": "`System.exit(0)` immediately halts the JVM process; the `finally` block does NOT execute after `System.exit()`."
+    },
+    {
+      "id": "tech-6-q02",
+      "topic": "Output Prediction",
+      "subtopic": "LinkedHashMap Access-Order LRU",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "What keys remain in `cache` (in iteration order) after running this Java code?",
+      "codeSnippet": "Map<Integer, String> cache = new LinkedHashMap<>(16, 0.75f, true) {\n  @Override protected boolean removeEldestEntry(Map.Entry<Integer, String> e) {\n    return size() > 2;\n  }\n};\ncache.put(1, \"A\");\ncache.put(2, \"B\");\ncache.get(1);\ncache.put(3, \"C\");\nSystem.out.println(cache.keySet());",
+      "options": [
+        "[1, 2]",
+        "[2, 3]",
+        "[1, 3]",
+        "[3, 1]"
+      ],
+      "correctIndex": 2,
+      "explanation": "Passing `accessOrder = true` makes `LinkedHashMap` maintain LRU order: `put(1), put(2)` -> `[1, 2]`; `get(1)` moves `1` to most-recent -> `[2, 1]`; `put(3)` triggers `removeEldestEntry` which evicts `2`, leaving `[1, 3]`."
+    },
+    {
+      "id": "tech-6-q03",
+      "topic": "Output Prediction",
+      "subtopic": "Constructor Chaining this() vs super()",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "What happens when compiling the following Java constructor?",
+      "codeSnippet": "class Base { Base(int x) {} }\nclass Sub extends Base {\n  Sub() {\n    System.out.println(\"init\");\n    super(10);\n  }\n}",
+      "options": [
+        "Prints `init`",
+        "Compilation error: call to `super` must be first statement in constructor",
+        "Compiles cleanly on Java 8+",
+        "Throws `StackOverflowError` at runtime"
+      ],
+      "correctIndex": 1,
+      "explanation": "In Java (prior to flexible constructor bodies preview), `super(...)` or `this(...)` must be the very first statement in a constructor; placing `System.out.println` before `super(10)` triggers a compile-time error."
+    },
+    {
+      "id": "tech-6-q04",
+      "topic": "Java",
+      "subtopic": "ThreadLocal Memory Leak in Thread Pools",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "Why can failing to call `threadLocal.remove()` in a Spring Boot / Tomcat web filter cause memory leaks in production?",
+      "options": [
+        "`ThreadLocal` converts heap objects into off-heap native memory",
+        "Servlet container worker threads are pooled and live indefinitely, keeping strong references to `ThreadLocalMap` values across requests",
+        "`ThreadLocal` disables garbage collection across the entire JVM",
+        "`ThreadLocal` automatically writes objects to disk"
+      ],
+      "correctIndex": 1,
+      "explanation": "In a `ThreadLocalMap`, the key is a weak reference to the `ThreadLocal`, while the value is a STRONG reference. Pooled Tomcat threads never die, so unremoved values stay pinned in memory (and risk leaking tenant context to the next HTTP request)."
+    },
+    {
+      "id": "tech-6-q05",
+      "topic": "Java",
+      "subtopic": "Enum Singleton Serialization Safety",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Why does Joshua Bloch's *Effective Java* recommend a single-element `enum` as the cleanest way to implement a Singleton in Java?",
+      "options": [
+        "Enums can be instantiated dynamically using `new EnumSingleton()`",
+        "The JVM guarantees single-instance thread-safe initialization AND immunity to reflection and deserialization attacks out of the box",
+        "Enums automatically persist their state to JDBC databases",
+        "Enums support multiple inheritance of concrete classes"
+      ],
+      "correctIndex": 1,
+      "explanation": "Java prevents `Constructor.newInstance()` on enum types and handles enum deserialization by name lookup, preventing duplicate instances from reflection or `ObjectInputStream`."
+    },
+    {
+      "id": "tech-6-q06",
+      "topic": "Java",
+      "subtopic": "CopyOnWriteArrayList Trade-offs",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "When is `CopyOnWriteArrayList` an ideal choice over `Collections.synchronizedList(new ArrayList<>())`?",
+      "options": [
+        "Write-heavy workloads with thousands of `add`/`remove` calls per second",
+        "Read-heavy workloads with rare writes where lock-free, snapshot-consistent iteration without `ConcurrentModificationException` is needed",
+        "Sorting 10 million integers in parallel",
+        "Implementing a FIFO queue with O(1) `poll()`"
+      ],
+      "correctIndex": 1,
+      "explanation": "`CopyOnWriteArrayList` duplicates the entire backing array on every mutation (`O(N)` write cost), making writes expensive but reads/iterators completely lock-free and immune to `ConcurrentModificationException`."
+    },
+    {
+      "id": "tech-6-q07",
+      "topic": "SQL",
+      "subtopic": "Finding Duplicate Emails",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Which SQL query returns every `email` appearing more than once in `Users(id, email)` along with its occurrence count?",
+      "options": [
+        "`SELECT email, COUNT(*) FROM Users WHERE COUNT(*) > 1 GROUP BY email`",
+        "`SELECT email, COUNT(*) AS cnt FROM Users GROUP BY email HAVING COUNT(*) > 1`",
+        "`SELECT DISTINCT email, COUNT(*) FROM Users GROUP BY id HAVING COUNT(*) > 1`",
+        "`SELECT email FROM Users GROUP BY email ORDER BY COUNT(*) > 1`"
+      ],
+      "correctIndex": 1,
+      "explanation": "Group by `email` and filter groups whose `COUNT(*) > 1` using `HAVING` (never `WHERE`, because aggregates cannot be evaluated row-by-row before grouping)."
+    },
+    {
+      "id": "tech-6-q08",
+      "topic": "SQL",
+      "subtopic": "CROSS JOIN Cardinality",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Table `Sizes` has 4 rows and Table `Colors` has 5 rows. How many rows does `SELECT * FROM Sizes CROSS JOIN Colors;` produce?",
+      "options": ["5", "9", "20", "45"],
+      "correctIndex": 2,
+      "explanation": "`CROSS JOIN` computes the Cartesian product of both tables: 4 * 5 = 20 rows."
+    },
+    {
+      "id": "tech-6-q09",
+      "topic": "DBMS",
+      "subtopic": "Precedence Graph Conflict Serializability",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "Schedule S has operations: `R1(X), R2(X), W1(X), W2(X)`. Is S conflict-serializable?",
+      "options": [
+        "Yes, equivalent to serial order T1 -> T2",
+        "Yes, equivalent to serial order T2 -> T1",
+        "No, because the precedence graph contains a cycle `T1 <-> T2`",
+        "Yes, because neither transaction reads uncommitted data"
+      ],
+      "correctIndex": 2,
+      "explanation": "Conflicting pairs on `X`: `R2(X)` before `W1(X)` adds edge `T2 -> T1`; `R1(X)` before `W2(X)` adds edge `T1 -> T2`. The cycle `T1 -> T2 -> T1` proves S is NOT conflict-serializable."
+    },
+    {
+      "id": "tech-6-q10",
+      "topic": "DBMS",
+      "subtopic": "B-Tree Minimum Keys & Order",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "In a B-Tree of order `m = 5` (maximum 5 children per node), what are the MINIMUM and MAXIMUM number of keys allowed in any non-root internal node?",
+      "options": [
+        "Min 1, Max 4",
+        "Min 2, Max 4",
+        "Min 2, Max 5",
+        "Min 3, Max 5"
+      ],
+      "correctIndex": 1,
+      "explanation": "A B-Tree of order `m` has at most `m` children (`m - 1 = 4` keys) and at least `ceil(m/2)` children (`ceil(5/2) - 1 = 3 - 1 = 2` keys) in non-root internal nodes."
+    },
+    {
+      "id": "tech-6-q11",
+      "topic": "OS",
+      "subtopic": "Non-Preemptive SJF Turnaround Numerical",
+      "difficulty": "hard",
+      "source_tag": "reported",
+      "question": "Four jobs arrive with (Arrival, Burst): J1(0, 6), J2(1, 3), J3(2, 8), J4(3, 2). Under non-preemptive Shortest Job First (SJF), what is the average turnaround time?",
+      "options": ["8.25 ms", "8.75 ms", "9.50 ms", "10.25 ms"],
+      "correctIndex": 2,
+      "explanation": "At t=0 only J1 is ready -> J1 runs [0-6] (CT=6, TAT=6-0=6). At t=6, J2(3), J3(8), J4(2) are ready -> J4 runs [6-8] (CT=8, TAT=8-3=5), J2 runs [8-11] (CT=11, TAT=11-1=10), J3 runs [11-19] (CT=19, TAT=19-2=17). Average TAT = (6 + 5 + 10 + 17) / 4 = 38 / 4 = 9.50 ms."
+    },
+    {
+      "id": "tech-6-q12",
+      "topic": "OS",
+      "subtopic": "Paging vs Segmentation Fragmentation",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Which statement accurately compares fragmentation in pure Paging versus pure Segmentation?",
+      "options": [
+        "Paging suffers from external fragmentation; Segmentation suffers from internal fragmentation",
+        "Paging eliminates external fragmentation (leaving minor internal fragmentation in the last page), whereas Segmentation suffers from external fragmentation",
+        "Both eliminate all internal and external fragmentation",
+        "Both require contiguous physical memory for the entire process"
+      ],
+      "correctIndex": 1,
+      "explanation": "Fixed-size page frames fit any free frame (no external fragmentation, only partial waste inside the last page). Variable-size segments leave scattered unallocated memory holes between segments (external fragmentation)."
+    },
+    {
+      "id": "tech-6-q13",
+      "topic": "CN",
+      "subtopic": "CIDR Supernetting / Route Aggregation",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "A router needs to aggregate four contiguous `/24` networks: `198.51.100.0/24`, `198.51.101.0/24`, `198.51.102.0/24`, and `198.51.103.0/24` into a single summary CIDR route. Which summary prefix is exact?",
+      "options": [
+        "`198.51.100.0/21`",
+        "`198.51.100.0/22`",
+        "`198.51.100.0/23`",
+        "`198.51.96.0/20`"
+      ],
+      "correctIndex": 1,
+      "explanation": "In binary, third octets 100..103 are `01100100`, `01100101`, `01100110`, `01100111`. They share the top 6 bits of the 3rd octet (`100` is divisible by 4). Total shared prefix = 8 + 8 + 6 = `/22` => `198.51.100.0/22`."
+    },
+    {
+      "id": "tech-6-q14",
+      "topic": "CN",
+      "subtopic": "DHCP Lease Acquisition (DORA)",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "What is the correct 4-step message sequence (DORA) when a client acquires an IPv4 lease from a DHCP server?",
+      "options": [
+        "Discover -> Offer -> Request -> Acknowledge",
+        "Demand -> Open -> Reply -> Assign",
+        "Discover -> Open -> Register -> Accept",
+        "Detect -> Offer -> Renew -> Allocate"
+      ],
+      "correctIndex": 0,
+      "explanation": "DHCP follows DORA: Client broadcasts DHCPDISCOVER -> Server(s) reply DHCPOFFER -> Client selects and broadcasts DHCPREQUEST -> Chosen server confirms with DHCPACK."
+    },
+    {
+      "id": "tech-6-q15",
+      "topic": "DSA",
+      "subtopic": "Kruskal vs Prim MST Choice",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "For finding a Minimum Spanning Tree on a VERY DENSE graph where `E ≈ V^2`, which algorithm + data structure combination achieves the better asymptotic time complexity?",
+      "options": [
+        "Kruskal's with sorted edge list: `O(V^2 log V)`",
+        "Prim's using an adjacency matrix without a binary heap: `O(V^2)`",
+        "BFS spanning tree: `O(V)`",
+        "Bellman-Ford: `O(V^3)`"
+      ],
+      "correctIndex": 1,
+      "explanation": "For dense graphs (`E = Theta(V^2)`), adjacency-matrix Prim's takes `O(V^2)` without any `log V` factor, beating Kruskal's `O(E log E) = O(V^2 log V)`."
+    },
+    {
+      "id": "tech-6-q16",
+      "topic": "DSA",
+      "subtopic": "QuickSelect Kth Largest Expected Time",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "What is the expected (average) time complexity of finding the Kth smallest element in an unsorted array of size `N` using randomized QuickSelect?",
+      "options": [
+        "`O(log N)`",
+        "`O(N)`",
+        "`O(N log K)`",
+        "`O(N log N)`"
+      ],
+      "correctIndex": 1,
+      "explanation": "Unlike QuickSort, QuickSelect recurses into only ONE partition each step. Expected work `N + N/2 + N/4 + ... = 2N = O(N)`."
+    },
+    {
+      "id": "tech-6-q17",
+      "topic": "JDBC",
+      "subtopic": "ResultSetMetaData & Column Inspection",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Which JDBC method retrieves column count, column names, and SQL column types dynamically from an arbitrary `ResultSet`?",
+      "options": [
+        "`connection.getSchema()`",
+        "`resultSet.getMetaData()` returning `ResultSetMetaData`",
+        "`statement.getWarnings()`",
+        "`driverManager.getColumns()`"
+      ],
+      "correctIndex": 1,
+      "explanation": "`resultSet.getMetaData()` returns a `ResultSetMetaData` object exposing `getColumnCount()`, `getColumnName(i)`, and `getColumnTypeName(i)` (1-indexed)."
+    },
+    {
+      "id": "tech-6-q18",
+      "topic": "SE",
+      "subtopic": "Dependency Inversion Principle (SOLID)",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "In SOLID design, what does the Dependency Inversion Principle (DIP) require?",
+      "options": [
+        "Databases must call REST controllers directly",
+        "High-level business modules and low-level infrastructure modules should both depend on abstractions (interfaces), not concrete implementations",
+        "Every class must invert its inheritance hierarchy before deployment",
+        "Global static variables should replace dependency injection"
+      ],
+      "correctIndex": 1,
+      "explanation": "DIP decouples high-level policy (e.g., `OrderService`) from low-level details (e.g., `MySqlOrderRepo`) by having both depend on an abstraction (`OrderRepository` interface)."
+    },
+    {
+      "id": "tech-6-q19",
+      "topic": "Java",
+      "subtopic": "@SpringBootApplication Meta-Annotation",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Which three core annotations are bundled together by `@SpringBootApplication`?",
+      "options": [
+        "`@Entity`, `@Table`, `@Id`",
+        "`@SpringBootConfiguration`, `@EnableAutoConfiguration`, `@ComponentScan`",
+        "`@RestController`, `@Service`, `@Repository`",
+        "`@Bean`, `@Autowired`, `@Transactional`"
+      ],
+      "correctIndex": 1,
+      "explanation": "`@SpringBootApplication` combines `@SpringBootConfiguration` (a `@Configuration` variant), `@EnableAutoConfiguration`, and `@ComponentScan`."
+    },
+    {
+      "id": "tech-6-q20",
+      "topic": "OOP",
+      "subtopic": "Abstract Class vs Interface in Java 8+",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Even after Java 8 introduced `default` and `static` methods in interfaces, what capability remains exclusive to an `abstract class`?",
+      "options": [
+        "Declaring abstract methods without bodies",
+        "Maintaining mutable non-static instance fields (`state`) and defining constructors to initialize them",
+        "Supporting lambda expressions directly",
+        "Being implemented alongside multiple other types"
+      ],
+      "correctIndex": 1,
+      "explanation": "All fields in an interface are implicitly `public static final` constants and interfaces cannot have constructors, whereas an abstract class can hold mutable instance state and constructors."
+    },
+    {
+      "id": "tech-6-q21",
+      "topic": "SQL",
+      "subtopic": "Self-Exclusion / Anti-Join Pattern",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Which query correctly lists all customers from `Customers c` who have placed ZERO orders in `Orders o` (even if `Orders.cust_id` contains `NULL`s)?",
+      "options": [
+        "`SELECT c.id FROM Customers c WHERE c.id NOT IN (SELECT cust_id FROM Orders)`",
+        "`SELECT c.id FROM Customers c LEFT JOIN Orders o ON c.id = o.cust_id WHERE o.cust_id IS NULL`",
+        "`SELECT c.id FROM Customers c INNER JOIN Orders o ON c.id <> o.cust_id`",
+        "`SELECT c.id FROM Customers c RIGHT JOIN Orders o ON c.id = o.cust_id WHERE c.id IS NULL`"
+      ],
+      "correctIndex": 1,
+      "explanation": "`LEFT JOIN ... WHERE o.cust_id IS NULL` (or `NOT EXISTS`) safely finds unmatched rows regardless of `NULL`s in `Orders.cust_id`, whereas `NOT IN` returns 0 rows if any `cust_id` is `NULL`."
+    },
+    {
+      "id": "tech-6-q22",
+      "topic": "DSA",
+      "subtopic": "Doubly Linked List vs Singly Linked List",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Given ONLY a direct pointer `node` to an arbitrary middle node inside a list (and no head pointer), in which structure can `node` be deleted in `O(1)` time without copying data from the next node?",
+      "options": [
+        "Singly Linked List",
+        "Doubly Linked List (using `node.prev.next = node.next` and `node.next.prev = node.prev`)",
+        "ArrayList",
+        "Singly Circular List"
+      ],
+      "correctIndex": 1,
+      "explanation": "A doubly linked list maintains `prev` pointers, enabling `O(1)` unlinking of any given node directly without scanning from `head`."
+    },
+    {
+      "id": "tech-6-q23",
+      "topic": "OS",
+      "subtopic": "Context Switch PCB State",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Which data structure does the OS kernel update to save a preempted process's Program Counter, CPU registers, and memory-management state?",
+      "options": [
+        "Master Boot Record (MBR)",
+        "Process Control Block (PCB)",
+        "DNS Resolver Cache",
+        "Interrupt Vector Table (IVT)"
+      ],
+      "correctIndex": 1,
+      "explanation": "Each process's execution context (registers, PC, scheduling priority, open files, page table pointer) is stored in its Process Control Block (PCB)."
+    },
+    {
+      "id": "tech-6-q24",
+      "topic": "CN",
+      "subtopic": "HTTPS TLS Handshake Purpose",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Why does HTTPS use asymmetric cryptography (RSA/ECDHE) during the TLS handshake, and then switch to symmetric encryption (AES-GCM / ChaCha20) for bulk HTTP data?",
+      "options": [
+        "Symmetric keys cannot be used on TCP port 443",
+        "Asymmetric crypto authenticates the server and safely establishes a shared session key, while symmetric crypto encrypts bulk traffic orders of magnitude faster",
+        "Symmetric encryption requires zero CPU cycles",
+        "Browsers cannot store symmetric keys in RAM"
+      ],
+      "correctIndex": 1,
+      "explanation": "Asymmetric key exchange solves identity verification and key agreement over an untrusted network; symmetric authenticated encryption handles high-throughput payload encryption efficiently."
+    },
+    {
+      "id": "tech-6-q25",
+      "topic": "Output Prediction",
+      "subtopic": "Java Bitwise & Shift Operator",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Predict the exact console output produced by signed (`>>`) versus unsigned (`>>>`) right bit-shifting on a negative integer in Java:",
+      "codeSnippet": "int n = -8;\nSystem.out.println((n >> 1) + \" \" + (n >>> 1));",
+      "options": [
+        "-4 -4",
+        "-4 2147483644",
+        "4 2147483644",
+        "-4 4"
+      ],
+      "correctIndex": 1,
+      "explanation": "`>>` is signed arithmetic right shift (preserves sign bit `1`, so `-8 >> 1 == -4`). `>>>` is unsigned logical right shift (fills MSB with `0`, turning negative `0xFFFFFFF8` into positive `0x7FFFFFFC = 2147483644`)."
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "setId": "coding-set-10",
+  "title": "Coding Set 10: Bitwise Uniqueness & Regex Validation",
+  "description": "Reported HCL coding problems: single non-duplicate element via XOR and Java-style regular expression validation.",
+  "durationMinutes": 60,
+  "problems": [
+    {
+      "id": "code-10-p01",
+      "topic": "Bit Manipulation",
+      "subtopic": "Single Element via XOR",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "title": "Element Occurring Once While All Others Appear Twice",
+      "statement": "Given an integer array A of odd size N where every element except one appears exactly twice, find and print the single unique element in O(N) time and O(1) extra space.",
+      "inputFormat": "Line 1: Odd integer N.\nLine 2: N space-separated integers.",
+      "outputFormat": "The single non-repeating integer.",
+      "constraints": [
+        "1 <= N <= 10^5 (N is odd)",
+        "-10^9 <= A[i] <= 10^9"
+      ],
+      "testCases": [
+        { "input": "5\n4 1 2 1 2\n", "expectedOutput": "4", "isSample": true },
+        { "input": "7\n7 3 5 4 5 3 4\n", "expectedOutput": "7", "isSample": true },
+        { "input": "1\n-42\n", "expectedOutput": "-42", "isSample": false },
+        { "input": "5\n-10 -10 0 99 99\n", "expectedOutput": "0", "isSample": false },
+        { "input": "9\n1000000000 -5 -5 1000000000 42 42 77 88 88\n", "expectedOutput": "77", "isSample": false },
+        { "input": "3\n-999 -999 -1\n", "expectedOutput": "-1", "isSample": false },
+        { "input": "5\n12 34 12 34 -56\n", "expectedOutput": "-56", "isSample": false }
+      ],
+      "starterCode": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        // Write your solution here\n    }\n}",
+        "python": "import sys\n\ndata = list(map(int, sys.stdin.read().split()))\nn = data[0]\n# Write your solution here\n",
+        "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n; cin >> n;\n    // Write your solution here\n    return 0;\n}\n"
+      },
+      "solutions": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        long xor = 0;\n        for (int i = 0; i < n; i++) xor ^= sc.nextLong();\n        System.out.println(xor);\n    }\n}",
+        "python": "import sys\n\ndata = list(map(int, sys.stdin.read().split()))\nn = data[0]\nans = 0\nfor x in data[1:1+n]:\n    ans ^= x\nprint(ans)\n"
+      },
+      "timeComplexity": "O(N) using XOR properties (`x ^ x = 0`, `x ^ 0 = x`).",
+      "spaceComplexity": "O(1) extra space.",
+      "edgeCases": [
+        "Negative integers work seamlessly with two's complement XOR",
+        "Unique element is 0",
+        "Single-element array (N = 1)"
+      ]
+    },
+    {
+      "id": "code-10-p02",
+      "topic": "Strings & Regex",
+      "subtopic": "Pattern Matching",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "title": "Java Regex-Based Identifier & Email Validator",
+      "statement": "Given N input lines, each starting with a tag (`ID` or `EMAIL`) followed by a space and a token string (no internal spaces), validate each token:\n- `ID`: valid Java identifier of length 1..30 starting with `[a-zA-Z_]` followed by `[a-zA-Z0-9_]*` (note: exclude `$` for this rule) and NOT in the reserved set `{class, public, static, void, int, if, else, return}`.\n- `EMAIL`: local part `[a-zA-Z0-9._-]+`, `@`, domain `[a-zA-Z0-9-]+`, `.` and 2-to-6-letter TLD `[a-zA-Z]{2,6}` (no consecutive dots in local part).\nPrint `VALID` or `INVALID` per line.",
+      "inputFormat": "Line 1: Integer N.\nNext N lines: `<TYPE> <TOKEN>`.",
+      "outputFormat": "N lines, each `VALID` or `INVALID`.",
+      "constraints": [
+        "1 <= N <= 100",
+        "Token length <= 100"
+      ],
+      "testCases": [
+        { "input": "4\nID emp_01\nID class\nEMAIL dev.hcl@hcltech.com\nEMAIL bad..dot@hcl.com\n", "expectedOutput": "VALID\nINVALID\nVALID\nINVALID", "isSample": true },
+        { "input": "3\nID 9lives\nID _helper2\nEMAIL user_1@sub.domain.co\n", "expectedOutput": "INVALID\nVALID\nINVALID", "isSample": true, "note": "Single domain label required before TLD here" },
+        { "input": "2\nID $price\nID a_b_c_123\n", "expectedOutput": "INVALID\nVALID", "isSample": false },
+        { "input": "3\nEMAIL a@b.in\nEMAIL a@b.c\nEMAIL test-1@org.tech\n", "expectedOutput": "VALID\nINVALID\nVALID", "isSample": false },
+        { "input": "2\nID return\nID returnValue\n", "expectedOutput": "INVALID\nVALID", "isSample": false },
+        { "input": "2\nID abcdefghij1234567890abcdefghijX\nID abcdefghij1234567890abcdefghij\n", "expectedOutput": "INVALID\nVALID", "isSample": false },
+        { "input": "2\nEMAIL .lead@site.org\nEMAIL lead.@site.org\n", "expectedOutput": "INVALID\nINVALID", "isSample": false }
+      ],
+      "starterCode": {
+        "java": "import java.util.*;\nimport java.util.regex.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = Integer.parseInt(sc.nextLine().trim());\n        // Write your solution here\n    }\n}",
+        "python": "import sys, re\n\nlines = sys.stdin.read().splitlines()\nn = int(lines[0].strip())\n# Write your solution here\n",
+        "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n; cin >> n;\n    // Write your solution here\n    return 0;\n}\n"
+      },
+      "solutions": {
+        "java": "import java.util.*;\nimport java.util.regex.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = Integer.parseInt(sc.nextLine().trim());\n        Set<String> reserved = new HashSet<>(Arrays.asList(\"class\", \"public\", \"static\", \"void\", \"int\", \"if\", \"else\", \"return\"));\n        Pattern idPat = Pattern.compile(\"^[a-zA-Z_][a-zA-Z0-9_]{0,29}$\");\n        Pattern emailPat = Pattern.compile(\"^[a-zA-Z0-9](?:[a-zA-Z0-9_-]|\\\\.(?=[a-zA-Z0-9_-]))*@[a-zA-Z0-9-]+\\\\.[a-zA-Z]{2,6}$\");\n        for (int i = 0; i < n; i++) {\n            String[] parts = sc.nextLine().trim().split(\"\\\\s+\");\n            String type = parts[0], tok = parts[1];\n            boolean ok = false;\n            if (type.equals(\"ID\")) {\n                ok = idPat.matcher(tok).matches() && !reserved.contains(tok);\n            } else if (type.equals(\"EMAIL\")) {\n                ok = emailPat.matcher(tok).matches();\n            }\n            System.out.println(ok ? \"VALID\" : \"INVALID\");\n        }\n    }\n}",
+        "python": "import sys, re\n\nlines = [ln.strip() for ln in sys.stdin.read().splitlines() if ln.strip()]\nn = int(lines[0])\nreserved = {'class', 'public', 'static', 'void', 'int', 'if', 'else', 'return'}\nid_re = re.compile(r'^[a-zA-Z_][a-zA-Z0-9_]{0,29}$')\nemail_re = re.compile(r'^[a-zA-Z0-9](?:[a-zA-Z0-9_-]|\\.(?=[a-zA-Z0-9_-]))*@[a-zA-Z0-9-]+\\.[a-zA-Z]{2,6}$')\nout = []\nfor i in range(1, n + 1):\n    kind, tok = lines[i].split()\n    if kind == 'ID':\n        ok = bool(id_re.match(tok)) and tok not in reserved\n    else:\n        ok = bool(email_re.match(tok))\n    out.append('VALID' if ok else 'INVALID')\nprint('\\n'.join(out))\n"
+      },
+      "timeComplexity": "O(L) per token where L <= 100 (anchored non-backtracking regex).",
+      "spaceComplexity": "O(1) compiled `Pattern` instances.",
+      "edgeCases": [
+        "Leading or trailing dots in email local part ('.lead@...' or 'lead.@...') must be rejected",
+        "Consecutive dots ('bad..dot@...') rejected via positive lookahead",
+        "Java keywords (`class`, `return`) rejected even though they match `[a-zA-Z_][a-zA-Z0-9_]*`"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1244 @@
+{
+  "mockId": "mock-5",
+  "title": "Full Mock 05: HCLTech Ascend Simulation — Final Grand Rehearsal",
+  "description": "Complete 75-item timed simulation (37 Cognitive + 36 Technical MCQ + 2 Coding) crafted exclusively from unseen questions.",
+  "durationMinutes": 90,
+  "aptitudeQuestions": [
+    {
+      "id": "mock5-apt-01",
+      "section": "quant",
+      "topic": "HCF & LCM",
+      "subtopic": "Ratio & LCM Reconstruction",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Two positive integers are in the ratio 5 : 7, and their Least Common Multiple (LCM) is 840. What is the sum of the two integers?",
+      "options": ["240", "264", "288", "312"],
+      "correctIndex": 2,
+      "explanation": "Let the numbers be `5x` and `7x` where `x = HCF`. Since `gcd(5, 7) = 1`, `LCM = 5 * 7 * x = 35x = 840 => x = 24`. Sum = `5x + 7x = 12 * 24 = 288`.",
+      "shortcut": "x = 840 / 35 = 24 -> sum = 12 * 24 = 288."
+    },
+    {
+      "id": "mock5-apt-02",
+      "section": "quant",
+      "topic": "Time & Work",
+      "subtopic": "Efficiency Ratios",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Developer A is 40% more efficient than Developer B, while Developer C is 20% less efficient than Developer B. Working together, A, B, and C finish an audit in 14 days. How many days would Developer A take working alone?",
+      "options": ["28 days", "30 days", "32 days", "35 days"],
+      "correctIndex": 2,
+      "explanation": "Take B's daily efficiency = 5 units. Then A = `5 * 1.4 = 7` units/day and C = `5 * 0.8 = 4` units/day. Combined daily rate = `7 + 5 + 4 = 16` units/day. Total work = `16 * 14 = 224` units. Days for A alone = `224 / 7 = 32` days.",
+      "shortcut": "Efficiency ratio A:B:C = 7:5:4 (sum 16) => A's days = 14 * (16 / 7) = 32."
+    },
+    {
+      "id": "mock5-apt-03",
+      "section": "quant",
+      "topic": "Time, Speed & Distance",
+      "subtopic": "Relative Pursuit Distance",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "A security guard spots an intruder 400 meters ahead fleeing at 18 km/h and immediately pursues him at 27 km/h along a straight road. How far does the intruder run before being caught?",
+      "options": ["600 m", "720 m", "800 m", "900 m"],
+      "correctIndex": 2,
+      "explanation": "Speeds in m/s: intruder = `18 * 5/18 = 5 m/s`, guard = `27 * 5/18 = 7.5 m/s`. Relative pursuit speed = `7.5 - 5 = 2.5 m/s`. Catch time = `400 / 2.5 = 160 s`. Distance run by intruder = `160 * 5 = 800 m`.",
+      "shortcut": "Speed ratio Guard:Intruder = 27:18 = 3:2 -> gap of 1 unit = 400 m => intruder runs 2 units = 800 m."
+    },
+    {
+      "id": "mock5-apt-04",
+      "section": "quant",
+      "topic": "Mixtures & Alligation",
+      "subtopic": "Profit-Adjusted Blending",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "In what ratio must Grade-A tea costing Rs. 240/kg be blended with Grade-B tea costing Rs. 320/kg so that selling the mixture at Rs. 319/kg yields a 10% profit?",
+      "options": ["2 : 3", "3 : 5", "4 : 5", "5 : 8"],
+      "correctIndex": 1,
+      "explanation": "Cost price of mixture = `319 / 1.10 = Rs. 290/kg`. By alligation: `Grade-A : Grade-B = (320 - 290) : (290 - 240) = 30 : 50 = 3 : 5`.",
+      "shortcut": "Mean CP = 319 / 1.1 = 290 -> distances from 240 and 320 are 50 and 30 -> inverse ratio 3 : 5."
+    },
+    {
+      "id": "mock5-apt-05",
+      "section": "quant",
+      "topic": "Geometry & Mensuration",
+      "subtopic": "Cube Space Diagonal & Area",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "The main 3D space diagonal of a solid metal cube measures `12 * sqrt(3)` cm. What is its Total Surface Area?",
+      "options": ["576 sq cm", "720 sq cm", "864 sq cm", "1,008 sq cm"],
+      "correctIndex": 2,
+      "explanation": "Space diagonal of a cube with edge `a` is `a * sqrt(3) = 12 * sqrt(3) => a = 12 cm`. Total Surface Area = `6 * a^2 = 6 * 144 = 864 sq cm`.",
+      "shortcut": "Edge = 12 => TSA = 6 * 12^2 = 864."
+    },
+    {
+      "id": "mock5-apt-06",
+      "section": "quant",
+      "topic": "Ratio & Percentages",
+      "subtopic": "Proportional Salary Increments",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "The salaries of three architects X, Y, and Z stand in the ratio 2 : 3 : 5. If their annual increments are 15%, 10%, and 20% respectively, what is the new ratio of their salaries?",
+      "options": ["23 : 33 : 60", "22 : 33 : 60", "23 : 34 : 60", "21 : 33 : 55"],
+      "correctIndex": 0,
+      "explanation": "Scale base ratio to `200 : 300 : 500`. After increments: X = `200 * 1.15 = 230`, Y = `300 * 1.10 = 330`, Z = `500 * 1.20 = 600`. Dividing by 10 gives `23 : 33 : 60`.",
+      "shortcut": "Multiply (2, 3, 5) by (115, 110, 120) and cancel 10 -> 23 : 33 : 60."
+    },
+    {
+      "id": "mock5-apt-07",
+      "section": "quant",
+      "topic": "Probability",
+      "subtopic": "Two-Dice Divisibility",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Two fair six-sided dice are rolled once. What is the probability that the PRODUCT of the two upward faces is divisible by 6?",
+      "options": ["1/3", "5/12", "4/9", "1/2"],
+      "correctIndex": 1,
+      "explanation": "Count pairs `(a, b)` out of 36 where `6 | ab`: requires at least one even AND at least one multiple of 3. Specifically: `a in {1,5}` needs `b=6` (2*1=2); `a in {2,4}` needs `b in {3,6}` (2*2=4); `a=3` needs `b in {2,4,6}` (3); `a=6` works with all 6 `b` (6). Total = `2 + 4 + 3 + 6 = 15`. Probability = `15 / 36 = 5 / 12`.",
+      "shortcut": "Complement: no 6, and either all odd (9) or no multiples of 3 (16), overlap (odd & non-3 = {1,5}^2 = 4) -> 9 + 16 - 4 = 21 bad => 15/36 = 5/12."
+    },
+    {
+      "id": "mock5-apt-08",
+      "section": "quant",
+      "topic": "Permutations & Combinations",
+      "subtopic": "At-Least Committee Selection",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "From a pool of 6 male and 4 female engineers, a 5-member architecture review committee must be formed containing AT LEAST 3 female engineers. In how many distinct ways can the committee be chosen?",
+      "options": ["56", "60", "66", "72"],
+      "correctIndex": 2,
+      "explanation": "Case 1 (3 female, 2 male): `C(4,3) * C(6,2) = 4 * 15 = 60`. Case 2 (4 female, 1 male): `C(4,4) * C(6,1) = 1 * 6 = 6`. Total = `60 + 6 = 66` ways.",
+      "shortcut": "4*15 + 1*6 = 66."
+    },
+    {
+      "id": "mock5-apt-09",
+      "section": "quant",
+      "topic": "Data Interpretation",
+      "subtopic": "SaaS Subscription Cohorts",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "passage": "SaaS Tier Metrics (Q9–Q11): Monthly active accounts & ARPU across 4 plans. Free: 50,000 accounts, $0 ARPU, 8.0% churn. Starter: 12,000 accounts, $20 ARPU, 4.5% churn. Growth: 5,000 accounts, $60 ARPU, 2.5% churn. Enterprise: 800 accounts, $400 ARPU, 0.5% churn.",
+      "question": "Which paid tier generates the HIGHEST Monthly Recurring Revenue (Accounts * ARPU), and what is that revenue?",
+      "options": [
+        "Growth — $300,000",
+        "Enterprise — $320,000",
+        "Starter — $240,000",
+        "Enterprise — $360,000"
+      ],
+      "correctIndex": 1,
+      "explanation": "Starter MRR = `12,000 * 20 = $240,000`. Growth MRR = `5,000 * 60 = $300,000`. Enterprise MRR = `800 * 400 = $320,000`. Enterprise leads at `$320,000`.",
+      "shortcut": "800 * 400 = $320k > 5000 * 60 = $300k > 12000 * 20 = $240k."
+    },
+    {
+      "id": "mock5-apt-10",
+      "section": "quant",
+      "topic": "Data Interpretation",
+      "subtopic": "Paid Blended ARPU",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "passage": "SaaS Tier Metrics (Q9–Q11): Monthly active accounts & ARPU across 4 plans. Free: 50,000 accounts, $0 ARPU, 8.0% churn. Starter: 12,000 accounts, $20 ARPU, 4.5% churn. Growth: 5,000 accounts, $60 ARPU, 2.5% churn. Enterprise: 800 accounts, $400 ARPU, 0.5% churn.",
+      "question": "What is the approximate blended ARPU across PAID accounts only (Starter + Growth + Enterprise combined)?",
+      "options": ["$44.80", "$48.31", "$52.15", "$56.40"],
+      "correctIndex": 1,
+      "explanation": "Total paid MRR = `$240,000 + $300,000 + $320,000 = $860,000`. Total paid accounts = `12,000 + 5,000 + 800 = 17,800`. Blended ARPU = `860,000 / 17,800 = 8600 / 178 ≈ $48.31`.",
+      "shortcut": "8600 / 178 = 4300 / 89 ≈ 48.31."
+    },
+    {
+      "id": "mock5-apt-11",
+      "section": "quant",
+      "topic": "Data Interpretation",
+      "subtopic": "Weighted Account Churn",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "passage": "SaaS Tier Metrics (Q9–Q11): Monthly active accounts & ARPU across 4 plans. Free: 50,000 accounts, $0 ARPU, 8.0% churn. Starter: 12,000 accounts, $20 ARPU, 4.5% churn. Growth: 5,000 accounts, $60 ARPU, 2.5% churn. Enterprise: 800 accounts, $400 ARPU, 0.5% churn.",
+      "question": "How many total PAID accounts (Starter + Growth + Enterprise) churn in a given month?",
+      "options": ["629 accounts", "669 accounts", "689 accounts", "712 accounts"],
+      "correctIndex": 1,
+      "explanation": "Starter churn = `12000 * 4.5% = 540`. Growth churn = `5000 * 2.5% = 125`. Enterprise churn = `800 * 0.5% = 4`. Total paid accounts churning = `540 + 125 + 4 = 669`.",
+      "shortcut": "540 + 125 + 4 = 669."
+    },
+    {
+      "id": "mock5-apt-12",
+      "section": "quant",
+      "topic": "Progressions",
+      "subtopic": "Arithmetic Progression Divisibility Sum",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Find the sum of all 3-digit positive integers that are divisible by 11.",
+      "options": ["43,890", "44,550", "45,100", "46,200"],
+      "correctIndex": 1,
+      "explanation": "First 3-digit multiple of 11 is `110` (`11 * 10`); last is `990` (`11 * 90`). Number of terms `n = 90 - 10 + 1 = 81`. Sum = `n * (first + last) / 2 = 81 * (110 + 990) / 2 = 81 * 550 = 44,550`.",
+      "shortcut": "81 terms * midpoint 550 = 81 * 550 = 44,550."
+    },
+    {
+      "id": "mock5-apt-13",
+      "section": "quant",
+      "topic": "Simple Interest",
+      "subtopic": "Split Principal Weighted Rate",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "An investor splits Rs. 16,000 across two fixed-income bonds paying simple interest at 8% p.a. and 12% p.a. respectively. If the combined annual interest earned is Rs. 1,640, how much money was invested in the 12% bond?",
+      "options": ["Rs. 7,000", "Rs. 8,000", "Rs. 9,000", "Rs. 10,000"],
+      "correctIndex": 2,
+      "explanation": "Had all Rs. 16,000 been at 8%, interest would be `1280`. Extra interest = `1640 - 1280 = 360`, generated by the extra `4%` (`12% - 8%`) on the 12% portion `x`: `0.04x = 360 => x = Rs. 9,000`.",
+      "shortcut": "Extra Rs. 360 / 4% rate diff = Rs. 9,000."
+    },
+    {
+      "id": "mock5-apt-14",
+      "section": "reasoning",
+      "topic": "Scheduling Puzzle",
+      "subtopic": "Six Sequential Slots",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "Six sprint meetings M1, M2, M3, M4, M5, and M6 are scheduled consecutively in time slots 1 through 6. M3 occurs sometime before M1 and immediately after M4. M2 is locked into slot 6. Exactly two meetings occur between M4 and M5. M6 is neither in slot 1 nor immediately adjacent to M2. Which meeting occurs in slot 3?",
+      "options": ["M1", "M3", "M5", "M6"],
+      "correctIndex": 3,
+      "explanation": "M2 = 6. Block `(M4, M3)` occupies two consecutive slots; testing M4: if M4=2 (M3=3, M5=5), remaining slots {1,4} cannot take M6 at 1 so M6=4, M1=1 which violates 'M3 before M1'. If M4=3 (M3=4), M5 collides with M2(6). If M4=4 (M3=5, M5=1), remaining {2,3} for M1 violates 'M3 before M1'. Thus M4=1, M3=2, M5=4 is forced! Remaining {3, 5} for M1 and M6: M6 cannot neighbor M2(6), so M6 = 3 and M1 = 5 (after M3). Order: `M4, M3, M6, M5, M1, M2`. Slot 3 is `M6`.",
+      "shortcut": "Only M4=1, M3=2, M5=4 leaves M1 after M3 and M6 away from slot 1 & M2(6)."
+    },
+    {
+      "id": "mock5-apt-15",
+      "section": "reasoning",
+      "topic": "Blood Relations",
+      "subtopic": "Complex Marriage Deduction",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "R is the brother of S. T is the father of R. U is the sister of V, who is the daughter of S. If T has only two children and V has no brothers, how is U related to R?",
+      "options": ["Daughter", "Niece", "Sister", "Cousin"],
+      "correctIndex": 1,
+      "explanation": "T has two children: R (male) and S. V is the daughter of S, and U is V's sister—meaning both V and U are daughters of S. Therefore U is the daughter of R's sibling S => U is R's niece.",
+      "shortcut": "U is S's daughter, and R is S's brother => U is R's niece."
+    },
+    {
+      "id": "mock5-apt-16",
+      "section": "reasoning",
+      "topic": "Direction Sense",
+      "subtopic": "Relative Bearing Verification",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Data center Node B lies 15 km East of Node A. Node C lies 8 km North of Node B. Node D lies 21 km West of Node C. What is the shortest straight-line distance between Node A and Node D?",
+      "options": ["8 km", "10 km", "12 km", "14 km"],
+      "correctIndex": 1,
+      "explanation": "Place A at `(0, 0)`. Then B = `(15, 0)`, C = `(15, 8)`, D = `(15 - 21, 8) = (-6, 8)`. Distance AD = `sqrt((-6)^2 + 8^2) = sqrt(36 + 64) = 10 km`.",
+      "shortcut": "Net offset from A to D = 6 km West, 8 km North => 6-8-10 Pythagorean triple."
+    },
+    {
+      "id": "mock5-apt-17",
+      "section": "reasoning",
+      "topic": "Syllogisms",
+      "subtopic": "Negative Transitivity",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Statements: (1) All caches are volatile. (2) Some volatile stores are distributed. (3) No distributed store is single-node.\nConclusions:\nI. Some volatile stores are not single-node.\nII. No cache is single-node.",
+      "options": [
+        "Only I follows",
+        "Only II follows",
+        "Both I and II follow",
+        "Neither I nor II follows"
+      ],
+      "correctIndex": 0,
+      "explanation": "Volatile stores overlapping `distributed` cannot be `single-node` (Conclusion I holds). However, `caches` may or may not overlap `distributed`/`single-node`—no negative link connects `caches` and `single-node`, so Conclusion II does NOT follow.",
+      "shortcut": "Only volatile ∩ distributed is barred from single-node (I true); caches have no direct constraint against single-node."
+    },
+    {
+      "id": "mock5-apt-18",
+      "section": "reasoning",
+      "topic": "Data Sufficiency",
+      "subtopic": "Area of Circle from Chord",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "What is the exact area of Circle C?\nStatement I: A chord of length 16 cm inside Circle C lies at a perpendicular distance of 6 cm from the center.\nStatement II: The diameter of Circle C is 4 times the side of an equilateral triangle whose height is `5 * sqrt(3) / 2` cm.",
+      "options": [
+        "Statement I alone is sufficient",
+        "Statement II alone is sufficient",
+        "Either Statement I independently OR Statement II independently is sufficient",
+        "Both together are required"
+      ],
+      "correctIndex": 2,
+      "explanation": "From I alone: radius `r = sqrt((16/2)^2 + 6^2) = sqrt(64 + 36) = 10 cm` -> area `100*pi` (sufficient!). From II alone: equilateral height `(sqrt(3)/2)*s = 5*sqrt(3)/2 => s = 5 => d = 20 => r = 10` -> area `100*pi` (sufficient independently!).",
+      "shortcut": "Each statement independently yields radius r = 10."
+    },
+    {
+      "id": "mock5-apt-19",
+      "section": "reasoning",
+      "topic": "Number Series",
+      "subtopic": "Prime-Cube Alternating Delta",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "Find the next term in the series: `4, 12, 39, 103, 228, ?`",
+      "options": ["396", "424", "444", "468"],
+      "correctIndex": 2,
+      "explanation": "Consecutive differences are consecutive cubes: `12 - 4 = 8 (2^3)`, `39 - 12 = 27 (3^3)`, `103 - 39 = 64 (4^3)`, `228 - 103 = 125 (5^3)`. Next difference is `6^3 = 216`: `228 + 216 = 444`.",
+      "shortcut": "Differences = 2^3, 3^3, 4^3, 5^3, 6^3 (+216) -> 444."
+    },
+    {
+      "id": "mock5-apt-20",
+      "section": "reasoning",
+      "topic": "Paper Folding & Symmetry / Visual Logic",
+      "subtopic": "Cube Face Opposite Deduction",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "An unfolded cardboard net in the shape of a cross has squares: top=`T`, center column top-to-bottom=`T, C, B, X`, and left=`L`, right=`R` attached to `C`. When folded into a closed cube, which face lies directly opposite `T`?",
+      "options": ["C", "B", "L", "X"],
+      "correctIndex": 1,
+      "explanation": "Along the vertical strip of 4 faces (`T -> C -> B -> X`), every alternate square sits on opposite faces when folded: `T` is opposite `B`, `C` is opposite `X`, and `L` is opposite `R`.",
+      "shortcut": "In a linear strip of 4 net squares, skip 1 square to find the opposite face (T <-> B)."
+    },
+    {
+      "id": "mock5-apt-21",
+      "section": "reasoning",
+      "topic": "Ranking & Order",
+      "subtopic": "Swapped Positions Row",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "In a queue facing the stage, Nidhi is 13th from the front and Kabir is 19th from the back. When they swap places, Nidhi becomes 24th from the front. How many total people stand in the queue?",
+      "options": ["41", "42", "43", "44"],
+      "correctIndex": 1,
+      "explanation": "After swapping, Nidhi occupies Kabir's original spot, which is simultaneously 24th from the front and 19th from the back. Total = `24 + 19 - 1 = 42`.",
+      "shortcut": "New front rank + old back rank - 1 = 24 + 19 - 1 = 42."
+    },
+    {
+      "id": "mock5-apt-22",
+      "section": "reasoning",
+      "topic": "Odd One Out",
+      "subtopic": "Letter Cluster Symmetry",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Three of the following four-letter codes follow a consistent alphabetical rule, while one is the odd one out:",
+      "options": ["BDFH", "MOQS", "TVXZ", "CEGK"],
+      "correctIndex": 3,
+      "explanation": "Check gaps: `B(+2)D(+2)F(+2)H`, `M(+2)O(+2)Q(+2)S`, `T(+2)V(+2)X(+2)Z`. In `CEGK`, `C(+2)E(+2)G(+4)K` breaks the `+2` progression (`G + 2 = I`, not `K`).",
+      "shortcut": "All others advance uniformly by +2; CEGK jumps +4 from G to K."
+    },
+    {
+      "id": "mock5-apt-23",
+      "section": "reasoning",
+      "topic": "Venn Diagrams",
+      "subtopic": "Set Membership Logic",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "In a tech club of 90 students, every member participates in Competitive Coding or Open Source (or both). If 62 participate in Competitive Coding and 49 participate in Open Source, how many participate in Open Source ONLY?",
+      "options": ["21", "28", "35", "41"],
+      "correctIndex": 1,
+      "explanation": "Both = `62 + 49 - 90 = 21`. Open Source ONLY = `49 - 21 = 28` (equivalently `90 - 62 = 28`!).",
+      "shortcut": "Since everyone is in at least one group, Open Source ONLY = Total - Competitive Coding = 90 - 62 = 28."
+    },
+    {
+      "id": "mock5-apt-24",
+      "section": "reasoning",
+      "topic": "Critical Reasoning",
+      "subtopic": "Evaluate Evidence",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "A university engineering department replaced timed paper exams with open-book project rubrics and saw average grades climb from 72% to 88%. The dean claims students mastered core concepts far better under projects. Which fact, if true, would MOST cast doubt on the dean's claim?",
+      "options": [
+        "Students submitted project code via GitHub classrooms.",
+        "Follow-up unannounced whiteboard conceptual quizzes given to the same cohort showed zero improvement compared to prior years, and rubric points heavily rewarded formatting and slide decks.",
+        "Library seating usage increased during finals week.",
+        "TAs finished grading three days earlier than last semester."
+      ],
+      "correctIndex": 1,
+      "explanation": "If independent conceptual quizzes showed zero mastery gain while rubrics inflated scores for non-conceptual formatting, grade inflation—not deeper learning—explains the jump.",
+      "shortcut": "Look for evidence separating higher grades from actual conceptual mastery."
+    },
+    {
+      "id": "mock5-apt-25",
+      "section": "reasoning",
+      "topic": "Statements & Assumptions",
+      "subtopic": "Implicit Policy Premise",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Statement: 'Starting Monday, all interns must pair-program with a mentor on database migration scripts before merging to main.'\nAssumptions:\nI. Unreviewed intern migration scripts carry risk of schema or data regressions.\nII. Mentors have sufficient domain context to catch migration issues during pairing.\nWhich assumption(s) are implicit?",
+      "options": ["Only I", "Only II", "Both I and II", "Neither I nor II"],
+      "correctIndex": 2,
+      "explanation": "Requiring mentor pairing assumes both that unreviewed scripts pose risk (I) and that mentor pairing effectively mitigates that risk (II).",
+      "shortcut": "Both risk motivation (I) and intervention efficacy (II) underpin the policy."
+    },
+    {
+      "id": "mock5-apt-26",
+      "section": "verbal",
+      "topic": "Reading Comprehension",
+      "subtopic": "Central Thesis",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "passage": "Modern web backends frequently insert distributed caches like Redis in front of relational databases to slash read latency from tens of milliseconds to sub-millisecond memory hits. While cache-aside patterns accelerate steady-state reads effortlessly, high-concurrency misses introduce a pernicious failure mode known as the 'cache stampede' (or thundering herd). When a hot catalog key expires or an entire cache node restarts cold, hundreds of concurrent application threads observe a cache miss simultaneously and stampede the primary SQL database with identical expensive recomputation queries. Production systems tame stampedes through three defenses: probabilistic early expiration (refreshing hot keys just before TTL ends), request coalescing/single-flight locks so only one worker recomputes a missing key while peers wait briefly, and stale-while-revalidate fallbacks during backend distress.",
+      "question": "What triggers a 'cache stampede' as described in the passage?",
+      "options": [
+        "Database read replicas falling behind on replication lag during quiet midnight hours",
+        "Hundreds of concurrent requests hitting a cache miss simultaneously on a hot expired/evicted key and flooding the underlying database with duplicate queries",
+        "Encrypting Redis keys with TLS certificates",
+        "Setting an infinite Time-To-Live (TTL) on static product images"
+      ],
+      "correctIndex": 1,
+      "explanation": "When a hot key expires or a cache restarts cold, simultaneous misses drive hundreds of threads to bombard the SQL DB with identical queries.",
+      "shortcut": "Direct scan: 'hundreds of concurrent application threads observe a cache miss simultaneously'."
+    },
+    {
+      "id": "mock5-apt-27",
+      "section": "verbal",
+      "topic": "Reading Comprehension",
+      "subtopic": "Specific Mechanism",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "passage": "Modern web backends frequently insert distributed caches like Redis in front of relational databases to slash read latency from tens of milliseconds to sub-millisecond memory hits. While cache-aside patterns accelerate steady-state reads effortlessly, high-concurrency misses introduce a pernicious failure mode known as the 'cache stampede' (or thundering herd). When a hot catalog key expires or an entire cache node restarts cold, hundreds of concurrent application threads observe a cache miss simultaneously and stampede the primary SQL database with identical expensive recomputation queries. Production systems tame stampedes through three defenses: probabilistic early expiration (refreshing hot keys just before TTL ends), request coalescing/single-flight locks so only one worker recomputes a missing key while peers wait briefly, and stale-while-revalidate fallbacks during backend distress.",
+      "question": "How does 'request coalescing' (single-flight locking) protect the relational database during a hot-key miss?",
+      "options": [
+        "It rejects 99% of incoming user traffic with HTTP 503 errors.",
+        "It ensures only a single worker queries the database to rebuild the missing key while concurrent waiters share that freshly computed result.",
+        "It disables cache eviction permanently across the cluster.",
+        "It duplicates every SQL query across three read replicas."
+      ],
+      "correctIndex": 1,
+      "explanation": "The passage explains single-flight locks allow 'only one worker [to] recompute a missing key while peers wait briefly'.",
+      "shortcut": "Single-flight = 1 DB query per missing key, shared across concurrent waiters."
+    },
+    {
+      "id": "mock5-apt-28",
+      "section": "verbal",
+      "topic": "Reading Comprehension",
+      "subtopic": "Vocabulary in Context",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "passage": "Modern web backends frequently insert distributed caches like Redis in front of relational databases to slash read latency from tens of milliseconds to sub-millisecond memory hits. While cache-aside patterns accelerate steady-state reads effortlessly, high-concurrency misses introduce a pernicious failure mode known as the 'cache stampede' (or thundering herd). When a hot catalog key expires or an entire cache node restarts cold, hundreds of concurrent application threads observe a cache miss simultaneously and stampede the primary SQL database with identical expensive recomputation queries. Production systems tame stampedes through three defenses: probabilistic early expiration (refreshing hot keys just before TTL ends), request coalescing/single-flight locks so only one worker recomputes a missing key while peers wait briefly, and stale-while-revalidate fallbacks during backend distress.",
+      "question": "The word 'pernicious' in the second sentence most closely means:",
+      "options": [
+        "Trivial and harmless",
+        "Deeply harmful / destructive in an insidious way",
+        "Temporary and easily ignored",
+        "Predictably beneficial"
+      ],
+      "correctIndex": 1,
+      "explanation": "`pernicious` means causing serious harm or subtle severe damage—fitting a failure mode capable of overwhelming the primary database.",
+      "shortcut": "Pernicious = destructive / severely harmful."
+    },
+    {
+      "id": "mock5-apt-29",
+      "section": "verbal",
+      "topic": "Reading Comprehension",
+      "subtopic": "Inference",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "passage": "Modern web backends frequently insert distributed caches like Redis in front of relational databases to slash read latency from tens of milliseconds to sub-millisecond memory hits. While cache-aside patterns accelerate steady-state reads effortlessly, high-concurrency misses introduce a pernicious failure mode known as the 'cache stampede' (or thundering herd). When a hot catalog key expires or an entire cache node restarts cold, hundreds of concurrent application threads observe a cache miss simultaneously and stampede the primary SQL database with identical expensive recomputation queries. Production systems tame stampedes through three defenses: probabilistic early expiration (refreshing hot keys just before TTL ends), request coalescing/single-flight locks so only one worker recomputes a missing key while peers wait briefly, and stale-while-revalidate fallbacks during backend distress.",
+      "question": "Which defense specifically aims to PREVENT a hot key's TTL from expiring cleanly at peak concurrency in the first place?",
+      "options": [
+        "Probabilistic early expiration",
+        "Stale-while-revalidate fallbacks",
+        "Cold node restarts",
+        "Disabling SQL connection pools"
+      ],
+      "correctIndex": 0,
+      "explanation": "Probabilistic early expiration refreshes hot keys proactively 'just before TTL ends', preventing simultaneous expiration misses.",
+      "shortcut": "Refresh BEFORE TTL ends = probabilistic early expiration."
+    },
+    {
+      "id": "mock5-apt-30",
+      "section": "verbal",
+      "topic": "Error Spotting",
+      "subtopic": "Gerund Possessive Preceding",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "Identify the segment containing a grammatical error:\n'The release lead appreciated him (A) / automating the rollback verification script (B) / prior to last Friday's (C) / multi-region database cutover. (D)'",
+      "options": ["Segment A", "Segment B", "Segment C", "Segment D"],
+      "correctIndex": 0,
+      "explanation": "A noun or pronoun modifying a gerund phrase (`automating the rollback verification script`) takes the possessive form in formal grammar: `appreciated his automating...`.",
+      "shortcut": "Pronoun before a gerund -> possessive (`his automating`, not `him automating`)."
+    },
+    {
+      "id": "mock5-apt-31",
+      "section": "verbal",
+      "topic": "Error Spotting",
+      "subtopic": "Each/Every Distributive Agreement",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Identify the segment containing a grammatical error:\n'Every microservice and background worker (A) / deployed inside the production namespace (B) / are required to expose (C) / Prometheus latency histograms. (D)'",
+      "options": ["Segment A", "Segment B", "Segment C", "Segment D"],
+      "correctIndex": 2,
+      "explanation": "Subjects linked by `and` preceded by `Every` or `Each` take a SINGULAR verb: `is required to expose`, not `are required`.",
+      "shortcut": "Every X and Y -> singular verb (`is`)."
+    },
+    {
+      "id": "mock5-apt-32",
+      "section": "verbal",
+      "topic": "Error Spotting",
+      "subtopic": "Tense Sequence & Past Perfect",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Identify the segment containing a grammatical error:\n'By the time the on-call engineer (A) / logged onto the bastion host, (B) / the autoscaler already provisioned (C) / four additional worker instances. (D)'",
+      "options": ["Segment A", "Segment B", "Segment C", "Segment D"],
+      "correctIndex": 2,
+      "explanation": "When describing an action completed BEFORE another past reference event (`By the time... logged onto...`), use past perfect: `had already provisioned`.",
+      "shortcut": "'By the time + simple past' -> main clause uses 'had + V3'."
+    },
+    {
+      "id": "mock5-apt-33",
+      "section": "verbal",
+      "topic": "Sentence Correction",
+      "subtopic": "Correlative Conjunction Placement",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Choose the grammatically tightest revision:\n'The profiler revealed that the query bottleneck stemmed either from an unindexed join or it was caused by N+1 lazy loading.'",
+      "options": [
+        "stemmed either from an unindexed join or from N+1 lazy loading.",
+        "either stemmed from an unindexed join or from N+1 lazy loading.",
+        "stemmed from either an unindexed join or it was caused by N+1 lazy loading.",
+        "stemmed either from an unindexed join or N+1 lazy loading caused it."
+      ],
+      "correctIndex": 0,
+      "explanation": "Parallel structure around `either ... or`: match prepositional phrase `from an unindexed join` cleanly with `from N+1 lazy loading` right after `stemmed`.",
+      "shortcut": "either [from X] or [from Y]."
+    },
+    {
+      "id": "mock5-apt-34",
+      "section": "verbal",
+      "topic": "Sentence Correction",
+      "subtopic": "Countable vs Uncountable Nouns",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Select the grammatically accurate sentence:",
+      "options": [
+        "The team lead shared several helpful advices on debugging Spring Security filters.",
+        "The team lead shared several helpful pieces of advice on debugging Spring Security filters.",
+        "The team lead shared many useful informations about debugging Spring Security filters.",
+        "The team lead shared a few advices regarding Spring Security filters."
+      ],
+      "correctIndex": 1,
+      "explanation": "`advice` and `information` are uncountable mass nouns in English and never take `-s` or `several/many` directly without a unit noun (`pieces of advice`).",
+      "shortcut": "Uncountables: advice, information, equipment, luggage -> use `pieces of advice`."
+    },
+    {
+      "id": "mock5-apt-35",
+      "section": "verbal",
+      "topic": "Vocabulary & Idiom",
+      "subtopic": "Contrastive Connectors",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Choose the word that best completes the sentence:\n_______ extensive pre-release chaos drills, an unanticipated BGP routing flap briefly isolated two edge points of presence.",
+      "options": ["Because of", "Notwithstanding", "Consequently", "Owing to"],
+      "correctIndex": 1,
+      "explanation": "`Notwithstanding` (= in spite of / despite) expresses the concession between thorough chaos drills and the unexpected outage.",
+      "shortcut": "Contrast between preparation and unexpected outage -> Notwithstanding."
+    },
+    {
+      "id": "mock5-apt-36",
+      "section": "verbal",
+      "topic": "Para Jumbles",
+      "subtopic": "5-Sentence Coherence",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "Arrange P, Q, R, S, T into a coherent paragraph:\nP: However, naive offset pagination (`OFFSET 500000 LIMIT 20`) forces the engine to scan and discard half a million rows on every page turn.\nQ: Users browsing large e-commerce catalogs routinely click through dozens of sequential search result pages.\nR: Keyset (cursor) pagination eliminates that linear waste by filtering directly on the last seen sort key (`WHERE id > last_id LIMIT 20`).\nS: As a result, page-turn response times remain flat in single-digit milliseconds regardless of whether the user is on page 2 or page 20,000.\nT: Because B+ tree index scans jump straight to `last_id`, the database reads only the exact 20 rows requested.",
+      "options": ["Q P R T S", "Q R P T S", "P Q R T S", "Q P T R S"],
+      "correctIndex": 0,
+      "explanation": "Q sets the user scenario (browsing pages). P introduces the `OFFSET` bottleneck ('However, naive offset pagination...'). R introduces Keyset pagination ('eliminates that linear waste'). T explains WHY via B+ tree index jump, and S states the final flat latency result.",
+      "shortcut": "Q (browsing) -> P (OFFSET flaw) -> R (Keyset fix) -> T (B+ tree why) -> S (result)."
+    },
+    {
+      "id": "mock5-apt-37",
+      "section": "verbal",
+      "topic": "Para Jumbles",
+      "subtopic": "4-Sentence Coherence",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Arrange P, Q, R, S into a coherent paragraph:\nP: Structured JSON logging solves that grep nightmare by emitting consistent machine-parseable fields such as `traceId`, `userId`, and `durationMs`.\nQ: Plain-text application logs concatenated across dozens of async threads quickly become nearly impossible to filter during production fires.\nR: Operators can then aggregate error spikes by endpoint or tenant in seconds across central dashboards.\nS: Without uniform schemas, urgent triage degenerates into fragile regular expressions that break whenever a developer edits a log message.",
+      "options": ["Q S P R", "Q P S R", "S Q P R", "P Q S R"],
+      "correctIndex": 0,
+      "explanation": "Q presents plain-text log chaos. S elaborates why unstructured logs break triage ('Without uniform schemas... fragile regular expressions'). P introduces structured JSON logging solving 'that grep nightmare', and R concludes with fast dashboard aggregation ('can then aggregate').",
+      "shortcut": "Q (plain-text logs) -> S (fragile regexes) -> P (solves 'that grep nightmare') -> R (dashboard payoff)."
+    }
+  ],
+  "technicalQuestions": [
+    {
+      "id": "mock5-tech-01",
+      "topic": "Output Prediction",
+      "subtopic": "CompletableFuture & Thread Exceptions",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "What does the following Java snippet print?",
+      "codeSnippet": "String out = CompletableFuture.supplyAsync(() -> 10 / 0)\n    .thenApply(n -> n * 2)\n    .exceptionally(ex -> -1)\n    .thenApply(n -> n + 10)\n    .join()\n    .toString();\nSystem.out.println(out);",
+      "options": [
+        "Throws ArithmeticException directly in main without printing",
+        "-1",
+        "9",
+        "10"
+      ],
+      "correctIndex": 2,
+      "explanation": "`10 / 0` throws `ArithmeticException` (wrapped in `CompletionException`). The first `thenApply(n -> n * 2)` is skipped; `.exceptionally(ex -> -1)` recovers the stage value to `-1`; then the downstream `.thenApply(n -> n + 10)` executes on `-1`, producing `-1 + 10 = 9`!",
+      "shortcut": "exceptionally(-1) recovers -> subsequent thenApply(-1 + 10) = 9."
+    },
+    {
+      "id": "mock5-tech-02",
+      "topic": "Output Prediction",
+      "subtopic": "SubList Backing View Trap",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "What happens when this Java `ArrayList.subList` snippet executes?",
+      "codeSnippet": "List<String> base = new ArrayList<>(List.of(\"A\", \"B\", \"C\", \"D\"));\nList<String> sub = base.subList(1, 3);\nsub.set(0, \"X\");\nbase.add(\"E\");\nSystem.out.println(sub);",
+      "options": [
+        "Prints `[X, C]`",
+        "Prints `[X, C, E]`",
+        "Throws `ConcurrentModificationException`",
+        "Prints `[B, C]`"
+      ],
+      "correctIndex": 2,
+      "explanation": "`subList` returns a structural view backed by `base`, NOT an independent copy. Structurally modifying `base` directly (`base.add(\"E\")`) invalidates `sub`'s `modCount`, causing `System.out.println(sub)` to throw `ConcurrentModificationException`!",
+      "shortcut": "Structural edit on parent list after subList() invalidates subList -> ConcurrentModificationException."
+    },
+    {
+      "id": "mock5-tech-03",
+      "topic": "Output Prediction",
+      "subtopic": "Local Variable Effectively Final in Lambdas",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "What is the outcome of compiling and running this Java lambda snippet?",
+      "codeSnippet": "int count = 0;\nList<String> items = List.of(\"x\", \"y\");\nitems.forEach(s -> { count++; });\nSystem.out.println(count);",
+      "options": [
+        "Prints `2`",
+        "Prints `0`",
+        "Compilation error: local variables referenced from a lambda expression must be final or effectively final",
+        "Throws IllegalStateException at runtime"
+      ],
+      "correctIndex": 2,
+      "explanation": "Java lambdas capture local stack variables by value, so captured locals must be `final` or effectively final. Incrementing `count++` inside the lambda violates this rule at compile time (use `AtomicInteger` or `stream().count()` instead).",
+      "shortcut": "Mutating a local primitive inside a lambda -> compile error."
+    },
+    {
+      "id": "mock5-tech-04",
+      "topic": "Output Prediction",
+      "subtopic": "StringBuilder equals() vs String.equals()",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "What does the following Java snippet print?",
+      "codeSnippet": "StringBuilder sb1 = new StringBuilder(\"HCL\");\nStringBuilder sb2 = new StringBuilder(\"HCL\");\nSystem.out.println(sb1.equals(sb2) + \" \" + sb1.toString().equals(sb2.toString()));",
+      "options": [
+        "true true",
+        "false true",
+        "true false",
+        "false false"
+      ],
+      "correctIndex": 1,
+      "explanation": "`StringBuilder` does NOT override `Object.equals()`, so `sb1.equals(sb2)` checks reference identity (`==` -> `false`). Converting via `.toString()` compares `String` contents (`true`).",
+      "shortcut": "StringBuilder inherits Object.equals() (reference equality) -> false; String.equals() -> true."
+    },
+    {
+      "id": "mock5-tech-05",
+      "topic": "Output Prediction",
+      "subtopic": "Finally Overriding Exception",
+      "difficulty": "hard",
+      "source_tag": "reported",
+      "question": "What does this Java method print when called from `main`?",
+      "codeSnippet": "static int test() {\n    try {\n        int x = 1 / 0;\n        return 1;\n    } catch (ArithmeticException e) {\n        return 2;\n    } finally {\n        return 3;\n    }\n}\npublic static void main(String[] args) {\n    System.out.println(test());\n}",
+      "options": [
+        "2",
+        "3",
+        "Throws ArithmeticException",
+        "1"
+      ],
+      "correctIndex": 1,
+      "explanation": "`finally` executes before the method returns to its caller; putting a `return 3;` statement inside `finally` overrides any pending `return 2;` from `catch` (and even suppresses thrown exceptions—considered a severe anti-pattern).",
+      "shortcut": "A return inside finally always overrides try/catch returns."
+    },
+    {
+      "id": "mock5-tech-06",
+      "topic": "Java",
+      "subtopic": "HashMap Treeification Threshold",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "In Java 8+ `HashMap`, under what two conditions does a hash bucket convert from a singly-linked list into a balanced Red-Black `TreeNode` bin?",
+      "options": [
+        "Bucket size >= 4 AND table capacity >= 16",
+        "Bucket size >= `TREEIFY_THRESHOLD` (8) AND total hash-table capacity >= `MIN_TREEIFY_CAPACITY` (64) (otherwise it resizes the table first)",
+        "Load factor reaches 0.50",
+        "Whenever keys implement `Serializable`"
+      ],
+      "correctIndex": 1,
+      "explanation": "If a bin exceeds 8 nodes while capacity < 64, `HashMap` resizes (`resize()`) to spread keys; only once capacity >= 64 and bin length >= 8 does it treeify into `O(log N)` worst-case lookup (and untreeifies back below 6).",
+      "shortcut": "Treeify requires bin >= 8 AND capacity >= 64 (untreeify <= 6)."
+    },
+    {
+      "id": "mock5-tech-07",
+      "topic": "Java",
+      "subtopic": "Java Memory Model (JMM) Happens-Before",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "Which of the following establishes a formal Java Memory Model (JMM) `happens-before` guarantee between Thread A and Thread B?",
+      "options": [
+        "Thread A writes a normal non-volatile field `x = 5`, then Thread B calls `Thread.yield()`",
+        "Thread A unlocks monitor `m`, and Thread B subsequently acquires the SAME monitor `m` (or A writes a `volatile` field before B reads that same `volatile` field)",
+        "Thread A sets `Thread.setPriority(MAX_PRIORITY)`",
+        "Thread A allocates an object before calling `System.gc()`"
+      ],
+      "correctIndex": 1,
+      "explanation": "Monitor lock release -> acquire (`synchronized`), `volatile` write -> read, `Thread.start()`, and `Thread.join()` are core JMM happens-before edges guaranteeing memory visibility.",
+      "shortcut": "Happens-before: unlock -> lock, volatile write -> read, start(), join()."
+    },
+    {
+      "id": "mock5-tech-08",
+      "topic": "Java",
+      "subtopic": "Spring Dependency Injection Types",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Why does the Spring team recommend Constructor Injection over `@Autowired` Field Injection for mandatory service dependencies?",
+      "options": [
+        "Field injection works only with XML configuration files",
+        "Constructor injection allows `final` immutable fields, prevents partially initialized objects in plain JUnit unit tests (no Spring context needed), and surfaces circular dependencies at startup",
+        "Constructor injection skips BeanPostProcessors",
+        "Field injection slows down SQL queries at runtime"
+      ],
+      "correctIndex": 1,
+      "explanation": "Constructor injection supports `final` fields, fails fast on missing/circular beans, and lets unit tests instantiate the service directly via `new MyService(mockRepo)` without reflection.",
+      "shortcut": "Constructor injection = immutable `final` fields + POJO unit-testable + explicit dependencies."
+    },
+    {
+      "id": "mock5-tech-09",
+      "topic": "Java",
+      "subtopic": "Functional Interface Rules",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Can an interface annotated with `@FunctionalInterface` contain `default`, `static`, and `java.lang.Object` public method signatures (`toString`, `equals`) alongside its single abstract method?",
+      "options": [
+        "No, zero other methods of any kind are permitted",
+        "Yes—only non-Object `abstract` methods count toward the Single Abstract Method (SAM) limit; `default`, `static`, and `Object` public declarations are allowed",
+        "Only `static` methods are allowed alongside the abstract method",
+        "Only `default` methods are allowed alongside the abstract method"
+      ],
+      "correctIndex": 1,
+      "explanation": "`Comparator<T>`, for example, is `@FunctionalInterface` yet declares `boolean equals(Object)` (inherited from `Object`) plus dozens of `default`/`static` helpers because it has only ONE non-Object abstract method `compare`.",
+      "shortcut": "SAM rule counts only abstract methods NOT already public in java.lang.Object."
+    },
+    {
+      "id": "mock5-tech-10",
+      "topic": "Java",
+      "subtopic": "ExecutorService Shutdown Semantics",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "What distinguishes `executor.shutdown()` from `executor.shutdownNow()` on a Java `ThreadPoolExecutor`?",
+      "options": [
+        "`shutdown()` kills JVM immediately via `System.exit(0)`",
+        "`shutdown()` stops accepting new tasks while letting queued + running tasks complete gracefully; `shutdownNow()` attempts to interrupt active worker threads and returns unstarted queued tasks",
+        "`shutdownNow()` waits indefinitely for queued tasks to finish",
+        "Neither stops non-daemon pool threads from keeping the JVM alive"
+      ],
+      "correctIndex": 1,
+      "explanation": "`shutdown()` initiates an orderly drain of submitted work; `shutdownNow()` calls `Thread.interrupt()` on running workers and drains the work queue into a returned `List<Runnable>`.",
+      "shortcut": "shutdown = graceful drain; shutdownNow = interrupt active + return unstarted queue."
+    },
+    {
+      "id": "mock5-tech-11",
+      "topic": "OOP",
+      "subtopic": "Singleton Double-Checked Locking",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "In classic lazy double-checked locking Singleton in Java, why MUST the static `instance` field be declared `volatile`?",
+      "options": [
+        "To let garbage collection collect the singleton every minute",
+        "To prevent JVM/CPU instruction reordering from publishing a partially constructed `Singleton` reference (`new` allocates + assigns pointer before constructor finishes) to another thread reading outside the `synchronized` block",
+        "To disable reflection access",
+        "Because `synchronized` cannot protect static fields"
+      ],
+      "correctIndex": 1,
+      "explanation": "Without `volatile`, instruction reordering can store the non-null heap address into `instance` before field initialization finishes, letting another thread see a half-built object.",
+      "shortcut": "Double-checked locking requires `volatile` to forbid partial-construction reordering."
+    },
+    {
+      "id": "mock5-tech-12",
+      "topic": "OOP",
+      "subtopic": "Single Responsibility & Cohesive Services",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "According to Robert Martin's definition of the Single Responsibility Principle (SRP), what does 'one responsibility' precisely mean?",
+      "options": [
+        "Every class must contain at most one public method",
+        "A class or module should have one, and only one, reason to change (aligned to a single business actor/concern)",
+        "A class cannot inject more than one dependency",
+        "Every file must be under 50 lines"
+      ],
+      "correctIndex": 1,
+      "explanation": "SRP is about axes of change/stakeholders—separating payroll tax rules from database persistence or PDF report formatting so unrelated changes don't collide.",
+      "shortcut": "SRP = one reason to change (not 'only 1 method')."
+    },
+    {
+      "id": "mock5-tech-13",
+      "topic": "OOP",
+      "subtopic": "Dynamic vs Static Method Dispatch",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Which set of Java methods CANNOT participate in runtime polymorphic overriding (`virtual` dispatch)?",
+      "options": [
+        "`public` and `protected` instance methods",
+        "`private`, `static`, and `final` methods (resolved at compile time / statically bound)",
+        "Abstract interface methods",
+        "Methods returning `Object`"
+      ],
+      "correctIndex": 1,
+      "explanation": "`private` methods aren't visible to subclasses, `static` methods belong to the class (method hiding, not overriding), and `final` methods cannot be overridden—all use static binding.",
+      "shortcut": "Static binding in Java: private, static, final (+ constructors)."
+    },
+    {
+      "id": "mock5-tech-14",
+      "topic": "JDBC",
+      "subtopic": "DriverManager Class Loading & SPI",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "In legacy JDBC 3.0, developers had to call `Class.forName(\"com.mysql.cj.jdbc.Driver\")` before `DriverManager.getConnection(...)`. Why is `Class.forName` optional in modern JDBC 4.0+ (Java 6+)?",
+      "options": [
+        "JDBC 4.0 removed `DriverManager` completely",
+        "`DriverManager` automatically discovers and registers drivers via the `META-INF/services/java.sql.Driver` Service Provider Interface (SPI) on the classpath",
+        "Drivers are baked directly inside `java.lang.Object`",
+        "TCP ports auto-detect driver classes"
+      ],
+      "correctIndex": 1,
+      "explanation": "JDBC 4.0 introduced automatic driver discovery using Java's `ServiceLoader` scanning `META-INF/services/java.sql.Driver` inside driver JARs.",
+      "shortcut": "JDBC 4.0 auto-loads drivers via META-INF/services/java.sql.Driver SPI."
+    },
+    {
+      "id": "mock5-tech-15",
+      "topic": "JDBC",
+      "subtopic": "Fetch Size & Memory Streaming",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "When streaming 5 million rows from PostgreSQL via JDBC without triggering `OutOfMemoryError` on the Java client heap, which combination of settings enables cursor-based chunked fetching?",
+      "options": [
+        "`conn.setAutoCommit(true)` and `statement.setFetchSize(0)`",
+        "`conn.setAutoCommit(false)` coupled with `statement.setFetchSize(500)` on a `TYPE_FORWARD_ONLY` read-only `ResultSet`",
+        "Using `CachedRowSet` to preload all 5 million rows into RAM",
+        "Setting `maxRows = 500`"
+      ],
+      "correctIndex": 1,
+      "explanation": "In PostgreSQL JDBC, default `autoCommit(true)` or `fetchSize(0)` buffers the entire query result in heap; disabling `autoCommit` and setting a positive `fetchSize` turns on server-side cursor streaming.",
+      "shortcut": "PostgreSQL JDBC streaming requires autoCommit=false + positive setFetchSize(N)."
+    },
+    {
+      "id": "mock5-tech-16",
+      "topic": "SQL",
+      "subtopic": "Correlated Subquery vs Self-Contained",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "How does a database engine conceptually evaluate a correlated subquery like `SELECT name FROM emp e WHERE salary > (SELECT AVG(salary) FROM emp WHERE dept = e.dept);`?",
+      "options": [
+        "The inner query runs strictly once before reading the outer table",
+        "The inner query depends on `e.dept` from each candidate outer row (either evaluated per outer row/group or rewritten by the optimizer into a hash join/window aggregate)",
+        "Correlated subqueries are invalid syntax in ANSI SQL",
+        "The `WHERE` clause skips NULL departments automatically without checking"
+      ],
+      "correctIndex": 1,
+      "explanation": "Logically, a correlated subquery references columns of the outer query (`e.dept`), re-evaluating for each outer tuple (though modern optimizers often decorrelate it into a grouped join).",
+      "shortcut": "Correlated subquery references outer table alias -> logically dependent per outer row."
+    },
+    {
+      "id": "mock5-tech-17",
+      "topic": "SQL",
+      "subtopic": "Window ROWS vs RANGE Framing",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "In `SUM(amt) OVER (ORDER BY txn_date)` when two transactions share the SAME `txn_date`, what does the SQL standard default window frame (`RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW`) include?",
+      "options": [
+        "Only rows strictly preceding the physical row position",
+        "All peer rows sharing the exact same `ORDER BY` key (`txn_date`) are summed together as a tie block for each tied row (unlike `ROWS BETWEEN ...` which processes physically row-by-row)",
+        "It raises a duplicate-key exception",
+        "It sorts rows randomly"
+      ],
+      "correctIndex": 1,
+      "explanation": "Default `ORDER BY` window framing is `RANGE`, which treats peers with equal sort values identically; specify `ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW` when strictly row-by-row running totals are needed.",
+      "shortcut": "Default ORDER BY frame = RANGE (groups ties together); ROWS = strict physical row order."
+    },
+    {
+      "id": "mock5-tech-18",
+      "topic": "SQL",
+      "subtopic": "EXISTS Short-Circuit Advantage",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Why does `WHERE EXISTS (SELECT 1 FROM orders o WHERE o.cust_id = c.id)` often outperform `WHERE c.id IN (SELECT o.cust_id FROM orders o)` when `orders` is huge and indexed on `cust_id`?",
+      "options": [
+        "`SELECT 1` skips checking `WHERE` conditions inside `orders`",
+        "`EXISTS` short-circuits immediately on the very first matching index probe (semi-join), without scanning duplicate orders or tripping on NULLs",
+        "`IN` forbids the query planner from using indexes",
+        "`EXISTS` returns rows even when the subquery is empty"
+      ],
+      "correctIndex": 1,
+      "explanation": "`EXISTS` asks a boolean existence question (`>= 1` match -> stop probing), whereas naive `IN` materialization or `NOT IN` NULL hazards are avoided.",
+      "shortcut": "EXISTS short-circuits on first matching row and stays NULL-safe."
+    },
+    {
+      "id": "mock5-tech-19",
+      "topic": "DBMS",
+      "subtopic": "1NF, 2NF, 3NF Violation Identification",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "Table `Enrollment(StudentID, CourseID, StudentName, Grade)` has composite primary key `(StudentID, CourseID)`. The dependency `StudentID -> StudentName` violates which highest normal form first?",
+      "options": [
+        "First Normal Form (1NF) — non-atomic values",
+        "Second Normal Form (2NF) — partial dependency of a non-prime attribute on part of a composite candidate key",
+        "Third Normal Form (3NF) only — transitive dependency",
+        "Boyce-Codd Normal Form (BCNF) only"
+      ],
+      "correctIndex": 1,
+      "explanation": "`StudentName` depends only on `StudentID` (a proper subset of the composite key `(StudentID, CourseID)`), which is a classic **partial functional dependency** violating **2NF**.",
+      "shortcut": "Non-prime depending on PART of a composite key = 2NF violation."
+    },
+    {
+      "id": "mock5-tech-20",
+      "topic": "DBMS",
+      "subtopic": "Transitive Dependency (3NF)",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Table `Emp(EmpID, EmpName, DeptID, DeptHead)` has single-column primary key `EmpID`, and `DeptID -> DeptHead` holds (`DeptID` is not a candidate key). Which normal form is violated?",
+      "options": [
+        "1NF",
+        "2NF",
+        "3NF (transitive dependency `EmpID -> DeptID -> DeptHead`)",
+        "No normalization violation"
+      ],
+      "correctIndex": 2,
+      "explanation": "A single-attribute primary key is automatically in 2NF (no partial dependency possible), yet `EmpID -> DeptID -> DeptHead` is a non-prime-to-non-prime transitive dependency violating **3NF**.",
+      "shortcut": "Non-prime -> Non-prime (`DeptID -> DeptHead`) = 3NF violation."
+    },
+    {
+      "id": "mock5-tech-21",
+      "topic": "DBMS",
+      "subtopic": "Deadlock Detection Wait-For Graph",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "How does a relational DBMS that permits lock waits detect a deadlock at runtime rather than running Banker's Algorithm?",
+      "options": [
+        "By killing every query running longer than 100 ms",
+        "By constructing a directed Wait-For Graph (`Ti -> Tj` if `Ti` waits for a lock held by `Tj`) and scanning for cycles, aborting a chosen victim transaction to break the cycle",
+        "By restarting the entire database server",
+        "By converting all X-locks into S-locks automatically"
+      ],
+      "correctIndex": 1,
+      "explanation": "DBMS lock managers periodically inspect the Wait-For Graph; any directed cycle implies deadlock, resolved by rolling back the cheapest victim (fewest log records/locks).",
+      "shortcut": "Runtime DBMS deadlock detection = cycle detection in Wait-For Graph + victim rollback."
+    },
+    {
+      "id": "mock5-tech-22",
+      "topic": "OS",
+      "subtopic": "SJF Turnaround Time Calculation",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "Four processes arrive at `t = 0`: P1 (burst 6), P2 (burst 8), P3 (burst 7), P4 (burst 3). Under non-preemptive Shortest Job First (SJF), what is the AVERAGE Turnaround Time?",
+      "options": ["10.0", "11.5", "13.0", "14.5"],
+      "correctIndex": 2,
+      "explanation": "Execution order by burst: `P4(3) -> P1(6) -> P3(7) -> P2(8)`. Completion (= Turnaround since all arrive at 0): `P4=3`, `P1=3+6=9`, `P3=9+7=16`, `P2=16+8=24`. Average Turnaround Time = `(3 + 9 + 16 + 24) / 4 = 52 / 4 = 13.0`.",
+      "shortcut": "Sort bursts (3,6,7,8) -> cumulative completions (3, 9, 16, 24) -> 52/4 = 13.0."
+    },
+    {
+      "id": "mock5-tech-23",
+      "topic": "OS",
+      "subtopic": "Binary Semaphore vs Mutex Ownership",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Why can a Binary Semaphore be used for cross-thread signaling (`post()` by Thread B, `wait()` by Thread A) whereas a Mutex is designed specifically for mutual exclusion?",
+      "options": [
+        "Semaphores use spin-waiting while mutexes always sleep",
+        "A Mutex enforces strict thread ownership (only the thread that locked it may unlock it), whereas a Semaphore is an ownership-free signaling counter where any thread can `signal()`/`V()` to wake another",
+        "Mutexes allow up to K threads inside the critical section",
+        "Semaphores cannot cause deadlocks"
+      ],
+      "correctIndex": 1,
+      "explanation": "Ownership distinguishes a mutex (lock & unlock by the same owner, enabling priority inheritance) from a semaphore (decoupled producer `signal()` / consumer `wait()`).",
+      "shortcut": "Mutex = strict owner locks & unlocks; Semaphore = counter without ownership."
+    },
+    {
+      "id": "mock5-tech-24",
+      "topic": "OS",
+      "subtopic": "Spooling & DMA I/O Efficiency",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "How does Direct Memory Access (DMA) relieve the CPU during high-throughput disk or network card transfers?",
+      "options": [
+        "DMA executes Java bytecode directly on the NIC",
+        "The CPU programs the DMA controller with source/destination addresses and byte count, then runs other processes while DMA moves blocks directly between device and RAM, raising ONE interrupt when done",
+        "DMA bypasses RAM and writes straight into L1 CPU registers",
+        "DMA replaces interrupts with busy-waiting polling loops"
+      ],
+      "correctIndex": 1,
+      "explanation": "Instead of byte-by-byte Programmed I/O wasting CPU cycles, DMA transfers entire buffers autonomously and interrupts the CPU once per block.",
+      "shortcut": "DMA = controller transfers blocks straight to/from RAM -> 1 completion interrupt per block."
+    },
+    {
+      "id": "mock5-tech-25",
+      "topic": "OS",
+      "subtopic": "Peterson's & Test-and-Set Spinlocks",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "When is an atomic hardware `Compare-And-Swap` (CAS) spinlock BETTER than a sleeping OS mutex, and when is it WORSE?",
+      "options": [
+        "Always better on single-core CPUs",
+        "Spinlocks beat sleeping mutexes for ultra-short critical sections on multi-core CPUs (avoiding context-switch overhead), yet waste 100% CPU burning cycles under long contention or on single-core systems",
+        "Spinlocks work only for disk I/O waits",
+        "CAS spinlocks never experience starvation"
+      ],
+      "correctIndex": 1,
+      "explanation": "If lock hold time is shorter than two OS context switches on a multicore machine, spinning is faster; on 1 core or long waits, spinning burns CPU uselessly.",
+      "shortcut": "Short wait + multi-core -> spinlock wins; long wait / single-core -> blocking mutex wins."
+    },
+    {
+      "id": "mock5-tech-26",
+      "topic": "CN",
+      "subtopic": "OSI Layer Protocol Mapping",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Which mapping of protocols to their primary TCP/IP / OSI layer is completely accurate?",
+      "options": [
+        "IP = Layer 2, ARP = Layer 4, TCP = Layer 3, HTTP = Layer 7",
+        "Ethernet/MAC = Layer 2 (Data Link), IP/ICMP = Layer 3 (Network), TCP/UDP = Layer 4 (Transport), HTTP/DNS/SMTP = Layer 7 (Application)",
+        "UDP = Layer 3, TLS = Layer 2, BGP = Layer 1",
+        "Switch = Layer 3, Hub = Layer 2, Router = Layer 1"
+      ],
+      "correctIndex": 1,
+      "explanation": "L1=Physical (Hub/Bits), L2=Data Link (Ethernet/Switch/Frames), L3=Network (IP/ICMP/Router/Packets), L4=Transport (TCP/UDP/Segments), L7=Application (HTTP/DNS/SMTP).",
+      "shortcut": "L2 Ethernet/Switch, L3 IP/Router, L4 TCP/UDP, L7 HTTP/DNS."
+    },
+    {
+      "id": "mock5-tech-27",
+      "topic": "CN",
+      "subtopic": "TCP vs UDP Real-Time Selection",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Why do real-time multiplayer shooter games and live VoIP audio streams prefer UDP over standard TCP?",
+      "options": [
+        "UDP guarantees zero packet loss across wireless links",
+        "TCP head-of-line stalling and retransmission of stale packets spike latency jitters; UDP sends low-overhead datagrams immediately so stale frames can simply be dropped in favor of newer state",
+        "UDP encrypts audio automatically",
+        "TCP cannot carry binary data"
+      ],
+      "correctIndex": 1,
+      "explanation": "In live audio/gaming, a delayed retransmission of a 300ms-old frame is useless and freezes subsequent packets in TCP's ordered byte stream.",
+      "shortcut": "UDP avoids TCP ordering stalls & retransmission jitter for real-time streams."
+    },
+    {
+      "id": "mock5-tech-28",
+      "topic": "CN",
+      "subtopic": "SYN Flood & SYN Cookies",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "How do Linux `SYN Cookies` defend a web server against TCP SYN Flood Denial-of-Service attacks?",
+      "options": [
+        "By blocking all HTTP `GET` requests from browsers without cookies",
+        "By avoiding allocating a half-open TCB state entry upon receiving `SYN`, instead encoding connection parameters into the server's cryptographic Initial Sequence Number (`ISN`) inside `SYN-ACK` and allocating state only once a valid `ACK` returns",
+        "By dropping the TCP 3-way handshake completely",
+        "By switching port 443 to UDP"
+      ],
+      "correctIndex": 1,
+      "explanation": "SYN floods exhaust the server's `SYN` backlog queue with spoofed `SYN`s; SYN cookies keep the server stateless until the client proves reachability with the 3rd-step `ACK`.",
+      "shortcut": "SYN cookies keep server stateless until valid 3rd-step ACK verifies client IP."
+    },
+    {
+      "id": "mock5-tech-29",
+      "topic": "CN",
+      "subtopic": "CORS Preflight OPTIONS",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "When a React SPA on `https://app.example.com` sends a `PUT` JSON request with an `Authorization` header to `https://api.example.com`, why does the browser automatically send an HTTP `OPTIONS` request first?",
+      "options": [
+        "To compress the JSON payload with gzip",
+        "CORS Preflight verification—because cross-origin `PUT` with non-simple headers (`Authorization`, `application/json`) requires server approval (`Access-Control-Allow-*`) before sending the actual mutation",
+        "To upgrade the connection to WebSockets",
+        "To fetch DNS MX records"
+      ],
+      "correctIndex": 1,
+      "explanation": "Browsers issue an `OPTIONS` preflight for non-simple cross-origin requests (`PUT`/`DELETE`, custom headers, `application/json`) to verify server CORS headers before executing side effects.",
+      "shortcut": "Non-simple cross-origin request -> browser sends OPTIONS CORS preflight."
+    },
+    {
+      "id": "mock5-tech-30",
+      "topic": "DSA",
+      "subtopic": "Binary Tree Diameter & Recursion",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "What is the optimal time complexity to compute the Diameter (longest path between any two nodes) of a Binary Tree with N nodes?",
+      "options": [
+        "O(N^2) because height must be recomputed separately at every node",
+        "O(N) via a single bottom-up post-order DFS returning node height while updating `bestDiameter = max(bestDiameter, leftH + rightH)`",
+        "O(N log N)",
+        "O(log N)"
+      ],
+      "correctIndex": 1,
+      "explanation": "Computing heights separately top-down takes `O(N^2)` on skewed trees, whereas returning height bottom-up in one DFS computes diameter in `O(N)` time and `O(H)` stack space.",
+      "shortcut": "Bottom-up post-order DFS computes height + updates diameter in O(N)."
+    },
+    {
+      "id": "mock5-tech-31",
+      "topic": "DSA",
+      "subtopic": "Floyd's Cycle Detection (Tortoise & Hare)",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "In Floyd's Tortoise-and-Hare algorithm on a singly linked list with a cycle, after `slow` (1 step) and `fast` (2 steps) first meet inside the cycle, why does resetting `slow` to `head` and advancing BOTH by 1 step locate the exact cycle entry node?",
+      "options": [
+        "Because `fast` always stops right at the tail node",
+        "By modular arithmetic (`L_head_to_entry ≡ k * CycleLen - offset`), the distance from `head` to cycle entry equals the distance from the meeting point forward to cycle entry (mod cycle length)",
+        "Because linked list cycles always have even length",
+        "It only works if the cycle starts at `head`"
+      ],
+      "correctIndex": 1,
+      "explanation": "If distance before entry is `a` and meeting point is `b` steps past entry inside cycle length `c`: `2(a + b) - (a + b) = k*c => a + b = k*c => a = k*c - b`.",
+      "shortcut": "2*(a+b) = (a+b) + k*c => a = k*c - b -> synchronized 1-step walks collide at entry."
+    },
+    {
+      "id": "mock5-tech-32",
+      "topic": "DSA",
+      "subtopic": "0/1 Knapsack Space Optimization",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "When compressing 2D 0/1 Knapsack DP (`dp[i][w]`) into a 1D array `dp[0..W]`, why MUST the inner capacity loop iterate BACKWARDS (`for w = W down to weight[i]`) whereas Unbounded Knapsack iterates FORWARDS?",
+      "options": [
+        "Backward iteration sorts weights automatically",
+        "Backward iteration preserves previous-row (`i - 1`) values at smaller indices `w - weight[i]`, preventing the same item `i` from being picked multiple times in the same row (unlike forward iteration which implements Unbounded Knapsack)",
+        "Forward iteration causes integer overflow",
+        "Backward iteration cuts time complexity from O(NW) to O(N)"
+      ],
+      "correctIndex": 1,
+      "explanation": "Reading `dp[w - wt]` before it is overwritten in row `i` ensures at-most-once usage (0/1 Knapsack); reading already-updated `dp[w - wt]` allows unlimited reuse (Unbounded Knapsack).",
+      "shortcut": "0/1 Knapsack = loop capacity W -> wt[i] (backward); Unbounded = loop wt[i] -> W (forward)."
+    },
+    {
+      "id": "mock5-tech-33",
+      "topic": "DSA",
+      "subtopic": "Counting Sort & Radix Sort Bounds",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Why does Radix Sort achieve `O(d * (N + k))` linear-style sorting for `N` 32-bit integers without violating the `Omega(N log N)` lower bound?",
+      "options": [
+        "Radix Sort uses multi-threading to beat math bounds",
+        "The `Omega(N log N)` lower bound applies strictly to comparison-based sorts; Radix/Counting Sort do NOT compare elements pairwise, instead exploiting bounded fixed-radix digit keys (`k` buckets, `d` digits)",
+        "Radix Sort deletes duplicate keys first",
+        "Counting Sort works directly on arbitrary unbounded real numbers"
+      ],
+      "correctIndex": 1,
+      "explanation": "Decision-tree `Omega(N log N)` applies only when ordering relies purely on binary `< / >` comparisons; integer key-indexing (`O(N + k)`) bypasses comparisons.",
+      "shortcut": "Omega(N log N) applies to comparison sorts only; non-comparison Radix/Counting Sort use key bucketing."
+    },
+    {
+      "id": "mock5-tech-34",
+      "topic": "SE",
+      "subtopic": "Git Merge vs Rebase Discipline",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "What is the golden rule of `git rebase` when collaborating on a shared team repository?",
+      "options": [
+        "Always rebase `main` onto every teammate's pushed feature branch and force-push `main`",
+        "Never rewrite/rebase commits that have already been pushed to a shared public branch (`main` / shared team branches) because changing commit SHA-1 hashes diverges teammates' histories",
+        "`git rebase` automatically deletes merge conflicts",
+        "`git merge` cannot be undone"
+      ],
+      "correctIndex": 1,
+      "explanation": "Rebasing rewrites commit history with new SHA hashes; safely rebase local unshared feature commits before PR merge, never shared `main` history.",
+      "shortcut": "Never rebase shared/public branches (changes commit hashes)."
+    },
+    {
+      "id": "mock5-tech-35",
+      "topic": "SE",
+      "subtopic": "White-Box vs Black-Box Testing",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Which testing technique is strictly a BLACK-BOX test-design method (requiring zero knowledge of internal source code branches)?",
+      "options": [
+        "Branch / Condition Coverage",
+        "Basis Path Cyclomatic Testing",
+        "Equivalence Class Partitioning & Boundary Value Analysis (BVA)",
+        "Statement Coverage"
+      ],
+      "correctIndex": 2,
+      "explanation": "Equivalence Partitioning and Boundary Value Analysis derive test inputs strictly from external functional specifications (`1 <= age <= 120` -> test 0, 1, 2, 119, 120, 121), whereas statement/branch/path coverage inspect internal code.",
+      "shortcut": "Black-box = Equivalence Partitioning & BVA; White-box = Statement/Branch/Path coverage."
+    },
+    {
+      "id": "mock5-tech-36",
+      "topic": "SE",
+      "subtopic": "Docker Multi-Stage Builds",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Why do production Spring Boot Dockerfiles use a Multi-Stage Build (Stage 1: `maven:3.9-eclipse-temurin-21` -> Stage 2: `eclipse-temurin:21-jre-alpine`)?",
+      "options": [
+        "Docker requires at least two `FROM` instructions per Dockerfile",
+        "It compiles the `.jar` using heavy JDK/Maven tooling in Stage 1 and copies ONLY the compiled `.jar` into a slim JRE runtime image, drastically shrinking image size and CVE attack surface",
+        "Multi-stage builds skip Maven unit tests automatically",
+        "Alpine images compile Java bytecode faster at runtime"
+      ],
+      "correctIndex": 1,
+      "explanation": "Dropping Maven caches, source code, and JDK compilers from the final runtime image cuts image size by hundreds of MB and shrinks security vulnerabilities.",
+      "shortcut": "Multi-stage Docker = heavy build stage + minimal runtime JRE stage."
+    }
+  ],
+  "codingProblems": [
+    {
+      "id": "mock5-c01",
+      "topic": "Two Pointers",
+      "subtopic": "Maximum Water Container",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "title": "Container With Most Water",
+      "statement": "You are given an integer array H of length N representing vertical barrier heights at indices 0, 1, ..., N-1. Choose two distinct lines `i` and `j` (0 <= i < j < N) that together with the x-axis hold the maximum area of water: `(j - i) * min(H[i], H[j])`. Print the maximum possible area.",
+      "inputFormat": "Line 1: Integer N.\nLine 2: N space-separated non-negative integers H[0..N-1].",
+      "outputFormat": "A single 64-bit integer representing maximum water area.",
+      "constraints": [
+        "2 <= N <= 10^5",
+        "0 <= H[i] <= 10^9",
+        "Target complexity: O(N) time, O(1) space"
+      ],
+      "testCases": [
+        { "input": "9\n1 8 6 2 5 4 8 3 7\n", "expectedOutput": "49", "isSample": true, "note": "Lines at index 1 (8) and index 8 (7): width 7 * min(8,7) = 49" },
+        { "input": "2\n1 1\n", "expectedOutput": "1", "isSample": true },
+        { "input": "5\n4 3 2 1 4\n", "expectedOutput": "16", "isSample": false },
+        { "input": "3\n1 2 1\n", "expectedOutput": "2", "isSample": false },
+        { "input": "5\n0 5 0 5 0\n", "expectedOutput": "10", "isSample": false },
+        { "input": "4\n1000000 1 1 1000000\n", "expectedOutput": "3000000", "isSample": false },
+        { "input": "7\n2 3 10 5 7 8 9\n", "expectedOutput": "36", "isSample": false }
+      ],
+      "starterCode": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        long[] h = new long[n];\n        for (int i = 0; i < n; i++) h[i] = sc.nextLong();\n        // Write your solution here\n    }\n}",
+        "python": "import sys\n\ndata = list(map(int, sys.stdin.read().split()))\nn = data[0]\nh = data[1:1+n]\n# Write your solution here\n",
+        "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n; cin >> n;\n    // Write your solution here\n    return 0;\n}\n"
+      },
+      "solutions": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        long[] h = new long[n];\n        for (int i = 0; i < n; i++) h[i] = sc.nextLong();\n        int l = 0, r = n - 1;\n        long best = 0;\n        while (l < r) {\n            long area = (long) (r - l) * Math.min(h[l], h[r]);\n            if (area > best) best = area;\n            if (h[l] < h[r]) l++;\n            else r--;\n        }\n        System.out.println(best);\n    }\n}",
+        "python": "import sys\n\ndata = list(map(int, sys.stdin.read().split()))\nn = data[0]\nh = data[1:1+n]\nl, r = 0, n - 1\nbest = 0\nwhile l < r:\n    area = (r - l) * min(h[l], h[r])\n    if area > best:\n        best = area\n    if h[l] < h[r]:\n        l += 1\n    else:\n        r -= 1\nprint(best)\n"
+      },
+      "timeComplexity": "O(N) — moving the shorter wall inward is guaranteed not to miss an optimal pair.",
+      "spaceComplexity": "O(1) extra space beyond input array.",
+      "edgeCases": [
+        "Zero-height walls on boundaries (`0 5 0 5 0` -> 10)",
+        "Product `(r - l) * min(h[l], h[r])` can exceed 32-bit `int` -> use 64-bit `long`",
+        "Difference from Trapping Rain Water: no intermediate bars block water here, only two chosen walls matter"
+      ]
+    },
+    {
+      "id": "mock5-c02",
+      "topic": "Dynamic Programming",
+      "subtopic": "Longest Common Subsequence",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "title": "Longest Common Subsequence (LCS) Length",
+      "statement": "Given two strings S1 and S2, find the length of their Longest Common Subsequence (characters appearing in the same relative order in both strings, not necessarily contiguous). If there is no common subsequence, print 0.",
+      "inputFormat": "Line 1: String S1.\nLine 2: String S2.",
+      "outputFormat": "A single integer denoting the LCS length.",
+      "constraints": [
+        "1 <= |S1|, |S2| <= 2000",
+        "Strings contain uppercase/lowercase ASCII letters",
+        "Target complexity: O(|S1| * |S2|) time, O(min(|S1|, |S2|)) space"
+      ],
+      "testCases": [
+        { "input": "abcde\nace\n", "expectedOutput": "3", "isSample": true, "note": "LCS is 'ace'" },
+        { "input": "AGGTAB\nGXTXAYB\n", "expectedOutput": "4", "isSample": true, "note": "LCS is 'GTAB'" },
+        { "input": "abc\nabc\n", "expectedOutput": "3", "isSample": false },
+        { "input": "abc\ndef\n", "expectedOutput": "0", "isSample": false },
+        { "input": "HCLTECH\nTECHHCL\n", "expectedOutput": "4", "isSample": false },
+        { "input": "aaaa\naa\n", "expectedOutput": "2", "isSample": false },
+        { "input": "programming\ngaming\n", "expectedOutput": "6", "isSample": false }
+      ],
+      "starterCode": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s1 = sc.nextLine().trim();\n        String s2 = sc.nextLine().trim();\n        // Write your solution here\n    }\n}",
+        "python": "import sys\n\nlines = sys.stdin.read().splitlines()\ns1 = lines[0].strip()\ns2 = lines[1].strip()\n# Write your solution here\n",
+        "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    string s1, s2; cin >> s1 >> s2;\n    // Write your solution here\n    return 0;\n}\n"
+      },
+      "solutions": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s1 = sc.nextLine().trim();\n        String s2 = sc.nextLine().trim();\n        int m = s1.length(), n = s2.length();\n        int[] dp = new int[n + 1];\n        for (int i = 0; i < m; i++) {\n            int prev = 0;\n            char c1 = s1.charAt(i);\n            for (int j = 0; j < n; j++) {\n                int tmp = dp[j + 1];\n                if (c1 == s2.charAt(j)) dp[j + 1] = prev + 1;\n                else dp[j + 1] = Math.max(dp[j + 1], dp[j]);\n                prev = tmp;\n            }\n        }\n        System.out.println(dp[n]);\n    }\n}",
+        "python": "import sys\n\nlines = sys.stdin.read().splitlines()\ns1 = lines[0].strip()\ns2 = lines[1].strip()\nm, n = len(s1), len(s2)\ndp = [0] * (n + 1)\nfor i in range(m):\n    prev = 0\n    c1 = s1[i]\n    for j in range(n):\n        tmp = dp[j + 1]\n        if c1 == s2[j]:\n            dp[j + 1] = prev + 1\n        else:\n            if dp[j] > dp[j + 1]:\n                dp[j + 1] = dp[j]\n        prev = tmp\nprint(dp[n])\n"
+      },
+      "timeComplexity": "O(|S1| * |S2|) dynamic programming.",
+      "spaceComplexity": "O(|S2|) rolling 1D DP row keeping diagonal `prev`.",
+      "edgeCases": [
+        "Completely disjoint alphabets -> 0",
+        "Case sensitivity ('A' != 'a')",
+        "Identical strings -> |S1|"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "setId": "sql-set-7",
+  "title": "SQL Set 07: SaaS Subscriptions, Cohorts & Telemetry",
+  "description": "Active subscription overlap checks, consecutive login streaks, plan upgrade detection, and percentile/median style queries.",
+  "durationMinutes": 50,
+  "queries": [
+    {
+      "id": "sql-7-q01",
+      "topic": "SQL",
+      "subtopic": "Subscription Upgrades (LEAD)",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "title": "Users Who Upgraded from Free to Paid Plan",
+      "prompt": "Find `user_id` of users whose `plan` transitioned directly from `'FREE'` to `'PRO'` or `'ENTERPRISE'` on their immediately next event ordered by `changed_at`. Order by `user_id`.",
+      "schemaSql": "CREATE TABLE plan_history (ev_id INT PRIMARY KEY, user_id INT, changed_at TEXT, plan TEXT);",
+      "seedSql": "INSERT INTO plan_history VALUES (1,10,'2025-01-01','FREE'),(2,10,'2025-02-01','PRO'),(3,20,'2025-01-05','PRO'),(4,20,'2025-02-05','FREE'),(5,30,'2025-01-10','FREE'),(6,30,'2025-03-01','ENTERPRISE');",
+      "expectedColumns": ["user_id"],
+      "expectedRows": [
+        [10],
+        [30]
+      ],
+      "solutionSql": "WITH nxt AS (SELECT user_id, plan, LEAD(plan) OVER (PARTITION BY user_id ORDER BY changed_at, ev_id) AS next_plan FROM plan_history) SELECT DISTINCT user_id FROM nxt WHERE plan = 'FREE' AND next_plan IN ('PRO', 'ENTERPRISE') ORDER BY user_id;",
+      "explanation": "`LEAD(plan)` inspects the immediately following subscription event per user without expensive self-joins."
+    },
+    {
+      "id": "sql-7-q02",
+      "topic": "SQL",
+      "subtopic": "MRR Aggregation",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "title": "Monthly Recurring Revenue by Active Tier",
+      "prompt": "Join `subscriptions` and `plans` to calculate `tier_name` and `active_mrr` (`SUM(monthly_price)`) for rows where `status = 'ACTIVE'`. Include tiers with 0 active subscriptions (`0` MRR). Order by `active_mrr` descending, `tier_name` ascending.",
+      "schemaSql": "CREATE TABLE plans (tier_id INT PRIMARY KEY, tier_name TEXT, monthly_price INT); CREATE TABLE subscriptions (sub_id INT PRIMARY KEY, tier_id INT, status TEXT);",
+      "seedSql": "INSERT INTO plans VALUES (1,'Starter',500),(2,'Growth',1500),(3,'Scale',4000); INSERT INTO subscriptions VALUES (10,1,'ACTIVE'),(11,1,'CANCELLED'),(12,2,'ACTIVE'),(13,2,'ACTIVE');",
+      "expectedColumns": ["tier_name", "active_mrr"],
+      "expectedRows": [
+        ["Growth", 3000],
+        ["Starter", 500],
+        ["Scale", 0]
+      ],
+      "solutionSql": "SELECT p.tier_name, COALESCE(SUM(CASE WHEN s.status = 'ACTIVE' THEN p.monthly_price ELSE 0 END), 0) AS active_mrr FROM plans p LEFT JOIN subscriptions s ON p.tier_id = s.tier_id GROUP BY p.tier_id, p.tier_name ORDER BY active_mrr DESC, p.tier_name ASC;",
+      "explanation": "Putting `s.status = 'ACTIVE'` in `CASE` (or in the `LEFT JOIN ... ON` clause rather than `WHERE`) preserves the zero-active `Scale` tier."
+    },
+    {
+      "id": "sql-7-q03",
+      "topic": "SQL",
+      "subtopic": "Consecutive Login Islands",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "title": "Users with 3+ Consecutive Daily Logins",
+      "prompt": "Given `user_logins (user_id, login_date)` (already deduplicated per day), find `user_id` values who logged in on at least 3 consecutive calendar days. Order by `user_id`.",
+      "schemaSql": "CREATE TABLE user_logins (user_id INT, login_date TEXT);",
+      "seedSql": "INSERT INTO user_logins VALUES (1,'2025-05-01'),(1,'2025-05-02'),(1,'2025-05-03'),(2,'2025-05-01'),(2,'2025-05-03'),(2,'2025-05-04'),(3,'2025-05-10'),(3,'2025-05-11'),(3,'2025-05-12'),(3,'2025-05-13');",
+      "expectedColumns": ["user_id"],
+      "expectedRows": [
+        [1],
+        [3]
+      ],
+      "solutionSql": "WITH grp AS (SELECT user_id, julianday(login_date) - ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY login_date) AS island FROM user_logins) SELECT DISTINCT user_id FROM grp GROUP BY user_id, island HAVING COUNT(*) >= 3 ORDER BY user_id;",
+      "explanation": "Subtracting `ROW_NUMBER()` from `julianday(login_date)` stays constant across consecutive calendar days (classic Gaps & Islands pattern)."
+    },
+    {
+      "id": "sql-7-q04",
+      "topic": "SQL",
+      "subtopic": "API Latency Outliers",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "title": "Endpoints with P95-Style Max Latency > 2x Average",
+      "prompt": "For each `endpoint` in `api_logs`, return `endpoint` and `max_ms` where `MAX(latency_ms) > 2 * AVG(latency_ms)` and at least 3 requests were logged. Order by `endpoint`.",
+      "schemaSql": "CREATE TABLE api_logs (req_id INT PRIMARY KEY, endpoint TEXT, latency_ms INT);",
+      "seedSql": "INSERT INTO api_logs VALUES (1,'/auth',50),(2,'/auth',60),(3,'/auth',70),(4,'/search',100),(5,'/search',100),(6,'/search',100),(7,'/search',900),(8,'/health',20),(9,'/health',100);",
+      "expectedColumns": ["endpoint", "max_ms"],
+      "expectedRows": [
+        ["/search", 900]
+      ],
+      "solutionSql": "SELECT endpoint, MAX(latency_ms) AS max_ms FROM api_logs GROUP BY endpoint HAVING COUNT(*) >= 3 AND MAX(latency_ms) > 2 * AVG(latency_ms) ORDER BY endpoint;",
+      "explanation": "`/search` has avg 300 and max 900 (> 600); `/health` only has 2 requests."
+    },
+    {
+      "id": "sql-7-q05",
+      "topic": "SQL",
+      "subtopic": "Window Percent Share",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "title": "Browser Traffic Share Percentage",
+      "prompt": "Calculate `browser` and `share_pct` (`ROUND(100.0 * COUNT(*) / SUM(COUNT(*)) OVER (), 2)`) from `sessions`. Order by `share_pct` DESC, `browser` ASC.",
+      "schemaSql": "CREATE TABLE sessions (sess_id INT PRIMARY KEY, browser TEXT);",
+      "seedSql": "INSERT INTO sessions VALUES (1,'Chrome'),(2,'Chrome'),(3,'Chrome'),(4,'Firefox'),(5,'Safari');",
+      "expectedColumns": ["browser", "share_pct"],
+      "expectedRows": [
+        ["Chrome", 60.0],
+        ["Firefox", 20.0],
+        ["Safari", 20.0]
+      ],
+      "solutionSql": "SELECT browser, ROUND(100.0 * COUNT(*) / SUM(COUNT(*)) OVER (), 2) AS share_pct FROM sessions GROUP BY browser ORDER BY share_pct DESC, browser ASC;",
+      "explanation": "`SUM(COUNT(*)) OVER ()` sums the grouped counts across the entire result set without needing a separate CTE."
+    }
+  ]
+}

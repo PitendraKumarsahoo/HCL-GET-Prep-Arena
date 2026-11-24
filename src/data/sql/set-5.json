@@ -1,0 +1,99 @@
+{
+  "setId": "sql-set-5",
+  "title": "SQL Set 05: Healthcare Appointments, Streaks & Coalescing",
+  "description": "Date gaps/consecutive visits via LEAD, doctor billing totals, first-visit attribution, and multi-condition filtering.",
+  "durationMinutes": 45,
+  "queries": [
+    {
+      "id": "sql-5-q01",
+      "topic": "SQL",
+      "subtopic": "First-Visit Attribution",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "title": "Earliest Appointment Date & Doctor per Patient",
+      "prompt": "For each patient in `appointments`, return `patient_id`, `visit_date`, and `doctor_name` corresponding to their chronologically earliest appointment. Order by `patient_id`.",
+      "schemaSql": "CREATE TABLE appointments (appt_id INT PRIMARY KEY, patient_id INT, visit_date TEXT, doctor_name TEXT);",
+      "seedSql": "INSERT INTO appointments VALUES (1,201,'2025-03-10','Dr. Sen'),(2,201,'2025-02-14','Dr. Nair'),(3,202,'2025-04-01','Dr. Kapur'),(4,203,'2025-01-20','Dr. Nair'),(5,203,'2025-05-12','Dr. Sen');",
+      "expectedColumns": ["patient_id", "visit_date", "doctor_name"],
+      "expectedRows": [
+        [201, "2025-02-14", "Dr. Nair"],
+        [202, "2025-04-01", "Dr. Kapur"],
+        [203, "2025-01-20", "Dr. Nair"]
+      ],
+      "solutionSql": "WITH ordered AS (SELECT patient_id, visit_date, doctor_name, ROW_NUMBER() OVER (PARTITION BY patient_id ORDER BY visit_date ASC, appt_id ASC) AS rn FROM appointments) SELECT patient_id, visit_date, doctor_name FROM ordered WHERE rn = 1 ORDER BY patient_id;",
+      "explanation": "Partitioning by `patient_id` ordered by `visit_date ASC` cleanly retrieves the first visit without correlated subqueries."
+    },
+    {
+      "id": "sql-5-q02",
+      "topic": "SQL",
+      "subtopic": "Date Arithmetic & Gaps",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "title": "Patients Readmitted Within 7 Days",
+      "prompt": "Find distinct `patient_id` values who had two consecutive visits in `ward_logs` where the next `admit_date` is within 7 days (1 to 7 days inclusive) after the previous `admit_date`. Order by `patient_id`.",
+      "schemaSql": "CREATE TABLE ward_logs (log_id INT PRIMARY KEY, patient_id INT, admit_date TEXT);",
+      "seedSql": "INSERT INTO ward_logs VALUES (1,11,'2025-02-01'),(2,11,'2025-02-06'),(3,12,'2025-02-01'),(4,12,'2025-02-20'),(5,13,'2025-03-01'),(6,13,'2025-03-08');",
+      "expectedColumns": ["patient_id"],
+      "expectedRows": [
+        [11],
+        [13]
+      ],
+      "solutionSql": "WITH diff AS (SELECT patient_id, julianday(admit_date) - julianday(LAG(admit_date) OVER (PARTITION BY patient_id ORDER BY admit_date)) AS gap FROM ward_logs) SELECT DISTINCT patient_id FROM diff WHERE gap BETWEEN 1 AND 7 ORDER BY patient_id;",
+      "explanation": "`julianday()` computes exact day differences in SQLite between consecutive admissions ordered via `LAG()`."
+    },
+    {
+      "id": "sql-5-q03",
+      "topic": "SQL",
+      "subtopic": "COALESCE & Billing",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "title": "Net Patient Payable After Insurance Coverage",
+      "prompt": "Compute `bill_id`, `patient_name`, and `net_payable` (`total_charge - COALESCE(insurance_covered, 0)`), filtering only rows where `net_payable >= 1000`. Order by `bill_id`.",
+      "schemaSql": "CREATE TABLE billing (bill_id INT PRIMARY KEY, patient_name TEXT, total_charge INT, insurance_covered INT);",
+      "seedSql": "INSERT INTO billing VALUES (1,'Ramesh',2500,1200),(2,'Geeta',1800,NULL),(3,'Farhan',900,NULL),(4,'Kavya',4000,3200);",
+      "expectedColumns": ["bill_id", "patient_name", "net_payable"],
+      "expectedRows": [
+        [1, "Ramesh", 1300],
+        [2, "Geeta", 1800]
+      ],
+      "solutionSql": "SELECT bill_id, patient_name, total_charge - COALESCE(insurance_covered, 0) AS net_payable FROM billing WHERE total_charge - COALESCE(insurance_covered, 0) >= 1000 ORDER BY bill_id;",
+      "explanation": "Without `COALESCE`, `1800 - NULL` evaluates to `NULL` and Geeta would be silently dropped."
+    },
+    {
+      "id": "sql-5-q04",
+      "topic": "SQL",
+      "subtopic": "Subquery Thresholds",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "title": "Specialties Exceeding Hospital Average Fee",
+      "prompt": "Return `specialty` and `avg_fee` (rounded to 2 decimals) for medical specialties whose average consultation fee exceeds the overall average fee of all doctors. Order by `avg_fee` descending.",
+      "schemaSql": "CREATE TABLE doctors (doc_id INT PRIMARY KEY, specialty TEXT, fee INT);",
+      "seedSql": "INSERT INTO doctors VALUES (1,'Cardiology',1200),(2,'Cardiology',1000),(3,'General',400),(4,'General',500),(5,'Neurology',1400);",
+      "expectedColumns": ["specialty", "avg_fee"],
+      "expectedRows": [
+        ["Neurology", 1400.0],
+        ["Cardiology", 1100.0]
+      ],
+      "solutionSql": "SELECT specialty, ROUND(AVG(fee), 2) AS avg_fee FROM doctors GROUP BY specialty HAVING AVG(fee) > (SELECT AVG(fee) FROM doctors) ORDER BY avg_fee DESC;",
+      "explanation": "Overall average fee is 900; `HAVING AVG(fee) > (SELECT AVG(fee) FROM doctors)` filters groups against the global scalar subquery."
+    },
+    {
+      "id": "sql-5-q05",
+      "topic": "SQL",
+      "subtopic": "Deduplication Query",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "title": "Keep Latest Record per Phone Number",
+      "prompt": "From `patient_contacts` containing duplicate `phone` registrations, return the single most recent row (`contact_id`, `phone`, `updated_at`) per `phone` based on largest `updated_at` (tie-break largest `contact_id`). Order by `contact_id`.",
+      "schemaSql": "CREATE TABLE patient_contacts (contact_id INT PRIMARY KEY, phone TEXT, updated_at TEXT);",
+      "seedSql": "INSERT INTO patient_contacts VALUES (1,'9876543210','2025-01-01'),(2,'9876543210','2025-02-15'),(3,'9123456789','2025-01-10'),(4,'9123456789','2025-01-10');",
+      "expectedColumns": ["contact_id", "phone", "updated_at"],
+      "expectedRows": [
+        [2, "9876543210", "2025-02-15"],
+        [4, "9123456789", "2025-01-10"]
+      ],
+      "solutionSql": "WITH cte AS (SELECT contact_id, phone, updated_at, ROW_NUMBER() OVER (PARTITION BY phone ORDER BY updated_at DESC, contact_id DESC) AS rn FROM patient_contacts) SELECT contact_id, phone, updated_at FROM cte WHERE rn = 1 ORDER BY contact_id;",
+      "explanation": "Common SQL deduplication pattern using `ROW_NUMBER()` over `phone` ordered by recency descending."
+    }
+  ]
+}

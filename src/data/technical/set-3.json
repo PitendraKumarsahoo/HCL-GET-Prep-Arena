@@ -1,0 +1,387 @@
+{
+  "setId": "tech-set-3",
+  "title": "Technical MCQ Set 03: Concurrency, Trees & Networking",
+  "description": "Tests Java generics & wildcards, switch/varargs traps, deadlock conditions, SQL self-joins, AVL/BST properties, and IP fragmentation.",
+  "durationMinutes": 35,
+  "questions": [
+    {
+      "id": "tech-3-q01",
+      "topic": "Output Prediction",
+      "subtopic": "Overloading Widening vs Boxing vs Varargs",
+      "difficulty": "hard",
+      "source_tag": "reported",
+      "question": "What does the following Java code print?",
+      "codeSnippet": "class OverloadTest {\n  static void m(Integer x) { System.out.print(\"Integer \"); }\n  static void m(long x) { System.out.print(\"long \"); }\n  static void m(int... x) { System.out.print(\"varargs \"); }\n  public static void main(String[] args) {\n    int a = 5;\n    m(a);\n  }\n}",
+      "options": [
+        "Integer",
+        "long",
+        "varargs",
+        "Compilation error"
+      ],
+      "correctIndex": 1,
+      "explanation": "Java's overload resolution priority for primitive `int` is: (1) exact match, (2) primitive widening (`long`), (3) autoboxing (`Integer`), (4) varargs (`int...`). Therefore `m(long)` wins."
+    },
+    {
+      "id": "tech-3-q02",
+      "topic": "Output Prediction",
+      "subtopic": "Array Covariance & ArrayStoreException",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "What happens when the following Java code compiles and runs?",
+      "codeSnippet": "Object[] arr = new String[3];\narr[0] = \"HCL\";\narr[1] = 42;\nSystem.out.println(arr[0]);",
+      "options": [
+        "Compilation error on `Object[] arr = new String[3]`",
+        "Compilation error on `arr[1] = 42`",
+        "Compiles cleanly, throws `ArrayStoreException` at runtime on `arr[1] = 42`",
+        "Prints `HCL`"
+      ],
+      "correctIndex": 2,
+      "explanation": "Java arrays are covariant (`String[]` is a subtype of `Object[]`), so the assignment compiles, but arrays reify their component type at runtime and throw `ArrayStoreException` when storing an `Integer` into a `String[]`."
+    },
+    {
+      "id": "tech-3-q03",
+      "topic": "Output Prediction",
+      "subtopic": "Static Method Hiding",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "What is the output of this Java snippet?",
+      "codeSnippet": "class A {\n  static void ping() { System.out.print(\"A \"); }\n  void pong() { System.out.print(\"a \"); }\n}\nclass B extends A {\n  static void ping() { System.out.print(\"B \"); }\n  @Override void pong() { System.out.print(\"b \"); }\n}\npublic class Demo {\n  public static void main(String[] args) {\n    A ref = new B();\n    ref.ping();\n    ref.pong();\n  }\n}",
+      "options": ["A a", "A b", "B a", "B b"],
+      "correctIndex": 1,
+      "explanation": "`static` methods are NOT overridden—they are hidden and bound at compile time to the reference type (`A.ping()` prints `A `). Instance method `pong()` is dynamically dispatched to `B.pong()`, printing `b `."
+    },
+    {
+      "id": "tech-3-q04",
+      "topic": "Java",
+      "subtopic": "Generics PECS Principle",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "Which statement about a `List<? extends Number>` parameter `nums` in Java is TRUE?",
+      "options": [
+        "You can call `nums.add(Integer.valueOf(10))` safely",
+        "You can read elements out as `Number`, and only `null` can be passed to `nums.add(...)`",
+        "You can pass a `List<Object>` to a method expecting `List<? extends Number>`",
+        "Wildcards remove all type safety checks at compile time"
+      ],
+      "correctIndex": 1,
+      "explanation": "Per PECS (Producer Extends, Consumer Super), `List<? extends Number>` is a producer: reading guarantees a `Number`, while adding any non-null value is rejected at compile time because the actual list could be `List<Double>`."
+    },
+    {
+      "id": "tech-3-q05",
+      "topic": "Java",
+      "subtopic": "JVM Memory Areas",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "In Java 8+, where are class metadata (formerly PermGen) and local primitive variables inside a running method stored respectively?",
+      "options": [
+        "Heap and Metaspace",
+        "Metaspace (native memory) and JVM Stack frame",
+        "JVM Stack and String Pool",
+        "Heap and Program Counter register"
+      ],
+      "correctIndex": 1,
+      "explanation": "Java 8 replaced PermGen with Metaspace (allocated in native memory) for class definitions/metadata, while local primitive variables and object references live in each thread's JVM Stack frame."
+    },
+    {
+      "id": "tech-3-q06",
+      "topic": "OOP",
+      "subtopic": "Liskov Substitution Principle",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "In classic OOP design, why does having `Square extends Rectangle` (where `setWidth` and `setHeight` independently mutate width/height) violate the Liskov Substitution Principle?",
+      "options": [
+        "Because `Square` adds an extra `area()` method",
+        "Because code holding a `Rectangle` expects `setWidth(5); setHeight(4);` to yield area 20, which breaks when `Square` forces width=height=4",
+        "Because Java forbids inheriting concrete setters",
+        "Because `Square` uses more heap memory than `Rectangle`"
+      ],
+      "correctIndex": 1,
+      "explanation": "LSP requires a subtype to preserve behavioral contracts expected by callers of the base type. Mutating `Square` breaks `Rectangle`'s postcondition of independent width and height."
+    },
+    {
+      "id": "tech-3-q07",
+      "topic": "SQL",
+      "subtopic": "Self-Join Hierarchy Query",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "Table `Employees(emp_id, name, manager_id)` stores the CEO with `manager_id = NULL`. Which query returns EVERY employee alongside their manager's name (showing `NULL` for the CEO)?",
+      "options": [
+        "`SELECT e.name, m.name FROM Employees e INNER JOIN Employees m ON e.manager_id = m.emp_id`",
+        "`SELECT e.name, m.name FROM Employees e LEFT JOIN Employees m ON e.manager_id = m.emp_id`",
+        "`SELECT e.name, m.name FROM Employees e LEFT JOIN Employees m ON e.emp_id = m.manager_id`",
+        "`SELECT e.name, m.name FROM Employees e CROSS JOIN Employees m`"
+      ],
+      "correctIndex": 1,
+      "explanation": "Matching employee `e.manager_id` to manager `m.emp_id` with `LEFT JOIN` preserves employees whose `manager_id` is `NULL` (the CEO). Reversing the `ON` condition joins subordinates instead."
+    },
+    {
+      "id": "tech-3-q08",
+      "topic": "SQL",
+      "subtopic": "TRUNCATE vs DELETE vs DROP",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Which difference between `DELETE FROM Logs;` and `TRUNCATE TABLE Logs;` is generally TRUE in standard RDBMS engines like PostgreSQL/Oracle?",
+      "options": [
+        "`DELETE` removes the table schema permanently, while `TRUNCATE` keeps rows",
+        "`DELETE` is a DML operation firing row-level triggers and logging each deleted row, whereas `TRUNCATE` is DDL that deallocates pages minimally and resets identity counters in some engines",
+        "`TRUNCATE` supports a `WHERE` clause, while `DELETE` does not",
+        "`DELETE` cannot be rolled back inside a transaction"
+      ],
+      "correctIndex": 1,
+      "explanation": "`DELETE` is DML (supports `WHERE`, logs row deletions, fires `ON DELETE` triggers, can be rolled back). `TRUNCATE` is DDL (removes all rows by deallocating data pages without `WHERE` or row-level triggers)."
+    },
+    {
+      "id": "tech-3-q09",
+      "topic": "DBMS",
+      "subtopic": "Normalization Lossless Join",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "When decomposing relation `R(A, B, C)` into `R1(A, B)` and `R2(B, C)`, what condition guarantees a lossless-join decomposition?",
+      "options": [
+        "`A -> C` holds",
+        "The common attribute `B` is a superkey of either `R1` (`B -> A`) or `R2` (`B -> C`)",
+        "`R1` and `R2` share zero attributes",
+        "Every attribute in `R` is nullable"
+      ],
+      "correctIndex": 1,
+      "explanation": "By Heath's theorem, decomposing R into R1 and R2 is lossless iff `(R1 ∩ R2) -> R1` or `(R1 ∩ R2) -> R2` holds in F+, i.e. the intersection `B` is a superkey of at least one decomposed table."
+    },
+    {
+      "id": "tech-3-q10",
+      "topic": "DBMS",
+      "subtopic": "2PL & Deadlock Prevention",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Strict Two-Phase Locking (Strict 2PL) guarantees conflict-serializability and avoids cascading aborts by:",
+      "options": [
+        "Releasing all shared and exclusive locks immediately after each read",
+        "Holding all exclusive (write) locks until the transaction commits or aborts",
+        "Allowing dirty reads between concurrent transactions",
+        "Executing every transaction on a single CPU core sequentially"
+      ],
+      "correctIndex": 1,
+      "explanation": "In Strict 2PL, a transaction cannot release any exclusive locks until commit/abort, preventing other transactions from reading uncommitted writes (eliminating cascading rollbacks)."
+    },
+    {
+      "id": "tech-3-q11",
+      "topic": "OS",
+      "subtopic": "Coffman Deadlock Conditions",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "If an OS enforces a global linear ordering on mutexes (all threads must lock `M1` before `M2` before `M3`), which of the four Coffman conditions for deadlock is broken?",
+      "options": [
+        "Mutual Exclusion",
+        "Hold and Wait",
+        "No Preemption",
+        "Circular Wait"
+      ],
+      "correctIndex": 3,
+      "explanation": "Strict total lock-ordering makes a cycle of waiting threads (`T1 waits for T2 waits for T1`) mathematically impossible, directly breaking Circular Wait."
+    },
+    {
+      "id": "tech-3-q12",
+      "topic": "OS",
+      "subtopic": "Page Fault & Virtual Memory Size",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "A 32-bit virtual address space uses 4 KB pages (`2^12` bytes). If each page table entry (PTE) is 4 bytes, what is the size of a single-level page table for one process?",
+      "options": ["1 MB", "2 MB", "4 MB", "8 MB"],
+      "correctIndex": 2,
+      "explanation": "Virtual pages = 2^32 / 2^12 = 2^20 = 1M entries. Page table size = 2^20 entries * 4 bytes/entry = 4 MB per process."
+    },
+    {
+      "id": "tech-3-q13",
+      "topic": "OS",
+      "subtopic": "Process vs Thread Context Switch",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Why is switching between two kernel threads of the SAME process significantly faster than switching between two separate processes?",
+      "options": [
+        "Threads share the same virtual address space (page tables / TLB entries remain valid) and open file descriptors",
+        "Threads do not have their own CPU registers or call stack",
+        "Threads never invoke the kernel scheduler",
+        "Processes cannot execute on multi-core CPUs"
+      ],
+      "correctIndex": 0,
+      "explanation": "Threads of the same process share code, heap, open files, and the virtual memory map (CR3/page directory), avoiding TLB flushes during context switch (though each thread still keeps its own stack and registers)."
+    },
+    {
+      "id": "tech-3-q14",
+      "topic": "CN",
+      "subtopic": "IPv4 Fragmentation Calculation",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "An IPv4 datagram carrying a 3,000-byte TCP payload (with standard 20-byte IP header, total 3,020 bytes) traverses a link with MTU = 1,500 bytes. What is the `Fragment Offset` field value of the SECOND IP fragment?",
+      "options": ["185", "187", "1480", "1500"],
+      "correctIndex": 0,
+      "explanation": "Max IP payload per 1500-byte MTU fragment = 1500 - 20 = 1480 bytes (already a multiple of 8!). Thus Fragment 1 carries bytes 0..1479 (1480 bytes). Fragment 2 starts at byte 1480; Fragment Offset is measured in 8-byte units: 1480 / 8 = 185."
+    },
+    {
+      "id": "tech-3-q15",
+      "topic": "CN",
+      "subtopic": "TCP Congestion Control (AIMD)",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "In TCP Reno, when 3 duplicate ACKs arrive (fast retransmit) while `cwnd` is 32 MSS, how do `ssthresh` and `cwnd` change?",
+      "options": [
+        "`ssthresh = 16`, `cwnd` resets to `1` (slow start)",
+        "`ssthresh = 16`, `cwnd` halves to `16` (plus 3 MSS inflation) and enters congestion avoidance",
+        "`ssthresh = 32`, `cwnd` doubles to `64`",
+        "Connection closes immediately with TCP RST"
+      ],
+      "correctIndex": 1,
+      "explanation": "Unlike a retransmission timeout (which drops `cwnd` to 1 MSS), 3 duplicate ACKs trigger Fast Retransmit/Fast Recovery: `ssthresh` becomes `cwnd/2 = 16` and `cwnd` drops to `ssthresh` rather than 1."
+    },
+    {
+      "id": "tech-3-q16",
+      "topic": "DSA",
+      "subtopic": "AVL Tree Balance & Rotations",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "Inserting keys `10, 20, 15` in that exact order into an empty AVL tree triggers which rotation at root `10`?",
+      "options": [
+        "Single Left (RR) rotation",
+        "Single Right (LL) rotation",
+        "Right-Left (RL) double rotation, resulting in `15` as the new root",
+        "Left-Right (LR) double rotation, resulting in `20` as the new root"
+      ],
+      "correctIndex": 2,
+      "explanation": "10 -> right child 20 -> left child 15 creates a Right-Left imbalance at 10. Right-rotating 20-15 then left-rotating at 10 promotes 15 to the root with left=10 and right=20."
+    },
+    {
+      "id": "tech-3-q17",
+      "topic": "DSA",
+      "subtopic": "Stack & Queue Complexity",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "When implementing a FIFO Queue using two stacks (`inStack` and `outStack`, transferring only when `outStack` is empty), what is the AMORTIZED time complexity of `enqueue` and `dequeue`?",
+      "options": [
+        "`O(1)` enqueue, `O(N)` amortized dequeue",
+        "`O(1)` amortized for both enqueue and dequeue",
+        "`O(N)` amortized for both enqueue and dequeue",
+        "`O(log N)` amortized for both"
+      ],
+      "correctIndex": 1,
+      "explanation": "Each element is pushed to `inStack` once, popped/pushed to `outStack` at most once, and popped from `outStack` once (at most 4 stack ops per element), yielding O(1) amortized per operation."
+    },
+    {
+      "id": "tech-3-q18",
+      "topic": "JDBC",
+      "subtopic": "Batch Execution & executeBatch()",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "When inserting 10,000 rows in JDBC via `PreparedStatement`, why does `addBatch()` + `executeBatch()` outperform calling `executeUpdate()` 10,000 times?",
+      "options": [
+        "It bypasses database transaction logs completely",
+        "It reduces network round-trips between the Java app and the database server",
+        "It skips primary key uniqueness checks",
+        "It executes SQL inside the JVM without a database connection"
+      ],
+      "correctIndex": 1,
+      "explanation": "Calling `executeUpdate()` per row incurs 10,000 separate network round-trips; batching packs hundreds/thousands of bound parameter sets per round-trip."
+    },
+    {
+      "id": "tech-3-q19",
+      "topic": "Java",
+      "subtopic": "StringBuilder vs StringBuffer",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "Why should you prefer `StringBuilder` over `StringBuffer` for building strings inside a single-threaded local method?",
+      "options": [
+        "`StringBuilder` is immutable whereas `StringBuffer` is mutable",
+        "`StringBuilder` avoids synchronized method lock overhead on `append()`, making it faster in single-threaded code",
+        "`StringBuffer` is deprecated since Java 8",
+        "`StringBuilder` interns every appended substring automatically"
+      ],
+      "correctIndex": 1,
+      "explanation": "`StringBuffer` synchronizes its methods for thread safety; `StringBuilder` provides the exact same API without synchronization overhead for single-threaded usage."
+    },
+    {
+      "id": "tech-3-q20",
+      "topic": "SE",
+      "subtopic": "V-Model vs Agile Sprint Testing",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "In the V-Model of SDLC, which testing phase directly validates the High-Level / Architectural Design phase?",
+      "options": [
+        "Unit Testing",
+        "Integration Testing",
+        "User Acceptance Testing (UAT)",
+        "Regression Testing"
+      ],
+      "correctIndex": 1,
+      "explanation": "In the V-Model: Low-Level/Module Design <-> Unit Testing; High-Level/Architecture Design <-> Integration Testing; System Specs <-> System Testing; Business Requirements <-> UAT."
+    },
+    {
+      "id": "tech-3-q21",
+      "topic": "Output Prediction",
+      "subtopic": "Java Switch Fall-Through",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "What does the following Java switch statement print?",
+      "codeSnippet": "int k = 2;\nswitch (k) {\n  case 1: System.out.print(\"1\");\n  case 2: System.out.print(\"2\");\n  case 3: System.out.print(\"3\"); break;\n  default: System.out.print(\"D\");\n}",
+      "options": ["2", "23", "23D", "3"],
+      "correctIndex": 1,
+      "explanation": "Traditional `case:` labels fall through until hitting a `break`. Matching `case 2` prints `2`, falls through into `case 3` printing `3`, and stops at `break`."
+    },
+    {
+      "id": "tech-3-q22",
+      "topic": "SQL",
+      "subtopic": "COALESCE vs NULLIF",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "How do you safely compute `revenue / NULLIF(clicks, 0)` in SQL when `clicks` can be `0`, returning `0` instead of a division-by-zero error?",
+      "options": [
+        "`COALESCE(revenue / clicks, 0)`",
+        "`COALESCE(revenue / NULLIF(clicks, 0), 0)`",
+        "`NULLIF(revenue / clicks, 0)`",
+        "`ISNULL(clicks, revenue)`"
+      ],
+      "correctIndex": 1,
+      "explanation": "`NULLIF(clicks, 0)` returns `NULL` when `clicks == 0`, turning `revenue / NULL` into `NULL` (avoiding division-by-zero), and outer `COALESCE(..., 0)` converts that `NULL` to `0`."
+    },
+    {
+      "id": "tech-3-q23",
+      "topic": "DSA",
+      "subtopic": "Hash Table Open Addressing",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Why must deleting a key in an open-addressed hash table (linear probing) mark the slot with a 'tombstone' (`DELETED`) sentinel rather than resetting it to `EMPTY`?",
+      "options": [
+        "Resetting to `EMPTY` would double the array size immediately",
+        "Resetting to `EMPTY` would prematurely terminate future lookup probe chains for keys inserted past that slot",
+        "Tombstones reduce hash collisions to zero",
+        "Open addressing cannot store integer keys without tombstones"
+      ],
+      "correctIndex": 1,
+      "explanation": "Linear probing stops searching when it hits an `EMPTY` slot. Turning a deleted middle slot into `EMPTY` breaks the probe path for keys that collided and probed past it."
+    },
+    {
+      "id": "tech-3-q24",
+      "topic": "OS",
+      "subtopic": "Mutex vs Binary Semaphore",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "What is the key behavioral difference between a Mutex and a Binary Semaphore?",
+      "options": [
+        "A Mutex has ownership: only the thread that locked it should unlock it, whereas any thread can signal (`V()`) a Semaphore",
+        "A Binary Semaphore supports priority inheritance while a Mutex never does",
+        "A Mutex can allow up to 10 threads into a critical section simultaneously",
+        "Semaphores work only inside Java, whereas Mutexes work only in Python"
+      ],
+      "correctIndex": 0,
+      "explanation": "A mutex enforces thread ownership (lock/unlock by the same thread, enabling priority inheritance), whereas a binary semaphore acts as a signaling flag that one thread can wait on and another thread can post."
+    },
+    {
+      "id": "tech-3-q25",
+      "topic": "CN",
+      "subtopic": "DNS Record Types",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Which DNS record type maps an alias domain (such as `www.example.com`) to another canonical domain name rather than directly to an IPv4 address?",
+      "options": ["A", "AAAA", "CNAME", "MX"],
+      "correctIndex": 2,
+      "explanation": "`CNAME` (Canonical Name) aliases one hostname to another hostname; `A` maps to IPv4, `AAAA` maps to IPv6, and `MX` specifies mail exchange servers."
+    }
+  ]
+}

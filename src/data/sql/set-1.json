@@ -1,0 +1,99 @@
+{
+  "setId": "sql-set-1",
+  "title": "SQL Set 01: Core HCL Payroll & Employee Queries",
+  "description": "Reported HCLTech SQL interview and coding round staples: top-N salaries, second highest salary, department averages, joins, and duplicate detection.",
+  "durationMinutes": 45,
+  "queries": [
+    {
+      "id": "sql-1-q01",
+      "topic": "SQL",
+      "subtopic": "Top-N Ordering",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "title": "Top 3 Highest-Paid Employees",
+      "prompt": "Write a SQL query to return the `emp_name`, `dept`, and `salary` of the top 3 highest-paid employees, ordered by `salary` descending and `emp_id` ascending on ties.",
+      "schemaSql": "CREATE TABLE employees (emp_id INT PRIMARY KEY, emp_name TEXT, dept TEXT, salary INT, email TEXT);",
+      "seedSql": "INSERT INTO employees VALUES (101,'Aarav','Engineering',92000,'aarav@hcl.com'),(102,'Meera','Finance',78000,'meera@hcl.com'),(103,'Rohan','Engineering',115000,'rohan@hcl.com'),(104,'Diya','Analytics',104000,'diya@hcl.com'),(105,'Kabir','Engineering',104000,'kabir@hcl.com'),(106,'Neha','HR',65000,'neha@hcl.com');",
+      "expectedColumns": ["emp_name", "dept", "salary"],
+      "expectedRows": [
+        ["Rohan", "Engineering", 115000],
+        ["Diya", "Analytics", 104000],
+        ["Kabir", "Engineering", 104000]
+      ],
+      "solutionSql": "SELECT emp_name, dept, salary FROM employees ORDER BY salary DESC, emp_id ASC LIMIT 3;",
+      "explanation": "Sort descending by `salary` with a deterministic tie-breaker (`emp_id ASC`) before applying `LIMIT 3`."
+    },
+    {
+      "id": "sql-1-q02",
+      "topic": "SQL",
+      "subtopic": "Correlated Subquery & CTE",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "title": "Employees Earning Above Department Average",
+      "prompt": "Retrieve `emp_id`, `emp_name`, `dept`, and `salary` for every employee whose `salary` is strictly greater than the average salary of their own department. Order by `emp_id` ascending.",
+      "schemaSql": "CREATE TABLE staff (emp_id INT PRIMARY KEY, emp_name TEXT, dept TEXT, salary INT);",
+      "seedSql": "INSERT INTO staff VALUES (1,'Vikram','Java',80000),(2,'Sana','Java',95000),(3,'Arjun','Java',65000),(4,'Pooja','Cloud',110000),(5,'Nikhil','Cloud',90000),(6,'Tara','QA',70000);",
+      "expectedColumns": ["emp_id", "emp_name", "dept", "salary"],
+      "expectedRows": [
+        [2, "Sana", "Java", 95000],
+        [4, "Pooja", "Cloud", 110000]
+      ],
+      "solutionSql": "SELECT s.emp_id, s.emp_name, s.dept, s.salary FROM staff s JOIN (SELECT dept, AVG(salary) AS avg_sal FROM staff GROUP BY dept) d ON s.dept = d.dept WHERE s.salary > d.avg_sal ORDER BY s.emp_id;",
+      "explanation": "Compute per-department average in a derived table (or window `AVG(salary) OVER (PARTITION BY dept)`) and keep only rows strictly exceeding it (Tara equals her 1-person department average, so excluded)."
+    },
+    {
+      "id": "sql-1-q03",
+      "topic": "SQL",
+      "subtopic": "DISTINCT & OFFSET",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "title": "Second Highest Distinct Salary",
+      "prompt": "Find the second highest distinct salary from the `payroll` table as column `second_highest_salary`. Ensure tied top salaries do not hide the true second highest salary.",
+      "schemaSql": "CREATE TABLE payroll (emp_id INT PRIMARY KEY, emp_name TEXT, salary INT);",
+      "seedSql": "INSERT INTO payroll VALUES (1,'Ananya',120000),(2,'Dev',120000),(3,'Ishaan',98000),(4,'Kriti',98000),(5,'Ritesh',84000);",
+      "expectedColumns": ["second_highest_salary"],
+      "expectedRows": [
+        [98000]
+      ],
+      "solutionSql": "SELECT MAX(salary) AS second_highest_salary FROM payroll WHERE salary < (SELECT MAX(salary) FROM payroll);",
+      "explanation": "`WHERE salary < (SELECT MAX(salary) FROM payroll)` handles duplicate max values and safely returns NULL if fewer than 2 distinct salaries exist."
+    },
+    {
+      "id": "sql-1-q04",
+      "topic": "SQL",
+      "subtopic": "GROUP BY & HAVING",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "title": "Detect Duplicate Email Records",
+      "prompt": "Find all `email` values that appear more than once in `candidates`, along with their occurrence count as `dup_count`. Order alphabetically by `email`.",
+      "schemaSql": "CREATE TABLE candidates (cand_id INT PRIMARY KEY, full_name TEXT, email TEXT);",
+      "seedSql": "INSERT INTO candidates VALUES (1,'Riya Sen','riya@mail.com'),(2,'Aman Roy','aman@mail.com'),(3,'Riya S','riya@mail.com'),(4,'Karan Das','karan@mail.com'),(5,'Aman R','aman@mail.com'),(6,'Aman K','aman@mail.com');",
+      "expectedColumns": ["email", "dup_count"],
+      "expectedRows": [
+        ["aman@mail.com", 3],
+        ["riya@mail.com", 2]
+      ],
+      "solutionSql": "SELECT email, COUNT(*) AS dup_count FROM candidates GROUP BY email HAVING COUNT(*) > 1 ORDER BY email;",
+      "explanation": "Group rows by `email` and filter post-aggregation using `HAVING COUNT(*) > 1`."
+    },
+    {
+      "id": "sql-1-q05",
+      "topic": "SQL",
+      "subtopic": "LEFT JOIN & Aggregation",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "title": "Join Departments and Compute Headcount & Total Payroll",
+      "prompt": "Join `departments` and `emp_roster` to return `dept_name`, `headcount`, and `total_salary` (0 if a department has no employees). Order by `total_salary` descending, then `dept_name` ascending.",
+      "schemaSql": "CREATE TABLE departments (dept_id INT PRIMARY KEY, dept_name TEXT); CREATE TABLE emp_roster (emp_id INT PRIMARY KEY, emp_name TEXT, dept_id INT, salary INT);",
+      "seedSql": "INSERT INTO departments VALUES (10,'Platform'),(20,'Data'),(30,'Security'); INSERT INTO emp_roster VALUES (1,'A',10,80000),(2,'B',10,95000),(3,'C',20,105000);",
+      "expectedColumns": ["dept_name", "headcount", "total_salary"],
+      "expectedRows": [
+        ["Platform", 2, 175000],
+        ["Data", 1, 105000],
+        ["Security", 0, 0]
+      ],
+      "solutionSql": "SELECT d.dept_name, COUNT(e.emp_id) AS headcount, COALESCE(SUM(e.salary), 0) AS total_salary FROM departments d LEFT JOIN emp_roster e ON d.dept_id = e.dept_id GROUP BY d.dept_id, d.dept_name ORDER BY total_salary DESC, d.dept_name ASC;",
+      "explanation": "Use `LEFT JOIN` to keep Security (0 employees), `COUNT(e.emp_id)` instead of `COUNT(*)` so NULL rows count as 0, and `COALESCE(SUM(e.salary), 0)`."
+    }
+  ]
+}

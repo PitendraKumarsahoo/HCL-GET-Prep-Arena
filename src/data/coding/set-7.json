@@ -1,0 +1,86 @@
+{
+  "setId": "coding-set-7",
+  "title": "Coding Set 07: Digital Root & Roman Numeral Validation",
+  "description": "Reported HCL logic & parsing problems: recursive/O(1) single-digit reduction and strict Roman numeral decoding.",
+  "durationMinutes": 60,
+  "problems": [
+    {
+      "id": "code-7-p01",
+      "topic": "Math",
+      "subtopic": "Congruence / Digital Root",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "title": "Digit Sum Until Single Digit",
+      "statement": "Given a non-negative integer N (potentially very large, up to 10^100000 digits), repeatedly sum its digits until only a single digit remains, and print that single digit. Solve in O(|digits|) time.",
+      "inputFormat": "A single line containing non-negative integer N as a digit string.",
+      "outputFormat": "A single digit (0–9).",
+      "constraints": [
+        "0 <= N <= 10^100000 (up to 10^5 digits)"
+      ],
+      "testCases": [
+        { "input": "9875\n", "expectedOutput": "2", "isSample": true, "note": "9+8+7+5 = 29 -> 2+9 = 11 -> 1+1 = 2" },
+        { "input": "0\n", "expectedOutput": "0", "isSample": true },
+        { "input": "9\n", "expectedOutput": "9", "isSample": false },
+        { "input": "999999999999999999\n", "expectedOutput": "9", "isSample": false },
+        { "input": "12345678901234567890\n", "expectedOutput": "9", "isSample": false },
+        { "input": "1000000000000000000000000000001\n", "expectedOutput": "2", "isSample": false },
+        { "input": "7\n", "expectedOutput": "7", "isSample": false }
+      ],
+      "starterCode": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next().trim();\n        // Write your solution here\n    }\n}",
+        "python": "import sys\n\ns = sys.stdin.readline().strip()\n# Write your solution here\n",
+        "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    string s; cin >> s;\n    // Write your solution here\n    return 0;\n}\n"
+      },
+      "solutions": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next().trim();\n        boolean allZero = true;\n        int mod9 = 0;\n        for (int i = 0; i < s.length(); i++) {\n            int d = s.charAt(i) - '0';\n            if (d != 0) allZero = false;\n            mod9 = (mod9 + d) % 9;\n        }\n        if (allZero) System.out.println(0);\n        else System.out.println(mod9 == 0 ? 9 : mod9);\n    }\n}",
+        "python": "import sys\n\ns = sys.stdin.readline().strip()\nif set(s) == {'0'}:\n    print(0)\nelse:\n    m = sum(ord(c) - 48 for c in s) % 9\n    print(9 if m == 0 else m)\n"
+      },
+      "timeComplexity": "O(D) where D is the number of digits.",
+      "spaceComplexity": "O(1) extra space beyond reading input.",
+      "edgeCases": [
+        "N = 0 must output 0 (not 9)",
+        "Non-zero multiples of 9 must output 9 (not 0)",
+        "Inputs exceeding 64-bit `long` require string-based digit summing"
+      ]
+    },
+    {
+      "id": "code-7-p02",
+      "topic": "Strings & Parsing",
+      "subtopic": "Roman Numeral Grammar",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "title": "Roman Numeral to Integer with Strict Validation",
+      "statement": "Given an uppercase string S, validate whether it is a canonical Roman numeral in [1, 3999]. If valid, print its integer value; otherwise print 'INVALID'. Canonical rules: at most three consecutive I, X, C, M; V, L, D never repeat; valid subtractive pairs are only IV, IX, XL, XC, CD, CM; and values must decrease strictly across tokens (e.g., 'IIX' or 'IXI' or 'VV' is invalid).",
+      "inputFormat": "A single line containing string S.",
+      "outputFormat": "Integer value or 'INVALID'.",
+      "constraints": [
+        "1 <= |S| <= 30"
+      ],
+      "testCases": [
+        { "input": "MCMXCIV\n", "expectedOutput": "1994", "isSample": true },
+        { "input": "IIX\n", "expectedOutput": "INVALID", "isSample": true },
+        { "input": "MMMCMXCIX\n", "expectedOutput": "3999", "isSample": false },
+        { "input": "IIII\n", "expectedOutput": "INVALID", "isSample": false },
+        { "input": "VV\n", "expectedOutput": "INVALID", "isSample": false },
+        { "input": "CDXLIV\n", "expectedOutput": "444", "isSample": false },
+        { "input": "IC\n", "expectedOutput": "INVALID", "isSample": false }
+      ],
+      "starterCode": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next().trim();\n        // Write your solution here\n    }\n}",
+        "python": "import sys\n\ns = sys.stdin.readline().strip()\n# Write your solution here\n",
+        "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    string s; cin >> s;\n    // Write your solution here\n    return 0;\n}\n"
+      },
+      "solutions": {
+        "java": "import java.util.*;\n\npublic class Main {\n    static String toRoman(int n) {\n        int[] vals = {1000,900,500,400,100,90,50,40,10,9,5,4,1};\n        String[] syms = {\"M\",\"CM\",\"D\",\"CD\",\"C\",\"XC\",\"L\",\"XL\",\"X\",\"IX\",\"V\",\"IV\",\"I\"};\n        StringBuilder sb = new StringBuilder();\n        for (int i = 0; i < vals.length; i++) {\n            while (n >= vals[i]) { sb.append(syms[i]); n -= vals[i]; }\n        }\n        return sb.toString();\n    }\n    static int val(char c) {\n        switch (c) {\n            case 'I': return 1; case 'V': return 5; case 'X': return 10;\n            case 'L': return 50; case 'C': return 100; case 'D': return 500; case 'M': return 1000;\n            default: return -1;\n        }\n    }\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next().trim();\n        int sum = 0;\n        for (int i = 0; i < s.length(); i++) {\n            int cur = val(s.charAt(i));\n            if (cur == -1) { System.out.println(\"INVALID\"); return; }\n            int nxt = (i + 1 < s.length()) ? val(s.charAt(i + 1)) : 0;\n            if (nxt == -1) { System.out.println(\"INVALID\"); return; }\n            if (cur < nxt) sum -= cur; else sum += cur;\n        }\n        if (sum >= 1 && sum <= 3999 && toRoman(sum).equals(s)) System.out.println(sum);\n        else System.out.println(\"INVALID\");\n    }\n}",
+        "python": "import sys\n\ns = sys.stdin.readline().strip()\nmp = {'I':1,'V':5,'X':10,'L':50,'C':100,'D':500,'M':1000}\ndef to_roman(n):\n    table = [(1000,'M'),(900,'CM'),(500,'D'),(400,'CD'),(100,'C'),(90,'XC'),(50,'L'),(40,'XL'),(10,'X'),(9,'IX'),(5,'V'),(4,'IV'),(1,'I')]\n    res = []\n    for v, sym in table:\n        while n >= v:\n            res.append(sym); n -= v\n    return ''.join(res)\nif any(c not in mp for c in s):\n    print('INVALID')\nelse:\n    total = 0\n    for i, c in enumerate(s):\n        v = mp[c]\n        nxt = mp[s[i+1]] if i + 1 < len(s) else 0\n        total += -v if v < nxt else v\n    print(total if 1 <= total <= 3999 and to_roman(total) == s else 'INVALID')\n"
+      },
+      "timeComplexity": "O(|S|) decoding + O(1) canonical round-trip check.",
+      "spaceComplexity": "O(1).",
+      "edgeCases": [
+        "Invalid subtractive pairs like 'IC', 'IL', 'XM'",
+        "Over-repetition like 'IIII', 'VV', 'LL'",
+        "Round-trip `toRoman(decoded) == S` cleanly catches every canonical grammar violation"
+      ]
+    }
+  ]
+}

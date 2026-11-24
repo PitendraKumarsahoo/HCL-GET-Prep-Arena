@@ -1,0 +1,89 @@
+{
+  "setId": "coding-set-5",
+  "title": "Coding Set 05: Anagram Equivalence & Circular Rotation",
+  "description": "Reported string/array coding problems: case-insensitive anagram check ignoring spaces and in-place right rotation by K.",
+  "durationMinutes": 60,
+  "problems": [
+    {
+      "id": "code-5-p01",
+      "topic": "Strings",
+      "subtopic": "Frequency Matching",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "title": "Anagram Check Ignoring Case & Spaces",
+      "statement": "Given two strings S1 and S2 on separate lines, determine whether S1 and S2 are anagrams of each other after ignoring all whitespace characters and letter casing (case-insensitive). Print 'ANAGRAM' if they are, otherwise 'NOT ANAGRAM'.",
+      "inputFormat": "Line 1: String S1.\nLine 2: String S2.",
+      "outputFormat": "'ANAGRAM' or 'NOT ANAGRAM'.",
+      "constraints": [
+        "1 <= |S1|, |S2| <= 10^5",
+        "Strings contain ASCII letters, digits, and spaces"
+      ],
+      "testCases": [
+        { "input": "Dormitory\nDirty room\n", "expectedOutput": "ANAGRAM", "isSample": true },
+        { "input": "Astronomer\nMoon starer\n", "expectedOutput": "ANAGRAM", "isSample": true },
+        { "input": "Listen\nSilent!\n", "expectedOutput": "NOT ANAGRAM", "isSample": false },
+        { "input": "aab\nabb\n", "expectedOutput": "NOT ANAGRAM", "isSample": false },
+        { "input": "   \n \n", "expectedOutput": "ANAGRAM", "isSample": false },
+        { "input": "Java 21\n21 A J V A\n", "expectedOutput": "ANAGRAM", "isSample": false },
+        { "input": "Conversation\nVoices rant on\n", "expectedOutput": "ANAGRAM", "isSample": false }
+      ],
+      "starterCode": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s1 = sc.hasNextLine() ? sc.nextLine() : \"\";\n        String s2 = sc.hasNextLine() ? sc.nextLine() : \"\";\n        // Write your solution here\n    }\n}",
+        "python": "import sys\n\ns1 = sys.stdin.readline().rstrip('\\r\\n')\ns2 = sys.stdin.readline().rstrip('\\r\\n')\n# Write your solution here\n",
+        "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    string s1, s2;\n    getline(cin, s1); getline(cin, s2);\n    // Write your solution here\n    return 0;\n}\n"
+      },
+      "solutions": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s1 = sc.hasNextLine() ? sc.nextLine() : \"\";\n        String s2 = sc.hasNextLine() ? sc.nextLine() : \"\";\n        int[] cnt = new int[256];\n        for (char c : s1.toCharArray()) {\n            if (!Character.isWhitespace(c)) cnt[Character.toLowerCase(c)]++;\n        }\n        for (char c : s2.toCharArray()) {\n            if (!Character.isWhitespace(c)) cnt[Character.toLowerCase(c)]--;\n        }\n        for (int v : cnt) {\n            if (v != 0) { System.out.println(\"NOT ANAGRAM\"); return; }\n        }\n        System.out.println(\"ANAGRAM\");\n    }\n}",
+        "python": "import sys\nfrom collections import Counter\n\ns1 = sys.stdin.readline().rstrip('\\r\\n')\ns2 = sys.stdin.readline().rstrip('\\r\\n')\nc1 = Counter(ch.lower() for ch in s1 if not ch.isspace())\nc2 = Counter(ch.lower() for ch in s2 if not ch.isspace())\nprint('ANAGRAM' if c1 == c2 else 'NOT ANAGRAM')\n"
+      },
+      "timeComplexity": "O(|S1| + |S2|) single frequency pass.",
+      "spaceComplexity": "O(1) fixed character count table.",
+      "edgeCases": [
+        "Strings with differing whitespace counts ('Dormitory' vs 'Dirty room')",
+        "Punctuation differences ('!' is non-whitespace, must mismatch)",
+        "Digits and uppercase/lowercase mix"
+      ]
+    },
+    {
+      "id": "code-5-p02",
+      "topic": "Arrays",
+      "subtopic": "Reversal Algorithm Rotation",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "title": "Rotate Array Right by K Positions",
+      "statement": "Given an integer array A of size N and a non-negative integer K, rotate the array to the right by K steps in-place (using O(1) extra space) and print the resulting array.",
+      "inputFormat": "Line 1: Two integers N and K.\nLine 2: N space-separated integers.",
+      "outputFormat": "N space-separated integers after rotating right by K.",
+      "constraints": [
+        "1 <= N <= 10^5",
+        "0 <= K <= 10^9",
+        "-10^9 <= A[i] <= 10^9"
+      ],
+      "testCases": [
+        { "input": "7 3\n1 2 3 4 5 6 7\n", "expectedOutput": "5 6 7 1 2 3 4", "isSample": true },
+        { "input": "5 7\n10 20 30 40 50\n", "expectedOutput": "40 50 10 20 30", "isSample": true, "note": "7 % 5 = 2" },
+        { "input": "4 0\n9 8 7 6\n", "expectedOutput": "9 8 7 6", "isSample": false },
+        { "input": "4 4\n1 2 3 4\n", "expectedOutput": "1 2 3 4", "isSample": false },
+        { "input": "1 1000000000\n42\n", "expectedOutput": "42", "isSample": false },
+        { "input": "6 1\n-1 -2 -3 4 5 6\n", "expectedOutput": "6 -1 -2 -3 4 5", "isSample": false },
+        { "input": "3 5\n100 200 300\n", "expectedOutput": "200 300 100", "isSample": false }
+      ],
+      "starterCode": {
+        "java": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        long k = sc.nextLong();\n        int[] a = new int[n];\n        for (int i = 0; i < n; i++) a[i] = sc.nextInt();\n        // Write your solution here\n    }\n}",
+        "python": "import sys\n\ndata = list(map(int, sys.stdin.read().split()))\nn, k = data[0], data[1]\na = data[2:2+n]\n# Write your solution here\n",
+        "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n; long long k;\n    cin >> n >> k;\n    vector<int> a(n);\n    for (int i = 0; i < n; i++) cin >> a[i];\n    // Write your solution here\n    return 0;\n}\n"
+      },
+      "solutions": {
+        "java": "import java.util.*;\n\npublic class Main {\n    static void reverse(int[] a, int l, int r) {\n        while (l < r) {\n            int tmp = a[l]; a[l] = a[r]; a[r] = tmp;\n            l++; r--;\n        }\n    }\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        int k = (int)(sc.nextLong() % n);\n        int[] a = new int[n];\n        for (int i = 0; i < n; i++) a[i] = sc.nextInt();\n        if (k > 0) {\n            reverse(a, 0, n - 1);\n            reverse(a, 0, k - 1);\n            reverse(a, k, n - 1);\n        }\n        StringBuilder sb = new StringBuilder();\n        for (int i = 0; i < n; i++) {\n            if (i > 0) sb.append(' ');\n            sb.append(a[i]);\n        }\n        System.out.println(sb.toString());\n    }\n}",
+        "python": "import sys\n\ndata = list(map(int, sys.stdin.read().split()))\nn, k = data[0], data[1] % data[0]\na = data[2:2+n]\nif k:\n    a = a[-k:] + a[:-k]\nprint(' '.join(map(str, a)))\n"
+      },
+      "timeComplexity": "O(N) via 3-step array reversal.",
+      "spaceComplexity": "O(1) extra space in Java/C++.",
+      "edgeCases": [
+        "K > N (must reduce K %= N, and K can be 10^9 so read as long)",
+        "K == 0 or K % N == 0",
+        "N == 1"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,381 @@
+{
+  "setId": "tech-set-4",
+  "title": "Technical MCQ Set 04: Concurrency, Algorithms & Spring/SQL",
+  "description": "Covers Java functional interfaces, equals/compareTo consistency, SQL EXISTS vs JOIN, Dijkstra vs Bellman-Ford, OS disk/paging, and ARP/NAT.",
+  "durationMinutes": 35,
+  "questions": [
+    {
+      "id": "tech-4-q01",
+      "topic": "Output Prediction",
+      "subtopic": "Lambda Effectively Final Variable",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "What happens when you try to compile and run the following Java snippet?",
+      "codeSnippet": "int factor = 2;\nList<Integer> nums = List.of(1, 2, 3);\nfactor = 3;\nnums.forEach(n -> System.out.print(n * factor + \" \"));",
+      "options": [
+        "Prints `2 4 6`",
+        "Prints `3 6 9`",
+        "Compilation error: local variable `factor` referenced from a lambda expression must be final or effectively final",
+        "Throws `UnsupportedOperationException` at runtime"
+      ],
+      "correctIndex": 2,
+      "explanation": "Lambdas capture local variables by value, so Java requires any captured local variable to be `final` or effectively final (never reassigned)."
+    },
+    {
+      "id": "tech-4-q02",
+      "topic": "Output Prediction",
+      "subtopic": "TreeSet compareTo vs equals",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "A `Task` implements `Comparable<Task>` comparing only `priority`. `t1 = new Task(\"A\", 1)` and `t2 = new Task(\"B\", 1)`. Both are added to a `TreeSet<Task>`. What is `set.size()`?",
+      "options": [
+        "`0`",
+        "`1` (only `t1` is retained)",
+        "`2` (both `t1` and `t2` are stored)",
+        "Throws `ClassCastException`"
+      ],
+      "correctIndex": 1,
+      "explanation": "`TreeSet` determines key equality using `compareTo()` (returning `0`), NOT `equals()`. Because `t1.compareTo(t2) == 0`, `TreeSet` treats `t2` as a duplicate and keeps `set.size() == 1`."
+    },
+    {
+      "id": "tech-4-q03",
+      "topic": "Output Prediction",
+      "subtopic": "Short-Circuit Logical Operators",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "What is the exact output of this Java snippet?",
+      "codeSnippet": "int a = 5, b = 10;\nif (a > 3 || ++b > 10) {\n  if (a > 10 && ++b > 11) { a++; }\n}\nSystem.out.println(a + \":\" + b);",
+      "options": ["5:10", "5:11", "6:11", "5:12"],
+      "correctIndex": 0,
+      "explanation": "In `a > 3 || ++b > 10`, `a > 3` is true, so `||` short-circuits and `++b` does NOT run (`b` stays 10). In the inner `if`, `a > 10` is false, so `&&` short-circuits and `++b` again does NOT run. Output: `5:10`."
+    },
+    {
+      "id": "tech-4-q04",
+      "topic": "Java",
+      "subtopic": "Comparable vs Comparator",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "When should you implement `Comparator<T>` rather than `Comparable<T>`?",
+      "options": [
+        "When you want to define multiple independent sort orders (e.g., sort by salary, then by name) or sort a third-party class you cannot edit",
+        "Only when sorting primitive `int[]` arrays",
+        "Whenever you need `HashMap` bucket hashing",
+        "`Comparator` is only used in Java 7 and removed in Java 8"
+      ],
+      "correctIndex": 0,
+      "explanation": "`Comparable` defines one natural ordering inside the class itself (`compareTo`), whereas `Comparator` enables external, multiple custom orderings (`compare`)."
+    },
+    {
+      "id": "tech-4-q05",
+      "topic": "Java",
+      "subtopic": "try-with-resources & AutoCloseable",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "In `try (ResourceA a = new ResourceA(); ResourceB b = new ResourceB()) { ... }`, in what order are `close()` methods called?",
+      "options": [
+        "`a.close()` then `b.close()`",
+        "`b.close()` then `a.close()` (reverse declaration order)",
+        "Simultaneously on daemon threads",
+        "Only `b.close()` is called unless an exception occurs"
+      ],
+      "correctIndex": 1,
+      "explanation": "Java's `try-with-resources` closes resources in the exact reverse order of their declaration (`b` then `a`), ensuring outer/dependent resources close before underlying connections."
+    },
+    {
+      "id": "tech-4-q06",
+      "topic": "OOP",
+      "subtopic": "Composition over Inheritance",
+      "difficulty": "medium",
+      "source_tag": "pyq-style",
+      "question": "Why does modern OOP favor Composition ('has-a') over deep Inheritance ('is-a') hierarchies?",
+      "options": [
+        "Inheritance is unsupported for generic classes in Java",
+        "Composition preserves encapsulation, avoids fragile base-class coupling, and allows swapping behaviors dynamically at runtime",
+        "Composition eliminates the need for interfaces",
+        "Inherited methods cannot be unit-tested with JUnit"
+      ],
+      "correctIndex": 1,
+      "explanation": "Inheriting implementation tightly couples subclasses to parent internals (fragile base class), whereas composition delegates to interfaces that can be swapped or mocked cleanly at runtime."
+    },
+    {
+      "id": "tech-4-q07",
+      "topic": "SQL",
+      "subtopic": "GROUP BY Column Rule",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "Why does `SELECT dept_id, emp_name, MAX(salary) FROM Employees GROUP BY dept_id;` fail in strict ANSI SQL / PostgreSQL?",
+      "options": [
+        "`MAX()` cannot be combined with `GROUP BY`",
+        "`emp_name` is neither included in `GROUP BY` nor wrapped in an aggregate function",
+        "`dept_id` must also appear inside `HAVING`",
+        "SQL forbids selecting more than two columns with `GROUP BY`"
+      ],
+      "correctIndex": 1,
+      "explanation": "Every non-aggregated expression in the `SELECT` list must be functionally dependent on or listed in `GROUP BY`; otherwise SQL cannot deterministically pick which `emp_name` represents the group."
+    },
+    {
+      "id": "tech-4-q08",
+      "topic": "SQL",
+      "subtopic": "Correlated Subquery Performance & EXISTS",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "When checking whether at least one matching order exists per customer, why is `EXISTS (SELECT 1 FROM Orders o WHERE o.cust_id = c.id)` often faster than `IN` or an unaggregated `JOIN`?",
+      "options": [
+        "`EXISTS` skips creating any query execution plan",
+        "`EXISTS` short-circuits as soon as the first matching row is found (semi-join) and handles NULLs safely",
+        "`EXISTS` caches results permanently in browser cookies",
+        "`EXISTS` disables table locks on `Orders`"
+      ],
+      "correctIndex": 1,
+      "explanation": "`EXISTS` uses a semi-join that stops scanning for a customer on the very first matching order row and never fails on NULL subqueries like `NOT IN`."
+    },
+    {
+      "id": "tech-4-q09",
+      "topic": "DBMS",
+      "subtopic": "B+Tree vs B-Tree in Databases",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "Why do relational databases overwhelmingly use B+Trees rather than plain B-Trees for table indexes?",
+      "options": [
+        "B+Trees allow O(1) unsorted point lookups without comparisons",
+        "B+Trees keep internal nodes compact (keys only, higher branching factor) and link leaf nodes sequentially for fast range scans",
+        "B+Trees never require node splitting during inserts",
+        "B+Trees store records exclusively in RAM rather than disk blocks"
+      ],
+      "correctIndex": 1,
+      "explanation": "Omitting data pointers from internal nodes lets B+Trees pack far more keys per disk page (shallower tree), while doubly-linked leaf pages make `BETWEEN` / `ORDER BY` range scans sequential."
+    },
+    {
+      "id": "tech-4-q10",
+      "topic": "DBMS",
+      "subtopic": "Candidate Key & Superkey Count",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "A relation `R(A, B, C, D)` has a single candidate key `{A, B}`. How many distinct SUPERKEYS does `R` have?",
+      "options": ["2", "3", "4", "8"],
+      "correctIndex": 2,
+      "explanation": "Any superkey must contain `{A, B}`, and each of the remaining 2 attributes (`C`, `D`) may independently be included or excluded: 2^2 = 4 superkeys (`AB`, `ABC`, `ABD`, `ABCD`)."
+    },
+    {
+      "id": "tech-4-q11",
+      "topic": "OS",
+      "subtopic": "FIFO vs LRU Page Faults Numerical",
+      "difficulty": "hard",
+      "source_tag": "reported",
+      "question": "For page reference string `1, 2, 3, 4, 1, 2, 5, 1, 2, 3` with 3 empty page frames, how many page faults occur under LRU?",
+      "options": ["7", "8", "9", "10"],
+      "correctIndex": 1,
+      "explanation": "Trace LRU (3 frames): 1(F)[1], 2(F)[1,2], 3(F)[1,2,3], 4(F evict 1)[2,3,4], 1(F evict 2)[3,4,1], 2(F evict 3)[4,1,2], 5(F evict 4)[1,2,5], 1(Hit)[2,5,1], 2(Hit)[5,1,2], 3(F evict 5)[1,2,3]. Total faults = 8."
+    },
+    {
+      "id": "tech-4-q12",
+      "topic": "OS",
+      "subtopic": "CPU Utilization & I/O Wait Formula",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "If each process in memory spends 80% of its time waiting for I/O (`p = 0.8`), approximately what is the CPU utilization when 3 such independent processes are in memory?",
+      "options": ["20.0%", "48.8%", "51.2%", "80.0%"],
+      "correctIndex": 1,
+      "explanation": "Probability all 3 processes wait for I/O simultaneously = `p^n = 0.8^3 = 0.512`. Therefore CPU utilization = `1 - 0.512 = 0.488 = 48.8%`."
+    },
+    {
+      "id": "tech-4-q13",
+      "topic": "CN",
+      "subtopic": "NAT & Port Translation",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "How does a home/office router running NAPT (PAT) allow 50 devices with private IPs (`192.168.1.x`) to share a single public IPv4 address simultaneously?",
+      "options": [
+        "By broadcasting all packets to every host on the internet",
+        "By rewriting the source IP to the router's public IP and mapping unique source TCP/UDP port numbers in a NAT translation table",
+        "By assigning each laptop a temporary IPv6 MAC address",
+        "By encapsulating HTTP inside ICMP ping replies"
+      ],
+      "correctIndex": 1,
+      "explanation": "PAT (Port Address Translation) maps `(privateIP, privatePort)` <-> `(publicIP, uniqueMappedPort)` so returning packets can be demultiplexed back to the exact internal host."
+    },
+    {
+      "id": "tech-4-q14",
+      "topic": "CN",
+      "subtopic": "Subnetting: Hosts & Subnets Split",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "An organization owns a `/22` IPv4 block and splits it equally into subnets supporting at least 120 usable hosts each. What is the maximum number of such equal subnets it can create?",
+      "options": ["4", "8", "16", "32"],
+      "correctIndex": 1,
+      "explanation": "Supporting >= 120 usable hosts requires `2^h - 2 >= 120` => `h = 7` host bits (126 usable hosts, `/25` prefix). Splitting `/22` into `/25` borrows `25 - 22 = 3` subnet bits => `2^3 = 8` subnets."
+    },
+    {
+      "id": "tech-4-q15",
+      "topic": "DSA",
+      "subtopic": "Dijkstra vs Bellman-Ford",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "Why does standard Dijkstra's shortest-path algorithm fail on graphs containing negative edge weights?",
+      "options": [
+        "Priority queues cannot store negative integers",
+        "Dijkstra greedily marks the popped vertex's distance as final, assuming adding future edges cannot decrease path cost",
+        "Dijkstra requires the graph to be a DAG",
+        "Dijkstra runs in exponential time on negative edges"
+      ],
+      "correctIndex": 1,
+      "explanation": "Dijkstra assumes non-negative weights guarantee monotonically non-decreasing path lengths; a later negative edge could yield a shorter path to an already settled vertex. Use Bellman-Ford instead."
+    },
+    {
+      "id": "tech-4-q16",
+      "topic": "DSA",
+      "subtopic": "Tree Traversal Reconstruction",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "Which pair of traversals is sufficient to reconstruct a general Binary Tree (with distinct keys) UNIQUELY?",
+      "options": [
+        "Preorder and Postorder only",
+        "Inorder and Preorder (or Inorder and Postorder)",
+        "Level-order and Preorder only",
+        "Postorder alone"
+      ],
+      "correctIndex": 1,
+      "explanation": "Preorder/Postorder identifies the root, while Inorder partitions nodes into left vs right subtrees. Without Inorder, single-child subtrees remain ambiguous."
+    },
+    {
+      "id": "tech-4-q17",
+      "topic": "Java",
+      "subtopic": "Spring Boot @Transactional Pitfall",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "In Spring Boot, why does calling a `@Transactional` method `saveOrder()` from another method `placeOrder()` inside the SAME bean class fail to start a transaction?",
+      "options": [
+        "Spring proxies only intercept `static` methods",
+        "Self-invocation (`this.saveOrder()`) bypasses the Spring AOP proxy wrapper around the bean",
+        "`@Transactional` only works on `@RestController` classes",
+        "Checked exceptions always commit transactions automatically"
+      ],
+      "correctIndex": 1,
+      "explanation": "Spring AOP creates a proxy around the bean; external callers go through the proxy, whereas internal `this.method()` calls bypass the proxy completely."
+    },
+    {
+      "id": "tech-4-q18",
+      "topic": "JDBC",
+      "subtopic": "ResultSet Scrollability & Type",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "What happens if you call `resultSet.previous()` on a default JDBC `ResultSet` created by `conn.prepareStatement(sql)`?",
+      "options": [
+        "Moves cursor cleanly back one row",
+        "Throws `SQLException` because default `ResultSet` is `TYPE_FORWARD_ONLY`",
+        "Returns `false` silently and stays on the current row",
+        "Re-executes the SQL query from row 1"
+      ],
+      "correctIndex": 1,
+      "explanation": "By default JDBC creates `ResultSet.TYPE_FORWARD_ONLY`; calling `previous()`, `absolute()`, or `first()` throws a `SQLException` unless `TYPE_SCROLL_INSENSITIVE` / `TYPE_SCROLL_SENSITIVE` is requested."
+    },
+    {
+      "id": "tech-4-q19",
+      "topic": "SE",
+      "subtopic": "Black-Box Testing Techniques",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "A loan form accepts ages `18` to `65` inclusive. Selecting test inputs `{17, 18, 19, 64, 65, 66}` exemplifies which QA testing technique?",
+      "options": [
+        "Statement Coverage",
+        "Boundary Value Analysis (BVA)",
+        "Mutation Testing",
+        "Regression Fuzzing"
+      ],
+      "correctIndex": 1,
+      "explanation": "Testing `min-1, min, min+1, max-1, max, max+1` targets off-by-one boundary defects, the essence of Boundary Value Analysis."
+    },
+    {
+      "id": "tech-4-q20",
+      "topic": "Output Prediction",
+      "subtopic": "Java Pass-by-Value Reference Trap",
+      "difficulty": "medium-hard",
+      "source_tag": "reported",
+      "question": "What does the following Java code print?",
+      "codeSnippet": "static void mutate(StringBuilder sb) {\n  sb.append(\"Tech\");\n  sb = new StringBuilder(\"Other\");\n}\npublic static void main(String[] args) {\n  StringBuilder s = new StringBuilder(\"HCL\");\n  mutate(s);\n  System.out.println(s);\n}",
+      "options": ["HCL", "HCLTech", "Other", "OtherTech"],
+      "correctIndex": 1,
+      "explanation": "Java passes object references by value. `sb.append(\"Tech\")` mutates the shared object on the heap (`HCLTech`), while reassigning the local parameter `sb = new StringBuilder(...)` only changes the local copy of the reference, leaving `s` pointing to `HCLTech`."
+    },
+    {
+      "id": "tech-4-q21",
+      "topic": "SQL",
+      "subtopic": "Window Frame Running Total",
+      "difficulty": "hard",
+      "source_tag": "pyq-style",
+      "question": "Given `Sales(sale_date, amount)` with unique dates, which SQL expression computes the cumulative running total up to each row's `sale_date`?",
+      "options": [
+        "`SUM(amount) OVER ()`",
+        "`SUM(amount) OVER (ORDER BY sale_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)`",
+        "`SUM(amount) GROUP BY sale_date`",
+        "`ROW_NUMBER() OVER (ORDER BY sale_date)`"
+      ],
+      "correctIndex": 1,
+      "explanation": "Specifying `ORDER BY sale_date` with frame `ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW` sums all rows from the start of the partition through the current row."
+    },
+    {
+      "id": "tech-4-q22",
+      "topic": "DSA",
+      "subtopic": "Topological Sort Condition",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "A directed graph admits a valid topological ordering if and only if it is:",
+      "options": [
+        "Bipartite",
+        "Complete",
+        "A Directed Acyclic Graph (DAG)",
+        "Strongly Connected"
+      ],
+      "correctIndex": 2,
+      "explanation": "Any directed cycle makes `u before v` and `v before u` mutually impossible; every finite DAG has at least one topological sort (found via Kahn's algorithm or DFS finish times)."
+    },
+    {
+      "id": "tech-4-q23",
+      "topic": "CN",
+      "subtopic": "ARP Scope & Operation",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "How is an ARP Request sent on an Ethernet LAN, and how does the target host reply?",
+      "options": [
+        "Request is unicast; Reply is broadcast",
+        "Request is Layer-2 broadcast (`FF:FF:FF:FF:FF:FF`); Reply is Layer-2 unicast",
+        "Both Request and Reply are multicast across the WAN",
+        "ARP runs over UDP port 53"
+      ],
+      "correctIndex": 1,
+      "explanation": "Because the sender does not yet know the target's MAC address, the ARP Request is broadcast across the local LAN segment; the matching target replies directly via unicast using the sender's MAC."
+    },
+    {
+      "id": "tech-4-q24",
+      "topic": "OS",
+      "subtopic": "System Call Mode Transition",
+      "difficulty": "medium",
+      "source_tag": "reported",
+      "question": "What happens at the CPU hardware level when a user-space program invokes `read()` on a file?",
+      "options": [
+        "The CPU remains in User Mode and reads disk sectors directly",
+        "A software interrupt / `syscall` trap switches the CPU from User Mode (ring 3) to Kernel Mode (ring 0) to execute the OS handler safely",
+        "The JVM Garbage Collector suspends all kernel threads",
+        "The MMU disables virtual memory translation permanently"
+      ],
+      "correctIndex": 1,
+      "explanation": "Protected hardware I/O cannot run in unprivileged user mode; `syscall`/`int 0x80` traps into kernel mode, validates permissions/buffers, performs I/O, and returns to user mode."
+    },
+    {
+      "id": "tech-4-q25",
+      "topic": "Java",
+      "subtopic": "Java 17+ Records & Sealed Classes",
+      "difficulty": "medium-hard",
+      "source_tag": "pyq-style",
+      "question": "Which restriction applies to a Java `record` (e.g., `record Point(int x, int y) {}`)?",
+      "options": [
+        "A record cannot implement interfaces",
+        "A record is implicitly `final` and cannot extend another class (other than `java.lang.Record`)",
+        "A record cannot declare static methods or compact constructors",
+        "Record fields are mutable by default via generated setters"
+      ],
+      "correctIndex": 1,
+      "explanation": "Java `record`s are shallowly immutable data carriers: all components are `private final`, the record class itself is implicitly `final` (cannot extend classes), though it CAN implement interfaces and define custom constructors/methods."
+    }
+  ]
+}
